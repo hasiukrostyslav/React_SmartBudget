@@ -7,6 +7,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    console.log('Hello from Nest project');
     return this.appService.getHello();
   }
 }
