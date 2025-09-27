@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '../../context';
 
 export default function AuthLayout() {
   return (
