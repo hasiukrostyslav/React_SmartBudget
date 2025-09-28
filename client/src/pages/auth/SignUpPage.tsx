@@ -8,7 +8,7 @@ export default function SignUpPage() {
       <title>Sign Up | SmartBudget</title>
       <SignUpForm />
       <p className="text-xs mt-3 text-slate-400">
-        Already have an account? <AuthLink href="/login">Sign In</AuthLink>
+        Already have an account? <AuthLink href="/auth/login">Sign In</AuthLink>
       </p>
     </AuthForm>
   );
