@@ -1,1 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  font-family: 'Roboto', sans-serif;
+
+  & button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .outline-round-sm {
+    border-radius: 3px;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 100ms;
+
+    @apply focus-visible:outline-2;
+    @apply focus-visible:outline-offset-2;
+    @apply focus-visible:outline-blue-500;
+  }
+
+  .outline-round-md {
+    border-radius: 6px;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 100ms;
+
+    @apply focus-visible:outline-4;
+    @apply focus-visible:outline-offset-3;
+    @apply focus-visible:outline-blue-500;
+  }
+
+  .outline-round-full {
+    border-radius: 50%;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 100ms;
+
+    @apply focus-visible:outline-2;
+    @apply focus-visible:outline-offset-2;
+    @apply focus-visible:outline-blue-500;
+  }
+}
+
+@theme {
+  --animate-wiggle: wiggle 2s ease-in-out;
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(360deg);
+    }
+  }
+}
