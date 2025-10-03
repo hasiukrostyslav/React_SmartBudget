@@ -8,13 +8,13 @@ interface AuthFormProps {
 
 export default function AuthForm({ children, heading }: AuthFormProps) {
   return (
-    <section className="w-5/12 flex items-center justify-center relative">
-      <div className=" w-1/2 flex items-center justify-center flex-col gap-2">
+    <section className="relative flex w-5/12 items-center justify-center">
+      <div className="flex w-1/2 flex-col items-center justify-center gap-2">
         <Logo />
         <h2 className="text-2xl font-bold">{heading}</h2>
         {children}
       </div>
-      <ThemeButton className="absolute bottom-5 right-10" />
+      <ThemeButton className="absolute right-10 bottom-5" />
     </section>
   );
 }

@@ -8,10 +8,10 @@ export default function ThemeButton({ className }: { className?: string }) {
 
   return (
     <div
-      className={`flex gap-6 px-2 py-1 border-2 border-slate-300 rounded-2xl ${className}`}
+      className={`flex gap-6 rounded-2xl border-2 border-slate-300 px-2 py-1 ${className}`}
     >
       <button
-        className={`outline-round-full  p-1 ${
+        className={`outline-round-full p-1 ${
           theme === 'light' ? 'bg-slate-300' : ''
         } ${!isInitial && theme === 'light' ? 'animate-wiggle' : ''}`}
         onClick={() => {

@@ -3,9 +3,9 @@ import ThemeButton from '@/components/ThemeButton';
 
 export default function NotFound() {
   return (
-    <section className="w-5/12 flex justify-center items-center relative">
+    <section className="relative flex w-5/12 items-center justify-center">
       <Error type="route" />
-      <ThemeButton className="absolute bottom-5 right-10" />
+      <ThemeButton className="absolute right-10 bottom-5" />
     </section>
   );
 }

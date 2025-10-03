@@ -17,26 +17,26 @@ export default function Input({ name, label, error, isPassword }: InputProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2 mb-4.5 relative">
+    <div className="relative mb-4.5 flex flex-col gap-2">
       <label className="text-sm" htmlFor={name}>
         {label}
       </label>
       <input
         type={isPassword && !isVisible ? 'password' : 'text'}
         name={name}
-        className={`outline-round-md py-2 border-2 ${
+        className={`outline-round-md border-2 py-2 ${
           error ? 'border-red-500' : 'border-slate-300'
-        } ${isPassword ? 'pl-3 pr-10' : 'px-3'}`}
+        } ${isPassword ? 'pr-10 pl-3' : 'px-3'}`}
       />
       {isPassword && (
         <button
-          className="absolute outline-round-sm right-3 bottom-3 w-4 h-4"
+          className="outline-round-sm absolute right-3 bottom-3 h-4 w-4"
           onClick={handleClick}
         >
           {isVisible ? <Icon name="visible" /> : <Icon name="hidden" />}
         </button>
       )}
-      <span className="text-xs text-red-500 absolute -bottom-5.5">{error}</span>
+      <span className="absolute -bottom-5.5 text-xs text-red-500">{error}</span>
     </div>
   );
 }

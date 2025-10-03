@@ -7,7 +7,7 @@ export default function LoginPage() {
     <AuthForm heading="Login to account">
       <title>Sign In | SmartBudget</title>
       <LoginForm />
-      <p className="text-xs mt-3 text-slate-400">
+      <p className="mt-3 text-xs text-slate-400">
         Don&apos;t have an account?{' '}
         <AuthLink href="/auth/signup">Sign Up</AuthLink>
       </p>

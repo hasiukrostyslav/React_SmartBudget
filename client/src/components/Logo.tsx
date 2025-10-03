@@ -9,7 +9,7 @@ export default function Logo() {
       alt="Logo"
       width={404}
       height={92}
-      className="w-[300px] h-auto"
+      className="h-auto w-[300px]"
     />
   );
 }
