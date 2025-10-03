@@ -16,7 +16,7 @@ const errors = {
 };
 
 interface ErrorProps {
-  type: 'auth' | 'route' | 'server';
+  type: keyof typeof errors;
 }
 
 export default function Error({ type }: ErrorProps) {
