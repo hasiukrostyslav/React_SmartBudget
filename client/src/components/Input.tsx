@@ -10,6 +10,7 @@ interface InputProps {
   isPassword?: boolean;
   disabled?: boolean;
   placeholder?: string;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
 export default function Input({
@@ -19,6 +20,8 @@ export default function Input({
   isPassword,
   disabled,
   placeholder,
+  ref,
+  ...props
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -35,6 +38,8 @@ export default function Input({
         {label}
       </label>
       <input
+        {...props}
+        ref={ref}
         disabled={disabled}
         placeholder={placeholder}
         type={isPassword && !isVisible ? 'password' : 'text'}
