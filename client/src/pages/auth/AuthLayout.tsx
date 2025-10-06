@@ -3,7 +3,7 @@ import { ThemeProvider } from '@/context';
 
 export default function AuthLayout() {
   return (
-    <main className="flex h-screen w-screen text-slate-900 dark:text-slate-300 dark:bg-slate-900">
+    <main className="flex h-screen w-screen text-slate-900 dark:bg-slate-900 dark:text-slate-300">
       <figure className="relative w-7/12">
         <img
           className="h-full"

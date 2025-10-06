@@ -1,23 +1,15 @@
-import { PiEyeLight, PiEyeSlashLight } from 'react-icons/pi';
-import { LuSun, LuMoon } from 'react-icons/lu';
+import type { IconName } from '@/types/types';
+import { DynamicIcon } from 'lucide-react/dynamic';
 
 interface IconProps {
   className?: string;
-  name: 'visible' | 'hidden' | 'sun' | 'moon';
+  color?: string;
+  size?: number;
+  name: IconName;
 }
 
-export default function Icon({ name, className }: IconProps) {
-  switch (name) {
-    case 'visible':
-      return <PiEyeLight className={className} />;
-    case 'hidden':
-      return <PiEyeSlashLight className={className} />;
-    case 'sun':
-      return <LuSun className={className} />;
-    case 'moon':
-      return <LuMoon className={className} />;
-
-    default:
-      return null;
-  }
+export default function Icon({ name, className, color, size }: IconProps) {
+  return (
+    <DynamicIcon name={name} size={size} color={color} className={className} />
+  );
 }
