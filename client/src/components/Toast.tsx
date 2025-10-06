@@ -1,7 +1,7 @@
 import type { ToastRoles } from '@/types/types';
 import Icon from './Icon';
 
-const messageTypes = {
+const messages = {
   signUp: {
     heading: 'Thanks for registration!',
     text: 'Your account has been created!',
@@ -40,21 +40,19 @@ const roles: ToastRoles = {
 };
 
 interface ToastProps {
-  type: keyof typeof messageTypes;
+  type: keyof typeof messages;
   role: keyof typeof roles;
 }
 
 export default function Toast({ type, role }: ToastProps) {
   return (
     <div
-      className={`relative min-w-84 rounded-xl border-2 py-6 pl-12 ${roles[role].bg} ${roles[role].border}`}
+      className={`relative min-w-84 rounded-xl border-2 py-6 pl-12 dark:text-slate-100 ${roles[role].bg} ${roles[role].border}`}
     >
-      <h3 className="mb-1 text-base font-semibold">
-        {messageTypes[type].heading}
-      </h3>
-      <p className="text-xs font-normal">{messageTypes[type].text}</p>
+      <h3 className="mb-1 text-base font-semibold">{messages[type].heading}</h3>
+      <p className="text-xs font-normal">{messages[type].text}</p>
       <span
-        className={`absolute top-6 left-3 rounded-md p-0.5 ${roles[role].bgIcon}`}
+        className={`absolute top-6 left-3 rounded-md p-1 ${roles[role].bgIcon}`}
       >
         <Icon size={16} name={roles[role].icon} className="text-slate-50" />
       </span>
