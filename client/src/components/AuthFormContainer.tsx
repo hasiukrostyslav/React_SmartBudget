@@ -6,7 +6,10 @@ interface AuthFormProps {
   heading: string;
 }
 
-export default function AuthForm({ children, heading }: AuthFormProps) {
+export default function AuthFormContainer({
+  children,
+  heading,
+}: AuthFormProps) {
   return (
     <section className="relative flex w-5/12 items-center justify-center">
       <div className="flex w-1/2 flex-col items-center justify-center gap-2">
