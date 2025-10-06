@@ -1,44 +1,15 @@
-import {
-  PiEyeLight,
-  PiEyeSlashLight,
-  PiExclamationMarkBold,
-} from 'react-icons/pi';
-import { LuSun, LuMoon } from 'react-icons/lu';
-import { IoCheckmark, IoClose, IoInformationOutline } from 'react-icons/io5';
+import type { IconName } from '@/types/types';
+import { DynamicIcon } from 'lucide-react/dynamic';
 
 interface IconProps {
   className?: string;
-  name:
-    | 'visible'
-    | 'hidden'
-    | 'sun'
-    | 'moon'
-    | 'success'
-    | 'error'
-    | 'info'
-    | 'warning';
+  color?: string;
+  size?: number;
+  name: IconName;
 }
 
-export default function Icon({ name, className }: IconProps) {
-  switch (name) {
-    case 'visible':
-      return <PiEyeLight className={className} />;
-    case 'hidden':
-      return <PiEyeSlashLight className={className} />;
-    case 'sun':
-      return <LuSun className={className} />;
-    case 'moon':
-      return <LuMoon className={className} />;
-    case 'success':
-      return <IoCheckmark className={className} />;
-    case 'error':
-      return <IoClose className={className} />;
-    case 'info':
-      return <IoInformationOutline className={className} />;
-    case 'warning':
-      return <PiExclamationMarkBold className={className} />;
-
-    default:
-      return null;
-  }
+export default function Icon({ name, className, color, size }: IconProps) {
+  return (
+    <DynamicIcon name={name} size={size} color={color} className={className} />
+  );
 }

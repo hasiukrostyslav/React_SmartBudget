@@ -33,7 +33,11 @@ export default function Input({ name, label, error, isPassword }: InputProps) {
           className="outline-round-sm absolute right-3 bottom-3 h-4 w-4"
           onClick={handleClick}
         >
-          {isVisible ? <Icon name="visible" /> : <Icon name="hidden" />}
+          <Icon
+            className="text-slate-500 dark:text-slate-400"
+            size={16}
+            name={isVisible ? 'eye' : 'eye-off'}
+          />
         </button>
       )}
       <span className="absolute -bottom-5.5 text-xs text-red-500">{error}</span>

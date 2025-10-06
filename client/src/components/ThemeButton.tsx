@@ -20,7 +20,7 @@ export default function ThemeButton({ className }: { className?: string }) {
           setIsInitial(false);
         }}
       >
-        <Icon name="sun" />
+        <Icon name="sun" size={16} />
       </button>
       <button
         className={`outline-round-full p-1 ${
@@ -32,7 +32,7 @@ export default function ThemeButton({ className }: { className?: string }) {
           setIsInitial(false);
         }}
       >
-        <Icon name="moon" />
+        <Icon name="moon" size={16} />
       </button>
     </div>
   );
