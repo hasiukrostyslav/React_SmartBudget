@@ -27,3 +27,10 @@ export interface ToastRoles {
   info: ToastStyleProps<'info'>;
   warning: ToastStyleProps<'circle-alert'>;
 }
+
+// Auth input with icons types
+export interface InputIcons {
+  name: Extract<IconName, 'user'>;
+  email: Extract<IconName, 'mail'>;
+  password: Extract<IconName, 'lock'>;
+}
