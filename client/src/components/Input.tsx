@@ -33,21 +33,22 @@ export default function Input({
   const borderColor = setBorderColor({ error, disabled });
 
   return (
-    <div className="relative mb-4.5 flex flex-col gap-2">
-      <label className="text-sm tracking-wider" htmlFor={name}>
+    <div className="relative mb-4.5">
+      <label className="flex flex-col gap-2 text-sm tracking-wider">
         {label}
+        <input
+          {...props}
+          ref={ref}
+          disabled={disabled}
+          placeholder={placeholder}
+          type={isPassword && !isVisible ? 'password' : 'text'}
+          name={name}
+          className={`outline-input border-2 py-2.5 pl-10 tracking-wider text-slate-700 dark:text-slate-50 dark:placeholder:text-slate-400 ${borderColor} ${
+            isPassword ? 'pr-10' : 'pr-3'
+          }`}
+          autoComplete="off"
+        />
       </label>
-      <input
-        {...props}
-        ref={ref}
-        disabled={disabled}
-        placeholder={placeholder}
-        type={isPassword && !isVisible ? 'password' : 'text'}
-        name={name}
-        className={`outline-input border-2 py-2.5 pl-10 tracking-wider text-slate-700 dark:text-slate-50 dark:placeholder:text-slate-400 ${borderColor} ${
-          isPassword ? 'pr-10' : 'pr-3'
-        }`}
-      />
       <span className="absolute bottom-3.5 left-3">
         <Icon
           className="text-slate-400 dark:text-slate-400"
