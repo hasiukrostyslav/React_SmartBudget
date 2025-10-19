@@ -1,5 +1,5 @@
-import Error from '@/components/Error';
-import ThemeButton from '@/components/ThemeButton';
+import Error from '@/components/ui/Error';
+import ThemeButton from '@/components/ui/ThemeButton';
 
 export default function NotFound() {
   return (
