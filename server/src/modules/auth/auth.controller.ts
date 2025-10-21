@@ -14,12 +14,13 @@ export class AuthController {
 
   @Post('login')
   @UsePipes(new ZodValidationPipe(SignInSchema))
-  login(@Body() body: SignInDto) {
-    return this.authService.login(body);
+  login(@Body() data: SignInDto) {
+    return this.authService.login(data);
   }
 
   @Post('signup')
-  signup() {
-    this.authService.signup();
+  @UsePipes(new ZodValidationPipe(SignUpSchema))
+  signup(@Body() data: SignUpDto) {
+    return this.authService.signup(data);
   }
 }
