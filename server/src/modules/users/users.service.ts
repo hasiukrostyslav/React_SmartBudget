@@ -1,11 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
-
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import type { User } from './users.type';
 
 @Injectable()
 export class UsersService {
