@@ -1,13 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { SignInDto, SignUpDto } from './schemas/auth.schemas';
+import { JwtService } from '@nestjs/jwt';
 import bcrypt from 'bcrypt';
 import { createId } from '@paralleldrive/cuid2';
+import { UsersService } from '../users/users.service';
+import { SignInDto, SignUpDto } from './schemas/auth.schemas';
 import { saltRounds } from '@/common/constants/constant';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async login({ email, password }: SignInDto) {
     // Check if User exist
@@ -19,7 +23,11 @@ export class AuthService {
     if (!matchPassword)
       throw new UnauthorizedException('Invalid email or password!');
 
-    return { success: true, data: user };
+    // Create access token
+    const payload = { sub: user.id, email: user.email };
+    const token = await this.jwtService.signAsync(payload);
+
+    return { access_token: token };
   }
 
   async signup({ email, password, name }: SignUpDto) {
