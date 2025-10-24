@@ -9,6 +9,10 @@ body {
 
   & button {
     cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+    }
   }
 }
 
@@ -45,6 +49,17 @@ body {
     @apply focus-visible:outline-offset-2;
     @apply focus-visible:outline-blue-500;
   }
+
+  .outline-input {
+    border-radius: 6px;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 100ms;
+
+    @apply focus-visible:outline-2;
+    @apply focus-visible:-outline-offset-2;
+    @apply focus-visible:outline-blue-500;
+  }
 }
 
 @theme {
@@ -55,6 +70,13 @@ body {
       transform: rotate(0deg);
     }
     50% {
+      transform: rotate(360deg);
+    }
+  }
+
+  --animate-spin: spin 1s linear infinite;
+  @keyframes spin {
+    to {
       transform: rotate(360deg);
     }
   }
