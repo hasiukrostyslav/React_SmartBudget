@@ -69,8 +69,7 @@ export class AuthService {
     });
 
     // Sign In
-
-    // Send JWT Token
+    return this.login({ email, password });
   }
 
   async refresh(refreshToken: string) {

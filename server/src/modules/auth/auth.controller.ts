@@ -52,8 +52,30 @@ export class AuthController {
 
   @Post('signup')
   @UsePipes(new ZodValidationPipe(SignUpSchema))
-  signup(@Body() data: SignUpDto) {
-    return this.authService.signup(data);
+  @Redirect('/dashboard', 301)
+  async signup(
+    @Res({ passthrough: true }) response: Response,
+    @Body() data: SignUpDto,
+  ) {
+    const result = await this.authService.signup(data);
+
+    response.cookie('access_token', result.access_token, {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    response.cookie('refresh_token', result.refresh_token, {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/auth/refresh',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return result.data;
   }
 
   @Post('refresh')
