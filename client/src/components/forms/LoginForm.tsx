@@ -20,6 +20,7 @@ export default function LoginForm() {
   } = useForm({ resolver: zodResolver(SignInSchema) });
 
   function onSubmit(data: FormInputs) {
+    console.log(data);
     reset();
     toast(<Toast type="login" role="success" />, toastOptions);
   }
