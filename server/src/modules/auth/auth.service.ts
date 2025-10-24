@@ -25,9 +25,15 @@ export class AuthService {
 
     // Create access token
     const payload = { sub: user.id, email: user.email };
-    const token = await this.jwtService.signAsync(payload);
+    const access_token = await this.jwtService.signAsync(payload);
 
-    return { access_token: token };
+    return {
+      data: {
+        success: true,
+        user: { email: user.email },
+      },
+      access_token,
+    };
   }
 
   async signup({ email, password, name }: SignUpDto) {

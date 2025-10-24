@@ -11,7 +11,7 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3000', //Should be change
     credentials: true,
   });
 
@@ -27,7 +27,7 @@ async function bootstrap() {
 
   app.getHttpAdapter().get('/csrf-token', (req: Request, res: Response) => {
     const csrfToken = generateCsrfToken(req, res);
-    res.json({ csrfToken });
+    res.json({ success: true });
   });
 
   app.use(doubleCsrfProtection);
