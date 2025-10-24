@@ -15,20 +15,17 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const {
-    invalidCsrfTokenError,
-    generateCsrfToken,
-    validateRequest,
-    doubleCsrfProtection,
-  } = doubleCsrf({
+  const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
     getSecret: (req) => process.env.CSRF_SECRET as string,
     getSessionIdentifier: (req) => req.user?.id || req.ip,
   });
 
-  app.getHttpAdapter().get('/csrf-token', (req: Request, res: Response) => {
-    const csrfToken = generateCsrfToken(req, res);
-    res.json({ success: true });
-  });
+  app
+    .getHttpAdapter()
+    .get('/auth/csrf-token', (req: Request, res: Response) => {
+      const csrfToken = generateCsrfToken(req, res);
+      res.json({ success: true });
+    });
 
   app.use(doubleCsrfProtection);
 

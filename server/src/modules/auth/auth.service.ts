@@ -25,7 +25,16 @@ export class AuthService {
 
     // Create access token
     const payload = { sub: user.id, email: user.email };
-    const access_token = await this.jwtService.signAsync(payload);
+    const access_token = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_ACCESS_SECRET,
+      expiresIn: '15m',
+    });
+
+    // Create refresh token
+    const refresh_token = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_REFRESH_SECRET,
+      expiresIn: '7d',
+    });
 
     return {
       data: {
@@ -33,6 +42,7 @@ export class AuthService {
         user: { email: user.email },
       },
       access_token,
+      refresh_token,
     };
   }
 
@@ -61,5 +71,27 @@ export class AuthService {
     // Sign In
 
     // Send JWT Token
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      // Verify refresh token
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET,
+      });
+
+      // Create new access token
+      const newAccessToken = await this.jwtService.signAsync(
+        { sub: payload.sub, email: payload.email },
+        {
+          secret: process.env.JWT_ACCESS_SECRET,
+          expiresIn: '15m',
+        },
+      );
+
+      return { access_token: newAccessToken };
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
   }
 }
