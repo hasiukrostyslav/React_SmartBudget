@@ -69,8 +69,7 @@ export class AuthService {
     });
 
     // Sign In
-
-    // Send JWT Token
+    return this.login({ email, password });
   }
 
   async refresh(refreshToken: string) {
@@ -79,6 +78,12 @@ export class AuthService {
       const payload = await this.jwtService.verifyAsync(refreshToken, {
         secret: process.env.JWT_REFRESH_SECRET,
       });
+
+      // Check if user still exist
+      const existedUser = await this.usersService.findUserByEmail(
+        payload.email,
+      );
+      if (!existedUser) throw new UnauthorizedException('User does not exist.');
 
       // Create new access token
       const newAccessToken = await this.jwtService.signAsync(
