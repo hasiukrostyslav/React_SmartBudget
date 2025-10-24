@@ -2,34 +2,38 @@ import { useForm } from 'react-hook-form';
 import type z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
-import { SignInSchema } from '@/lib/schema';
+import { SignUpSchema } from '@/lib/schemas/schema';
 import { toastOptions } from '@/lib/constants';
-import AuthLink from './AuthLink';
-import Button from './Button';
-import Input from './Input';
-import Toast from './Toast';
+import Toast from '../ui/Toast';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
 
-type FormInputs = z.infer<typeof SignInSchema>;
+type FormInputs = z.infer<typeof SignUpSchema>;
 
-export default function LoginForm() {
+export default function SignUpForm() {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(SignInSchema) });
+  } = useForm({ resolver: zodResolver(SignUpSchema) });
 
   function onSubmit(data: FormInputs) {
     reset();
-    toast(<Toast type="login" role="success" />, toastOptions);
+    toast(<Toast type="signUp" role="success" />, toastOptions);
   }
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
       className="mt-6 flex w-full flex-col gap-2"
     >
+      <Input
+        label="Full name"
+        {...register('name')}
+        placeholder="Please enter your full name"
+        error={errors.name?.message}
+      />
       <Input
         label="Email address"
         {...register('email')}
@@ -43,11 +47,8 @@ export default function LoginForm() {
         error={errors.password?.message}
         isPassword
       />
-      <AuthLink href="/auth/forgot-password" className="mb-3 self-end">
-        Forgot password
-      </AuthLink>
-      <Button color="black" type="submit">
-        Sign In
+      <Button color="black" type="submit" className="mt-3">
+        Sign Up
       </Button>
     </form>
   );

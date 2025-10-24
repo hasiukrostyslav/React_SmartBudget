@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ForgotPasswordSchema } from '@/lib/schema';
-import Button from './Button';
-import Input from './Input';
+import { ForgotPasswordSchema } from '@/lib/schemas/schema';
+import Input from '../ui/Input';
+import Button from '../ui/Button';
 
 type FormInput = z.infer<typeof ForgotPasswordSchema>;
 
