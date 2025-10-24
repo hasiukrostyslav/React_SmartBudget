@@ -80,6 +80,12 @@ export class AuthService {
         secret: process.env.JWT_REFRESH_SECRET,
       });
 
+      // Check if user still exist
+      const existedUser = await this.usersService.findUserByEmail(
+        payload.email,
+      );
+      if (!existedUser) throw new UnauthorizedException('User does not exist.');
+
       // Create new access token
       const newAccessToken = await this.jwtService.signAsync(
         { sub: payload.sub, email: payload.email },
