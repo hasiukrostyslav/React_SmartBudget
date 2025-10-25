@@ -18,13 +18,13 @@ import {
   SignUpSchema,
 } from './schemas/auth.schemas';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   @UsePipes(new ZodValidationPipe(SignInSchema))
-  @Redirect('/dashboard', 301)
+  @Redirect('/api/dashboard', 301)
   async login(
     @Res({ passthrough: true }) response: Response,
     @Body() data: SignInDto,
@@ -43,7 +43,7 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       sameSite: 'lax',
-      path: '/auth/refresh',
+      path: '/api/auth/refresh',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
