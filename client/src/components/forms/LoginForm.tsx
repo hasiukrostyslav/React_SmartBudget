@@ -47,6 +47,7 @@ export default function LoginForm() {
       <AuthLink href="/auth/forgot-password" className="mb-3 self-end">
         Forgot password
       </AuthLink>
+
       <Button color="black" type="submit">
         Sign In
       </Button>

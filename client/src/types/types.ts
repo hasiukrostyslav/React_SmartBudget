@@ -11,7 +11,9 @@ export type IconName =
   | 'x'
   | 'info'
   | 'circle-alert'
-  | 'loader-circle';
+  | 'loader-circle'
+  | 'triangle-alert'
+  | 'circle-check-big';
 
 // Toast Component types
 interface ToastStyleProps<I extends IconName> {
