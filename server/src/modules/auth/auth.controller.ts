@@ -52,7 +52,7 @@ export class AuthController {
 
   @Post('signup')
   @UsePipes(new ZodValidationPipe(SignUpSchema))
-  @Redirect('/dashboard', 301)
+  @Redirect('/api/dashboard', 301)
   async signup(
     @Res({ passthrough: true }) response: Response,
     @Body() data: SignUpDto,

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import type { LoginFormInputs } from '@/types/types';
+import type { LoginFormInputs, SignUpFormInputs } from '@/types/types';
 
 const baseURL = 'http://localhost:3001/api/auth';
 
@@ -32,6 +32,34 @@ export async function login({ email, password }: LoginFormInputs) {
       {
         email,
         password,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        withCredentials: true,
+      },
+    );
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+
+    throw new Error('Internal server error!');
+  }
+}
+
+export async function signUp({ name, email, password }: SignUpFormInputs) {
+  try {
+    const csrfToken = await getCsrfToken();
+
+    await axios.post(
+      `${baseURL}/signup`,
+      {
+        email,
+        password,
+        name,
       },
       {
         headers: {

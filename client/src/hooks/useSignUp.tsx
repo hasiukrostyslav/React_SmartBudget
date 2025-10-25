@@ -1,17 +1,18 @@
 import { useNavigate } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { login as loginAPI } from '@/services/apiAuth';
+import { signUp as signUpAPI } from '@/services/apiAuth';
 
-export function useLogin() {
+export function useSignUp() {
   const navigate = useNavigate();
 
   const {
-    mutate: login,
+    mutate: signUp,
     isPending,
     error,
   } = useMutation({
-    mutationFn: loginAPI,
+    mutationFn: signUpAPI,
     onSuccess: () => navigate('/dashboard'),
   });
-  return { login, isPending, error };
+
+  return { signUp, error, isPending };
 }

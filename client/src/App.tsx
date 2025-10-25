@@ -7,6 +7,7 @@ import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import NotFound from './pages/NotFound';
+import DashboardPage from './pages/dashboard/DashboardPage';
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ export default function App() {
             />
             <Route path="*" element={<NotFound />} />
           </Route>
+          <Route path="dashboard" element={<DashboardPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer limit={1} />

@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignInSchema } from '@/lib/schemas/schema';
 import { useLogin } from '@/hooks/useLogin';
@@ -18,9 +18,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(SignInSchema) });
 
-  function onSubmit(data: LoginFormInputs) {
-    login(data);
-  }
+  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => login(data);
 
   return (
     <form
