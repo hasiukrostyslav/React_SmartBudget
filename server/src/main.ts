@@ -11,19 +11,30 @@ async function bootstrap() {
   app.use(helmet());
   app.use(cookieParser());
   app.enableCors({
-    origin: 'http://localhost:3000', //Should be change
+    origin: 'http://localhost:5173',
     credentials: true,
   });
 
   const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
     getSecret: (req) => process.env.CSRF_SECRET as string,
     getSessionIdentifier: (req) => req.user?.id || req.ip,
+    cookieName:
+      process.env.NODE_ENV === 'production'
+        ? '__Host-psifi.x-csrf-token'
+        : 'psifi.x-csrf-token',
+    cookieOptions: {
+      sameSite: 'lax',
+      path: '/',
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+    },
   });
 
   app
     .getHttpAdapter()
     .get('/api/auth/csrf-token', (req: Request, res: Response) => {
       const csrfToken = generateCsrfToken(req, res);
+
       res.json({ success: true });
     });
 
