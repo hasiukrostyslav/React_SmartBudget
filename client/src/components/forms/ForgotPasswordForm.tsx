@@ -14,7 +14,9 @@ export default function ForgotPasswordForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(ForgotPasswordSchema) });
 
-  function onSubmit(data: FormInput) {}
+  function onSubmit(data: FormInput) {
+    console.log(data);
+  }
 
   return (
     <form

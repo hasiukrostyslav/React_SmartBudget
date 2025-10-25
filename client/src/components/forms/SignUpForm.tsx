@@ -19,6 +19,7 @@ export default function SignUpForm() {
   } = useForm({ resolver: zodResolver(SignUpSchema) });
 
   function onSubmit(data: FormInputs) {
+    console.log(data);
     reset();
     toast(<Toast type="signUp" role="success" />, toastOptions);
   }
