@@ -1,3 +1,6 @@
+import { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
+import type z from 'zod';
+
 // Icon names
 export type IconName =
   | 'eye'
@@ -11,7 +14,9 @@ export type IconName =
   | 'x'
   | 'info'
   | 'circle-alert'
-  | 'loader-circle';
+  | 'loader-circle'
+  | 'triangle-alert'
+  | 'circle-check-big';
 
 // Toast Component types
 interface ToastStyleProps<I extends IconName> {
@@ -34,3 +39,6 @@ export interface InputIcons {
   email: Extract<IconName, 'mail'>;
   password: Extract<IconName, 'lock'>;
 }
+
+export type LoginFormInputs = z.infer<typeof SignInSchema>;
+export type SignUpFormInputs = z.infer<typeof SignUpSchema>;
