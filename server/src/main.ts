@@ -40,7 +40,6 @@ async function bootstrap() {
     });
 
   app.use((req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     if (req.path === '/api/auth/signout') {
       return next();
     }

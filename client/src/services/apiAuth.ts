@@ -4,10 +4,12 @@ import type { LoginFormInputs, SignUpFormInputs } from '@/types/types';
 
 export async function login({ email, password }: LoginFormInputs) {
   try {
-    await api.post('/auth/login', {
+    const res = await api.post('/auth/login', {
       email,
       password,
     });
+
+    return res.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
@@ -19,11 +21,13 @@ export async function login({ email, password }: LoginFormInputs) {
 
 export async function signUp({ name, email, password }: SignUpFormInputs) {
   try {
-    await api.post('/auth/signup', {
+    const res = await api.post('/auth/signup', {
       email,
       password,
       name,
     });
+
+    return res.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
