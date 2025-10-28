@@ -37,6 +37,20 @@ export async function signUp({ name, email, password }: SignUpFormInputs) {
   }
 }
 
+export async function getSession() {
+  try {
+    const res = await api.get('/auth/session');
+
+    return res.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message);
+    }
+
+    throw new Error('Internal server error!');
+  }
+}
+
 export async function signOut() {
   try {
     await api.post('/auth/signout');

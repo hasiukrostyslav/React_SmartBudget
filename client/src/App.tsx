@@ -8,6 +8,8 @@ import SignUpPage from './pages/auth/SignUpPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import NotFound from './pages/NotFound';
 import DashboardPage from './pages/dashboard/DashboardPage';
+import RedirectRoute from './components/routes/RedirectRoute';
+import ProtectedRoute from './components/routes/ProtectedRoute';
 
 const queryClient = new QueryClient();
 
@@ -16,16 +18,21 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route element={<AuthLayout />}>
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/signup" element={<SignUpPage />} />
-            <Route
-              path="/auth/forgot-password"
-              element={<ForgotPasswordPage />}
-            />
+          <Route path="auth" element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignUpPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="dashboard" element={<DashboardPage />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route path="/" element={<RedirectRoute />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer limit={1} />
