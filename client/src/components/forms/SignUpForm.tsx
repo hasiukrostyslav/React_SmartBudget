@@ -1,28 +1,23 @@
-import { useForm } from 'react-hook-form';
-import type z from 'zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
+import { useSignUp } from '@/hooks/useSignUp';
 import { SignUpSchema } from '@/lib/schemas/schema';
-import { toastOptions } from '@/lib/constants';
-import Toast from '../ui/Toast';
+import type { SignUpFormInputs } from '@/types/types';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
-
-type FormInputs = z.infer<typeof SignUpSchema>;
+import FormError from '../ui/FormError';
+import Icon from '../ui/Icon';
 
 export default function SignUpForm() {
+  const { signUp, isPending, error } = useSignUp();
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(SignUpSchema) });
 
-  function onSubmit(data: FormInputs) {
-    console.log(data);
-    reset();
-    toast(<Toast type="signUp" role="success" />, toastOptions);
-  }
+  const onSubmit: SubmitHandler<SignUpFormInputs> = (data) => signUp(data);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -34,22 +29,33 @@ export default function SignUpForm() {
         {...register('name')}
         placeholder="Please enter your full name"
         error={errors.name?.message}
+        disabled={isPending}
       />
       <Input
         label="Email address"
         {...register('email')}
         placeholder="Please enter your email"
         error={errors.email?.message}
+        disabled={isPending}
       />
       <Input
         label="Password"
         {...register('password')}
         placeholder="Please enter your password"
         error={errors.password?.message}
+        disabled={isPending}
         isPassword
       />
-      <Button color="black" type="submit" className="mt-3">
-        Sign Up
+      {error && <FormError message={error.message} />}
+      <Button color="black" type="submit" className="mt-3" disabled={isPending}>
+        {!isPending ? (
+          'Sign Up'
+        ) : (
+          <span className="flex items-center justify-center gap-2">
+            <Icon name="loader-circle" className="animate-spin" />
+            Submit
+          </span>
+        )}
       </Button>
     </form>
   );
