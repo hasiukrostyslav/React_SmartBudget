@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
 import cookieParser from 'cookie-parser';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +28,7 @@ async function bootstrap() {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
     },
+    ignoredMethods: ['GET'],
   });
 
   app
@@ -38,7 +39,14 @@ async function bootstrap() {
       res.json({ success: true });
     });
 
-  app.use(doubleCsrfProtection);
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
+    if (req.path === '/api/auth/signout') {
+      return next();
+    }
+
+    return doubleCsrfProtection(req, res, next);
+  });
 
   await app.listen(process.env.PORT ?? 3001);
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  HttpCode,
   Post,
   Redirect,
   Req,
@@ -24,7 +25,8 @@ export class AuthController {
 
   @Post('login')
   @UsePipes(new ZodValidationPipe(SignInSchema))
-  @Redirect('/api/dashboard', 301)
+  @HttpCode(200)
+  // @Redirect('/api/dashboard', 301)
   async login(
     @Res({ passthrough: true }) response: Response,
     @Body() data: SignInDto,
@@ -52,7 +54,7 @@ export class AuthController {
 
   @Post('signup')
   @UsePipes(new ZodValidationPipe(SignUpSchema))
-  @Redirect('/api/dashboard', 301)
+  // @Redirect('/api/dashboard', 301)
   async signup(
     @Res({ passthrough: true }) response: Response,
     @Body() data: SignUpDto,
@@ -102,9 +104,33 @@ export class AuthController {
   }
 
   @Post('signout')
+  @HttpCode(200)
   signout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('access_token');
-    response.clearCookie('refresh_token', { path: '/auth/refresh' });
+    response.clearCookie('access_token', {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+    });
+
+    response.clearCookie('refresh_token', {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/auth/refresh',
+    });
+
+    response.clearCookie(
+      process.env.NODE_ENV === 'production'
+        ? '__Host-psifi.x-csrf-token'
+        : 'psifi.x-csrf-token',
+      {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: false,
+        sameSite: 'lax',
+        path: '/',
+      },
+    );
 
     return { message: 'Logged out' };
   }
