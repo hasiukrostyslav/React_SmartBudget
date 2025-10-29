@@ -10,31 +10,34 @@ import NotFound from './pages/NotFound';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import RedirectRoute from './components/routes/RedirectRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
+import { ThemeProvider } from './context';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-            <Route path="signup" element={<SignUpPage />} />
-            <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      <ThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="auth" element={<AuthLayout />}>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="signup" element={<SignUpPage />} />
+              <Route path="forgot-password" element={<ForgotPasswordPage />} />
+            </Route>
+            <Route
+              path="dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path="/" element={<RedirectRoute />} />
             <Route path="*" element={<NotFound />} />
-          </Route>
-          <Route
-            path="dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route path="/" element={<RedirectRoute />} />
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
       <ToastContainer limit={1} />
       <ReactQueryDevtools buttonPosition="bottom-left" />
     </QueryClientProvider>
