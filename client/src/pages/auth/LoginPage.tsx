@@ -1,5 +1,5 @@
 import LoginForm from '@/components/forms/LoginForm';
-import AuthFormContainer from '@/components/layouts/AuthFormContainer';
+import AuthFormContainer from '@/components/containers/AuthFormContainer';
 import AuthLink from '@/components/ui/AuthLink';
 
 export default function LoginPage() {
