@@ -1,6 +1,6 @@
 import { useTheme } from '@/hooks/useTheme';
 
-export default function Logo({ classname }: { classname?: string }) {
+export default function Logo({ className }: { className?: string }) {
   const { theme } = useTheme();
 
   return (
@@ -9,7 +9,7 @@ export default function Logo({ classname }: { classname?: string }) {
       alt="Logo"
       width={404}
       height={92}
-      className={`h-auto ${classname}`}
+      className={`h-auto ${className}`}
     />
   );
 }
