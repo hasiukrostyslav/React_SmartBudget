@@ -1,11 +1,18 @@
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
 import globals from 'globals';
 import parser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import prettierPlugin from 'eslint-plugin-prettier';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const compat = new FlatCompat({
-  baseDirectory: new URL('.', import.meta.url).pathname,
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
 });
 
 export default [
@@ -26,7 +33,7 @@ export default [
       parser, // @typescript-eslint/parser
       parserOptions: {
         project: './tsconfig.json',
-        tsconfigRootDir: new URL('.', import.meta.url).pathname,
+        tsconfigRootDir: __dirname,
       },
       globals: {
         ...globals.node,
