@@ -13,8 +13,8 @@ export default function AuthFormContainer({
   return (
     <section className="relative flex w-5/12 items-center justify-center">
       <div className="flex w-1/2 flex-col items-center justify-center gap-2">
-        <Logo />
-        <h2 className="text-2xl font-bold tracking-wider">{heading}</h2>
+        <Logo className="w-[300px]" />
+        <h2 className="text-lg font-medium tracking-wide">{heading}</h2>
         {children}
       </div>
       <ThemeButton className="absolute right-10 bottom-5" />

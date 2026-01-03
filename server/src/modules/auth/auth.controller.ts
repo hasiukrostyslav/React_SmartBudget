@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Redirect,
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import type { Response, Request } from 'express';
@@ -18,6 +20,7 @@ import {
   SignInSchema,
   SignUpSchema,
 } from './schemas/auth.schemas';
+import { AuthGuard } from './auth.guard';
 
 @Controller('api/auth')
 export class AuthController {
@@ -133,5 +136,11 @@ export class AuthController {
     );
 
     return { message: 'Logged out' };
+  }
+
+  @Get('session')
+  @UseGuards(AuthGuard)
+  getSession(@Req() req: Request) {
+    return { user: { id: req.user.sub, email: req.user.email } };
   }
 }
