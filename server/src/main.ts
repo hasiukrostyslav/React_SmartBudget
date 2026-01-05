@@ -36,7 +36,7 @@ async function bootstrap() {
     .get('/api/auth/csrf-token', (req: Request, res: Response) => {
       const csrfToken = generateCsrfToken(req, res);
 
-      res.json({ success: true });
+      res.json({ success: true, csrfToken });
     });
 
   app.use((req: Request, res: Response, next: NextFunction) => {
