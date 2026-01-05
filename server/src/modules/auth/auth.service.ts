@@ -5,6 +5,7 @@ import { createId } from '@paralleldrive/cuid2';
 import { UsersService } from '../users/users.service';
 import { SignInDto, SignUpDto } from './schemas/auth.schemas';
 import { saltRounds } from '@/common/constants/constant';
+import { RefreshTokenPayload } from '@/types/types';
 
 @Injectable()
 export class AuthService {
@@ -61,7 +62,7 @@ export class AuthService {
     const id = createId();
 
     // Create new user
-    const newUser = await this.usersService.createUser({
+    await this.usersService.createUser({
       email,
       hashedPassword,
       name,
@@ -75,9 +76,12 @@ export class AuthService {
   async refresh(refreshToken: string) {
     try {
       // Verify refresh token
-      const payload = await this.jwtService.verifyAsync(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET,
-      });
+      const payload = await this.jwtService.verifyAsync<RefreshTokenPayload>(
+        refreshToken,
+        {
+          secret: process.env.JWT_REFRESH_SECRET,
+        },
+      );
 
       // Check if user still exist
       const existedUser = await this.usersService.findUserByEmail(

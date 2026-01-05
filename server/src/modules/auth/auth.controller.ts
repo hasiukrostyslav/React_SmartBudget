@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   Post,
-  Redirect,
   Req,
   Res,
   UnauthorizedException,
@@ -29,7 +28,6 @@ export class AuthController {
   @Post('login')
   @UsePipes(new ZodValidationPipe(SignInSchema))
   @HttpCode(200)
-  // @Redirect('/api/dashboard', 301)
   async login(
     @Res({ passthrough: true }) response: Response,
     @Body() data: SignInDto,
