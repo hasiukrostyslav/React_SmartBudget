@@ -86,7 +86,7 @@ export class AuthController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const refreshToken = request.cookies['refresh_token'];
+    const refreshToken = request.cookies['refresh_token'] as string | undefined;
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is missing');
     }
@@ -139,6 +139,7 @@ export class AuthController {
   @Get('session')
   @UseGuards(AuthGuard)
   getSession(@Req() req: Request) {
-    return { user: { id: req.user.sub, email: req.user.email } };
+    const user = req.user as { id: string; email: string };
+    return { user: { id: user.id, email: user.email } };
   }
 }
