@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractToken(request);
 
     if (!token) {
@@ -20,11 +20,17 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync<{
+        sub: string;
+        email: string;
+      }>(token, {
         secret: process.env.JWT_ACCESS_SECRET,
       });
 
-      request['user'] = payload;
+      request.user = { ...payload, id: payload.sub } as {
+        id: string;
+        email: string;
+      };
     } catch {
       throw new UnauthorizedException('Invalid or expired access token');
     }
@@ -33,7 +39,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractToken(req: Request): string | undefined {
-    const token = req.cookies['access_token'];
+    const token = req.cookies['access_token'] as string | undefined;
 
     return token ? token : undefined;
   }
