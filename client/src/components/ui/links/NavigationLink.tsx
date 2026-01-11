@@ -26,12 +26,13 @@ export default function NavigationLink({
             : 'text-slate-600 hover:bg-slate-200 hover:text-blue-500 dark:text-blue-100 dark:hover:bg-slate-700',
         )
       }
-      to={href}
       style={{
         transition: 'padding 0.5s ease-in-out',
         padding: isCollapsed ? '0.5rem' : '0.5rem 1.75rem',
         borderRadius: isCollapsed ? '9999px ' : '1.5rem',
       }}
+      to={href}
+      end
     >
       <Icon className="shrink-0" name={iconName} size={24} />
       <span
