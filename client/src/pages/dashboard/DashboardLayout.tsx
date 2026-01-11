@@ -8,7 +8,7 @@ export default function DashboardLayout() {
   return (
     <section className="grid h-screen grid-cols-[auto_1fr] grid-rows-[auto_1fr_auto]">
       <Sidebar />
-      {/* <Header /> */}
+      <Header />
       <section
         className={clsx(
           'relative mx-5 rounded-2xl border',
