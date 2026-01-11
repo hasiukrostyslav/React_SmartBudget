@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import type { Response, Request } from 'express';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
 import { ZodValidationPipe } from '@/common/pipes/zod-validation.pipe';
 import {
   type SignInDto,
@@ -23,7 +24,10 @@ import { AuthGuard } from './auth.guard';
 
 @Controller('api/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('login')
   @UsePipes(new ZodValidationPipe(SignInSchema))
@@ -138,8 +142,20 @@ export class AuthController {
 
   @Get('session')
   @UseGuards(AuthGuard)
-  getSession(@Req() req: Request) {
-    const user = req.user as { id: string; email: string };
-    return { user: { id: user.id, email: user.email } };
+  async getSession(@Req() req: Request) {
+    const user = req.user as {
+      id: string;
+      email: string;
+      exp: number;
+      iat: number;
+    };
+
+    const result = await this.usersService.findUserById(user.id);
+
+    return {
+      isAuthenticated: true,
+      expires: new Date(user.exp * 1000).toISOString(),
+      user: { id: user.id, email: user.email, name: result?.name },
+    };
   }
 }

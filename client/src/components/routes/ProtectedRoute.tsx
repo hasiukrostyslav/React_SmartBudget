@@ -8,7 +8,9 @@ export default function ProtectedRoute({
 }) {
   const { session, isFetching } = useAuth();
 
-  if (!session && !isFetching) return <Navigate to="/auth/login" replace />;
+  if (session) return children;
 
-  if (session && !isFetching) return children;
+  if (!isFetching) return <Navigate to="/auth/login" replace />;
+
+  return null;
 }

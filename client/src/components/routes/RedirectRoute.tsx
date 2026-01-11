@@ -4,7 +4,9 @@ import { useAuth } from '@/hooks/useAuth';
 export default function RedirectRoute() {
   const { session, isFetching } = useAuth();
 
-  if (session && !isFetching) return <Navigate to="/dashboard" replace />;
+  if (isFetching) return null;
 
-  if (!session && !isFetching) return <Navigate to="/auth/login" replace />;
+  if (session) return <Navigate to="/dashboard" replace />;
+
+  return <Navigate to="/auth/login" replace />;
 }
