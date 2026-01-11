@@ -1,22 +1,10 @@
+import { icons } from '@/lib/constants/icons';
+
 import { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
 import type z from 'zod';
 
 // Icon names
-export type IconName =
-  | 'eye'
-  | 'eye-off'
-  | 'mail'
-  | 'lock'
-  | 'user'
-  | 'sun'
-  | 'moon'
-  | 'check'
-  | 'x'
-  | 'info'
-  | 'circle-alert'
-  | 'loader-circle'
-  | 'triangle-alert'
-  | 'circle-check-big';
+export type IconName = (typeof icons)[number]['role'];
 
 // Toast Component types
 interface ToastStyleProps<I extends IconName> {
@@ -28,16 +16,16 @@ interface ToastStyleProps<I extends IconName> {
 
 export interface ToastRoles {
   success: ToastStyleProps<'check'>;
-  error: ToastStyleProps<'x'>;
+  error: ToastStyleProps<'close'>;
   info: ToastStyleProps<'info'>;
-  warning: ToastStyleProps<'circle-alert'>;
+  warning: ToastStyleProps<'warning'>;
 }
 
 // Auth input with icons types
 export interface InputIcons {
-  name: Extract<IconName, 'user'>;
-  email: Extract<IconName, 'mail'>;
-  password: Extract<IconName, 'lock'>;
+  name: Extract<IconName, 'name'>;
+  email: Extract<IconName, 'email'>;
+  password: Extract<IconName, 'password'>;
 }
 
 export type LoginFormInputs = z.infer<typeof SignInSchema>;
