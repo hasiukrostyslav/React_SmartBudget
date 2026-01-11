@@ -9,7 +9,7 @@ export default function Header() {
       <DashboardHeading />
       <Time />
       <SearchForm size="sm" className="ml-auto" placeholder="Search..." />
-      {/* <UserPanel /> */}
+      <UserPanel />
     </header>
   );
 }
