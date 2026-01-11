@@ -1,15 +1,23 @@
 import { useTheme } from '@/hooks/useTheme';
+interface LogoProps {
+  type: 'sm' | 'lg';
+  className?: string;
+}
 
-export default function Logo({ className }: { className?: string }) {
+export default function Logo({ className, type }: LogoProps) {
   const { theme } = useTheme();
 
   return (
     <img
-      src={theme === 'light' ? '/logo-dark.svg' : '/logo-light.svg'}
+      src={
+        type === 'lg'
+          ? `/logo-${theme === 'light' ? 'dark' : 'light'}.svg`
+          : '/logo-sm.svg'
+      }
       alt="Logo"
       width={404}
       height={92}
-      className={`h-auto ${className}`}
+      className={`w-auto ${className}`}
     />
   );
 }
