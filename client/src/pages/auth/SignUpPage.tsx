@@ -1,6 +1,6 @@
 import SignUpForm from '@/components/forms/SignUpForm';
 import AuthFormContainer from '@/components/layouts/AuthFormContainer';
-import AuthLink from '@/components/ui/AuthLink';
+import AuthLink from '@/components/ui/links/AuthLink';
 
 export default function SignUpPage() {
   return (

@@ -20,7 +20,7 @@ const roles: ToastRoles = {
     bg: 'bg-emerald-50 dark:bg-slate-700',
   },
   error: {
-    icon: 'x',
+    icon: 'close',
     bgIcon: 'bg-linear-to-b from-red-400 from-30% to-red-600',
     border: 'border-red-300 dark:border-red-500',
     bg: 'bg-red-50 dark:bg-slate-700',
@@ -32,7 +32,7 @@ const roles: ToastRoles = {
     bg: 'bg-blue-50 dark:bg-slate-700',
   },
   warning: {
-    icon: 'circle-alert',
+    icon: 'warning',
     bgIcon: 'bg-linear-to-b from-amber-400 from-30% to-amber-600',
     border: 'border-amber-400 dark:border-amber-500',
     bg: 'bg-amber-50 dark:bg-slate-700',
