@@ -10,10 +10,10 @@ export default function DashboardPage() {
 
   return (
     <div>
-      DashboardPage
+      {/* DashboardPage
       <form onSubmit={onSubmit}>
         <button type="submit">Sign out</button>
-      </form>
+      </form> */}
     </div>
   );
 }

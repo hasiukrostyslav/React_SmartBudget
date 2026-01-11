@@ -7,6 +7,7 @@ import LoginPage from './pages/auth/LoginPage';
 import SignUpPage from './pages/auth/SignUpPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import NotFound from './pages/NotFound';
+import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
 import RedirectRoute from './components/routes/RedirectRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
@@ -29,17 +30,19 @@ export default function App() {
               path="dashboard"
               element={
                 <ProtectedRoute>
-                  <DashboardPage />
+                  <DashboardLayout />
                 </ProtectedRoute>
               }
-            ></Route>
+            >
+              <Route index element={<DashboardPage />} />
+            </Route>
             <Route path="/" element={<RedirectRoute />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
       <ToastContainer limit={1} />
-      <ReactQueryDevtools buttonPosition="bottom-left" />
+      <ReactQueryDevtools buttonPosition="top-left" />
     </QueryClientProvider>
   );
 }
