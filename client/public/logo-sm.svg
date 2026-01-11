@@ -1,0 +1,12 @@
+<svg
+      viewBox="'0 0 200 50"
+      xmlns="http://www.w3.org/2000/svg"
+      width="92"
+      height="92"
+      role="img"
+      aria-label="SmartBudget logo"
+    >
+     <text x="0" y="64" font-size="64" fill="oklch(92.9% 0.013 255.508)" font-weight="700" font-family="Montserrat, Arial, sans-serif">
+       <tspan fill="oklch(54.6% 0.245 262.881)">SB</tspan>
+</text>
+    </svg>

@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSignUp } from '@/hooks/useSignUp';
 import { SignUpSchema } from '@/lib/schemas/schema';
 import type { SignUpFormInputs } from '@/types/types';
-import Input from '../ui/Input';
-import Button from '../ui/Button';
+import Input from '../ui/inputs/Input';
+import Button from '../ui/buttons/Button';
 import FormError from '../ui/FormError';
 import Icon from '../ui/Icon';
 
@@ -30,6 +30,8 @@ export default function SignUpForm() {
         placeholder="Please enter your full name"
         error={errors.name?.message}
         disabled={isPending}
+        withError
+        icon="name"
       />
       <Input
         label="Email address"
@@ -37,6 +39,8 @@ export default function SignUpForm() {
         placeholder="Please enter your email"
         error={errors.email?.message}
         disabled={isPending}
+        withError
+        icon="email"
       />
       <Input
         label="Password"
@@ -44,15 +48,25 @@ export default function SignUpForm() {
         placeholder="Please enter your password"
         error={errors.password?.message}
         disabled={isPending}
-        isPassword
+        withError
+        icon="password"
+        withButton
       />
+
       {error && <FormError message={error.message} />}
-      <Button color="black" type="submit" className="mt-3" disabled={isPending}>
+
+      <Button
+        size="lg"
+        color="black"
+        type="submit"
+        className="mt-3"
+        disabled={isPending}
+      >
         {!isPending ? (
           'Sign Up'
         ) : (
           <span className="flex items-center justify-center gap-2">
-            <Icon name="loader-circle" className="animate-spin" />
+            <Icon size={24} name="loader-circle" className="animate-spin" />
             Submit
           </span>
         )}
