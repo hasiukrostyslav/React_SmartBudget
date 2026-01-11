@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Pool, QueryResult } from 'pg';
 import type { Users } from './users.type';
-import { NewUserDto, SignUpDto } from '../auth/schemas/auth.schemas';
+import { NewUserDto } from '../auth/schemas/auth.schemas';
 
 @Injectable()
 export class UsersService {
@@ -40,7 +40,7 @@ export class UsersService {
     id,
   }: NewUserDto): Promise<Users | null> {
     try {
-      const result = await this.pool.query(
+      const result: QueryResult<Users> = await this.pool.query(
         `
       INSERT INTO "users" (id, email, password, name)
       VALUES($1, $2, $3, $4)
@@ -49,7 +49,7 @@ export class UsersService {
         [id, email, hashedPassword, name],
       );
 
-      return result.rows[0] || null;
+      return result.rows[0];
     } catch (error: unknown) {
       if (error instanceof Error) console.error('DB error:', error.message);
       return null;

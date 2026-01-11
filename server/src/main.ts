@@ -17,7 +17,7 @@ async function bootstrap() {
 
   const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
     getSecret: (req) => process.env.CSRF_SECRET as string,
-    getSessionIdentifier: (req) => req.user?.id || req.ip,
+    getSessionIdentifier: (req: Request) => req.user?.id || req.ip || 'unknown',
     cookieName:
       process.env.NODE_ENV === 'production'
         ? '__Host-psifi.x-csrf-token'
@@ -36,7 +36,7 @@ async function bootstrap() {
     .get('/api/auth/csrf-token', (req: Request, res: Response) => {
       const csrfToken = generateCsrfToken(req, res);
 
-      res.json({ success: true });
+      res.json({ success: true, csrfToken });
     });
 
   app.use((req: Request, res: Response, next: NextFunction) => {
@@ -49,4 +49,4 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT ?? 3001);
 }
-bootstrap();
+bootstrap().catch((err) => console.error(err));

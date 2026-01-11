@@ -1,4 +1,4 @@
-import ButtonLink from './ButtonLink';
+import ButtonLink from './buttons/ButtonLink';
 
 const errors = {
   auth: {
