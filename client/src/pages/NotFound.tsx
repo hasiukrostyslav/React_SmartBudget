@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <section className="relative flex h-screen items-center justify-center">
       <Link to="/">
-        <Logo type="lg" className="absolute top-5 left-5 h-[45px]" />
+        <Logo type="lg" className="absolute top-2.5 left-[27px] h-10" />
       </Link>
       <Error type="route" />
       <ThemeButton className="absolute right-10 bottom-5" />
