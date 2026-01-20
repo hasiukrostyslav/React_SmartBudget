@@ -6,7 +6,7 @@ import ThemeButton from '@/components/ui/buttons/ThemeButton';
 export default function NotFound() {
   return (
     <section className="relative flex h-screen items-center justify-center">
-      <Link to="/">
+      <Link to="/dashboard">
         <Logo type="lg" className="absolute top-2.5 left-[27px] h-10" />
       </Link>
       <Error type="route" />

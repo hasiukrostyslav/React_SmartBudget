@@ -32,7 +32,7 @@ export default function Error({ type }: ErrorProps) {
       <figcaption className="mt-4 text-3xl leading-snug font-medium tracking-wider">
         {errors[type].header}
       </figcaption>
-      <ButtonLink href="/">Back to Home</ButtonLink>
+      <ButtonLink href="/dashboard">Back to Home</ButtonLink>
     </figure>
   );
 }

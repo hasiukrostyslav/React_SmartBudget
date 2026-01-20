@@ -8,7 +8,7 @@ interface AnimatedLogoProps {
 
 export default function AnimatedLogo({ isCollapsed }: AnimatedLogoProps) {
   return (
-    <Link className="outline-round-sm flex justify-center" to="/">
+    <Link className="outline-round-sm flex justify-center" to="/dashboard">
       <AnimatePresence mode="wait">
         <motion.div
           key={isCollapsed ? 'sm' : 'lg'}

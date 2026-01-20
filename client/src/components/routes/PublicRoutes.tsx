@@ -9,7 +9,8 @@ export default function PublicRoutes({
   const location = useLocation();
   const { session } = useAuth();
 
-  if (session) return <Navigate to="/dashboard" replace />;
+  if (session && location.pathname.startsWith('/auth'))
+    return <Navigate to="/dashboard" replace />;
 
   if (!session && /^\/auth\/?$/.test(location.pathname))
     return <Navigate to="/auth/login" replace />;

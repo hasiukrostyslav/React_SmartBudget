@@ -6,7 +6,8 @@ export function useAuth() {
     data: session,
     error,
     isFetching,
+    isSuccess,
   } = useQuery({ queryKey: ['session'], queryFn: getSession, retry: false });
 
-  return { session, isFetching, error };
+  return { session, isFetching, error, isSuccess };
 }

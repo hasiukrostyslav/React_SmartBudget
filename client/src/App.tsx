@@ -10,8 +10,8 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import NotFound from './pages/NotFound';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import DashboardPage from './pages/dashboard/DashboardPage';
-import RedirectRoute from './components/routes/RedirectRoute';
-import ProtectedRoute from './components/routes/ProtectedRoute';
+import PublicRoutes from './components/routes/PublicRoutes';
+import ProtectedRoutes from './components/routes/ProtectedRoutes';
 import TransactionsPage from './pages/dashboard/TransactionPage';
 import PaymentsPage from './pages/dashboard/PaymentsPage';
 import CardsPage from './pages/dashboard/CardsPage';
@@ -20,6 +20,7 @@ import LoansPage from './pages/dashboard/LoansPage';
 import DepositsPage from './pages/dashboard/DepositsPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
 import SettingsPage from './pages/dashboard/SettingsPage';
+import NotFoundGuard from './components/routes/NotFoundGuard';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +30,14 @@ export default function App() {
       <ThemeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="auth" element={<AuthLayout />}>
+            <Route
+              path="auth"
+              element={
+                <PublicRoutes>
+                  <AuthLayout />
+                </PublicRoutes>
+              }
+            >
               <Route path="login" element={<LoginPage />} />
               <Route path="signup" element={<SignUpPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
@@ -37,9 +45,9 @@ export default function App() {
             <Route
               path="dashboard"
               element={
-                <ProtectedRoute>
+                <ProtectedRoutes>
                   <DashboardLayout />
-                </ProtectedRoute>
+                </ProtectedRoutes>
               }
             >
               <Route index element={<DashboardPage />} />
@@ -52,8 +60,14 @@ export default function App() {
               <Route path="profile" element={<ProfilePage />} />
               <Route path="settings" element={<SettingsPage />} />
             </Route>
-            <Route path="/" element={<RedirectRoute />} />
-            <Route path="*" element={<NotFound />} />
+            <Route
+              path="*"
+              element={
+                <NotFoundGuard>
+                  <NotFound />
+                </NotFoundGuard>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
