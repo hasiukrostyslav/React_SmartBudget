@@ -1,9 +1,16 @@
 import axios, { AxiosError } from 'axios';
 import { getCsrfCookie } from '@/lib/utils/cookie';
 
+const BASE_URL =
+  import.meta.env.VITE_ENV === 'production'
+    ? import.meta.env.VITE_SERVER_PROD_URL
+    : import.meta.env.VITE_SERVER_DEV_URL;
+
+console.log(BASE_URL);
+
 async function getCsrfToken() {
   try {
-    await axios('http://localhost:3001/api/auth/csrf-token', {
+    await axios(`${BASE_URL}/api/auth/csrf-token`, {
       withCredentials: true,
     });
     const token = getCsrfCookie();
@@ -18,7 +25,7 @@ async function getCsrfToken() {
 }
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: `${BASE_URL}/api`,
   withCredentials: true,
 });
 
