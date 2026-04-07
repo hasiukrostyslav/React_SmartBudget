@@ -26,10 +26,10 @@ async function bootstrap() {
         ? '__Host-psifi.x-csrf-token'
         : 'psifi.x-csrf-token',
     cookieOptions: {
-      sameSite: 'lax',
+      sameSite: 'none',
       path: '/',
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
+      secure: true,
     },
     ignoredMethods: ['GET'],
   });
