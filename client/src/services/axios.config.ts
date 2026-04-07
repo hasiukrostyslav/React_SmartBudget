@@ -1,12 +1,11 @@
 import axios, { AxiosError } from 'axios';
 import { getCsrfCookie } from '@/lib/utils/cookie';
 
-const BASE_URL =
-  import.meta.env.VITE_ENV === 'production'
-    ? import.meta.env.VITE_SERVER_PROD_URL
-    : import.meta.env.VITE_SERVER_DEV_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
-console.log(BASE_URL);
+if (!BASE_URL) {
+  throw new Error('❌ VITE_API_URL is missing');
+}
 
 async function getCsrfToken() {
   try {
