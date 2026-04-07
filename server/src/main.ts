@@ -10,8 +10,11 @@ async function bootstrap() {
 
   app.use(helmet());
   app.use(cookieParser());
+
+  const allowedOrigins = ['http://localhost:5173', process.env.CLIENT_URL];
+
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
   });
 
