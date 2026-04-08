@@ -20,7 +20,7 @@ async function bootstrap() {
 
   const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
     getSecret: (req) => process.env.CSRF_SECRET as string,
-    getSessionIdentifier: (req: Request) => req.user?.id || req.ip || 'unknown',
+    getSessionIdentifier: () => 'global',
     cookieName:
       process.env.NODE_ENV === 'production'
         ? '__Host-psifi.x-csrf-token'
