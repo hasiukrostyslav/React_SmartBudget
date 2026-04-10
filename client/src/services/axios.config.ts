@@ -7,13 +7,20 @@ if (!BASE_URL) {
   throw new Error('❌ VITE_API_URL is missing');
 }
 
+/** Token from last /csrf-token response; required when API is on another origin (cookie not in document.cookie). */
+let cachedCsrfToken: string | null = null;
+
 async function getCsrfToken() {
   try {
-    await axios(`${BASE_URL}/api/auth/csrf-token`, {
-      withCredentials: true,
-    });
-    const token = getCsrfCookie();
-    return token;
+    const { data } = await axios.get<{ success: boolean; csrfToken: string }>(
+      `${BASE_URL}/api/auth/csrf-token`,
+      { withCredentials: true },
+    );
+    const token = data.csrfToken ?? getCsrfCookie();
+    if (token) {
+      cachedCsrfToken = token;
+    }
+    return token ?? null;
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
@@ -30,13 +37,16 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    let csrfToken = getCsrfCookie();
+    let csrfToken =
+      cachedCsrfToken ?? getCsrfCookie();
 
     if (!csrfToken) {
       csrfToken = await getCsrfToken();
     }
 
-    config.headers['X-CSRF-Token'] = csrfToken;
+    if (csrfToken) {
+      config.headers['X-CSRF-Token'] = csrfToken;
+    }
 
     return config;
   },
