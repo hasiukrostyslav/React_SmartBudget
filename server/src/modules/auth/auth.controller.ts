@@ -22,6 +22,25 @@ import {
 } from './schemas/auth.schemas';
 import { AuthGuard } from './auth.guard';
 
+/** Lax blocks cookies on cross-site XHR/fetch; None + Secure is required for SPA on another origin than the API. */
+const isProd = process.env.NODE_ENV === 'production';
+
+const accessTokenCookieOpts = {
+  secure: isProd,
+  httpOnly: true,
+  sameSite: isProd ? ('none' as const) : ('lax' as const),
+  path: '/',
+  maxAge: 15 * 60 * 1000,
+};
+
+const refreshTokenCookieOpts = {
+  secure: isProd,
+  httpOnly: true,
+  sameSite: isProd ? ('none' as const) : ('lax' as const),
+  path: '/api/auth/refresh',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 @Controller('api/auth')
 export class AuthController {
   constructor(
@@ -38,21 +57,13 @@ export class AuthController {
   ) {
     const result = await this.authService.login(data);
 
-    response.cookie('access_token', result.access_token, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
+    response.cookie('access_token', result.access_token, accessTokenCookieOpts);
 
-    response.cookie('refresh_token', result.refresh_token, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/api/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    response.cookie(
+      'refresh_token',
+      result.refresh_token,
+      refreshTokenCookieOpts,
+    );
 
     return result.data;
   }
@@ -66,21 +77,13 @@ export class AuthController {
   ) {
     const result = await this.authService.signup(data);
 
-    response.cookie('access_token', result.access_token, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
+    response.cookie('access_token', result.access_token, accessTokenCookieOpts);
 
-    response.cookie('refresh_token', result.refresh_token, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    response.cookie(
+      'refresh_token',
+      result.refresh_token,
+      refreshTokenCookieOpts,
+    );
 
     return result.data;
   }
@@ -97,13 +100,7 @@ export class AuthController {
 
     const result = await this.authService.refresh(refreshToken);
 
-    response.cookie('access_token', result.access_token, {
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: true,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
-    });
+    response.cookie('access_token', result.access_token, accessTokenCookieOpts);
 
     return { success: true };
   }
@@ -112,17 +109,17 @@ export class AuthController {
   @HttpCode(200)
   signout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('access_token', {
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProd,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: isProd ? 'none' : 'lax',
       path: '/',
     });
 
     response.clearCookie('refresh_token', {
-      secure: process.env.NODE_ENV === 'production',
+      secure: isProd,
       httpOnly: true,
-      sameSite: 'lax',
-      path: '/auth/refresh',
+      sameSite: isProd ? 'none' : 'lax',
+      path: '/api/auth/refresh',
     });
 
     response.clearCookie(
@@ -130,9 +127,9 @@ export class AuthController {
         ? '__Host-psifi.x-csrf-token'
         : 'psifi.x-csrf-token',
       {
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProd,
         httpOnly: false,
-        sameSite: 'lax',
+        sameSite: isProd ? 'none' : 'lax',
         path: '/',
       },
     );
