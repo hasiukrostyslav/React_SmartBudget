@@ -1,5 +1,32 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 import { getCsrfCookie } from '@/lib/utils/cookie';
+
+type RetryableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
+
+/** Single in-flight refresh so concurrent 401s share one POST /auth/refresh. */
+let refreshAccessTokenPromise: Promise<void> | null = null;
+
+function refreshAccessToken() {
+  if (!refreshAccessTokenPromise) {
+    refreshAccessTokenPromise = api
+      .post('/auth/refresh')
+      .then(() => undefined)
+      .finally(() => {
+        refreshAccessTokenPromise = null;
+      });
+  }
+  return refreshAccessTokenPromise;
+}
+
+function shouldSkipAuthRefresh(config: InternalAxiosRequestConfig): boolean {
+  const url = config.url ?? '';
+  return (
+    url.includes('/auth/login') ||
+    url.includes('/auth/signup') ||
+    url.includes('/auth/refresh') ||
+    url.includes('/auth/signout')
+  );
+}
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -51,4 +78,30 @@ api.interceptors.request.use(
     return config;
   },
   (error) => Promise.reject(error),
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as RetryableRequest | undefined;
+    const status = error.response?.status;
+
+    if (
+      status !== 401 ||
+      !originalRequest ||
+      originalRequest._retry ||
+      shouldSkipAuthRefresh(originalRequest)
+    ) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    try {
+      await refreshAccessToken();
+      return api(originalRequest);
+    } catch {
+      return Promise.reject(error);
+    }
+  },
 );
