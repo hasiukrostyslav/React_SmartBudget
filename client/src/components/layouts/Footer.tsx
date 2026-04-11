@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import clsx from 'clsx';
 import ThemeButton from '../ui/buttons/ThemeButton';
+import Copyright from '../ui/Copyright';
 
 const links = ['Privacy Policy', 'Term and Condition', 'Contact'];
 
@@ -12,7 +13,7 @@ export default function Footer() {
         'text-slate-500 dark:text-slate-400',
       )}
     >
-      <p className="self-end">Copyright &copy; 2025 SmartBudget</p>
+      <Copyright />
       <ul className="flex items-center gap-4 self-end">
         {links.map((link) => (
           <li key={link} className="hover:text-slate-600">
