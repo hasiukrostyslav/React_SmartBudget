@@ -5,15 +5,13 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/app.ts",
   "scripts": {
-    "scripts": {
-      "dev": "ts-node-dev --respawn src/server.ts",
-      "build": "tsc",
-      "start": "node dist/server.js",
-      "lint": "eslint . --ext .ts",
-      "format": "prettier --write ."
-    }
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
