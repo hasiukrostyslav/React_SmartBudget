@@ -28,7 +28,11 @@ function shouldSkipAuthRefresh(config: InternalAxiosRequestConfig): boolean {
   );
 }
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const serverType = import.meta.env.VITE_API_SERVER;
+const BASE_URL =
+  serverType === 'nest'
+    ? import.meta.env.VITE_API_NEST_URL
+    : import.meta.env.VITE_API_EXPRESS_URL;
 
 if (!BASE_URL) {
   throw new Error('❌ VITE_API_URL is missing');
@@ -64,8 +68,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    let csrfToken =
-      cachedCsrfToken ?? getCsrfCookie();
+    let csrfToken = cachedCsrfToken ?? getCsrfCookie();
 
     if (!csrfToken) {
       csrfToken = await getCsrfToken();
