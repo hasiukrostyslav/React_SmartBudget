@@ -129,9 +129,9 @@ export class AuthController {
         ? '__Host-psifi.x-csrf-token'
         : 'psifi.x-csrf-token',
       {
-        secure: true,
+        secure: isProd,
         httpOnly: false,
-        sameSite: 'none',
+        sameSite: isProd ? 'none' : 'lax',
         path: '/',
       },
     );
