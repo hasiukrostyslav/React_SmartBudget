@@ -41,6 +41,10 @@ if (!BASE_URL) {
 /** Token from last /csrf-token response; required when API is on another origin (cookie not in document.cookie). */
 let cachedCsrfToken: string | null = null;
 
+export function resetCsrfToken() {
+  cachedCsrfToken = null;
+}
+
 async function getCsrfToken() {
   try {
     const { data } = await axios.get<{ success: boolean; csrfToken: string }>(

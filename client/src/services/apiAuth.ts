@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { api } from './axios.config';
+import { api, resetCsrfToken } from './axios.config';
 import type { LoginFormInputs, SignUpFormInputs } from '@/types/types';
 
 export async function login({ email, password }: LoginFormInputs) {
@@ -54,6 +54,7 @@ export async function getSession() {
 export async function signOut() {
   try {
     await api.post('/auth/signout');
+    resetCsrfToken();
   } catch (error) {
     if (error instanceof AxiosError) {
       throw new Error(error.response?.data.message);
