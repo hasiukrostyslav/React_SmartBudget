@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { signUp as signUpAPI } from '@/services/apiAuth';
 
 export function useSignUp() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     mutate: signUp,
@@ -11,7 +12,10 @@ export function useSignUp() {
     error,
   } = useMutation({
     mutationFn: signUpAPI,
-    onSuccess: () => navigate('/dashboard'),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['session'] });
+      navigate('/dashboard');
+    },
   });
 
   return { signUp, error, isPending };

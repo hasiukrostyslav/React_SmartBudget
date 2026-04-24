@@ -1,7 +1,9 @@
 export const getCsrfCookie = () => {
-  return document.cookie
+  const entry = document.cookie
     .split('; ')
-    .find((str) => str.includes('csrf-token'))
-    ?.split('=')
-    .at(-1);
+    .find((str) => str.includes('csrf-token'));
+
+  if (!entry) return undefined;
+
+  return entry.slice(entry.indexOf('=') + 1);
 };
