@@ -17,6 +17,6 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('auth');
+    consumer.apply(AuthMiddleware).forRoutes('api/auth');
   }
 }

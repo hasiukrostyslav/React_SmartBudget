@@ -122,6 +122,8 @@ export class AuthController {
       path: '/api/auth/refresh',
     });
 
+    // CSRF cookie is always set with secure:true + sameSite:'none' in main.ts,
+    // so it must be cleared with the same attributes or the browser ignores it.
     response.clearCookie(
       process.env.NODE_ENV === 'production'
         ? '__Host-psifi.x-csrf-token'
