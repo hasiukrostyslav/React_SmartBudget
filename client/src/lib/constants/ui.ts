@@ -16,3 +16,23 @@ export const navLinks: {
   { type: 'setting', page: 'profile', icon: 'user' },
   { type: 'setting', page: 'settings', icon: 'settings' },
 ];
+
+export const ERROR_MESSAGES = {
+  auth: {
+    code: 401,
+    header: 'Access denied',
+    message:
+      "You don't have permission to view this page. Please log in and try again.",
+  },
+  route: {
+    code: 404,
+    header: 'Page not found',
+    message:
+      "The page you're looking for doesn't exist or may have been moved.",
+  },
+  server: {
+    code: 500,
+    header: 'Something went wrong',
+    message: "We're having trouble loading this page. Please try again later.",
+  },
+} as const;
