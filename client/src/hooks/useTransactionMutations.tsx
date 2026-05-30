@@ -1,5 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-
 import {
   deleteAllTransactions,
   deleteTransaction,
@@ -7,10 +5,9 @@ import {
   updateTransactionsCategory,
   updateTransactionsStatus,
 } from '@/services/apiTransactions';
-import type {
-  Status,
-  TransactionCategories,
-} from '@/lib/constants/enums';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import type { Status, TransactionCategories } from '@/lib/constants/enums';
 
 const TRANSACTIONS_KEY = ['transactions'];
 

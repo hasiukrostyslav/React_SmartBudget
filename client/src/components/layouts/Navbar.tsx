@@ -13,7 +13,9 @@ export default function Navbar({ isCollapsed }: NavbarProps) {
         <NavLink
           key={el.page}
           iconName={el.icon}
-          href={el.page === 'dashboard' ? '/dashboard' : `/dashboard/${el.page}`}
+          href={
+            el.page === 'dashboard' ? '/dashboard' : `/dashboard/${el.page}`
+          }
           text={el.page.replace(el.page[0], el.page[0].toUpperCase())}
           isCollapsed={isCollapsed}
         />

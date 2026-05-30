@@ -1,7 +1,7 @@
 import type { DeleteItem } from '@/types/types';
 
-import { useDeleteTransaction } from '@/hooks/useTransactionMutations';
 import { useDialog } from '@/hooks/useDialog';
+import { useDeleteTransaction } from '@/hooks/useTransactionMutations';
 
 import ButtonIcon from '../../buttons/ButtonIcon';
 import DeleteModal from '../../modals/DeleteModal';

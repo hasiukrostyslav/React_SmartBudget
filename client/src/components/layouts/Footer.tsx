@@ -1,5 +1,6 @@
-import { Link } from 'react-router';
 import clsx from 'clsx';
+import { Link } from 'react-router';
+
 import Copyright from '../ui/atomic/Copyright';
 import ThemeButton from '../ui/buttons/ThemeButton';
 

@@ -1,11 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router';
-
 import {
   getTransactions,
   type SearchParams,
   type TransactionsResponse,
 } from '@/services/apiTransactions';
+import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router';
 
 const ALLOWED_KEYS = [
   'limit',
@@ -17,7 +16,9 @@ const ALLOWED_KEYS = [
   'order',
 ] as const satisfies readonly (keyof SearchParams)[];
 
-function paramsFromSearch(searchParams: URLSearchParams): Partial<SearchParams> {
+function paramsFromSearch(
+  searchParams: URLSearchParams,
+): Partial<SearchParams> {
   const result: Partial<SearchParams> = {};
   for (const key of ALLOWED_KEYS) {
     const value = searchParams.get(key);
@@ -33,10 +34,12 @@ export function useTransactions() {
   const [searchParams] = useSearchParams();
   const params = paramsFromSearch(searchParams);
 
-  const { data, isPending, isFetching, error } = useQuery<TransactionsResponse>({
-    queryKey: ['transactions', params],
-    queryFn: () => getTransactions(params),
-  });
+  const { data, isPending, isFetching, error } = useQuery<TransactionsResponse>(
+    {
+      queryKey: ['transactions', params],
+      queryFn: () => getTransactions(params),
+    },
+  );
 
   return {
     transactions: data?.transactions ?? [],

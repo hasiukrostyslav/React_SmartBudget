@@ -6,8 +6,8 @@ import type {
   TransactionCategories,
   TransactionType,
 } from '@/lib/constants/enums';
-import { useDeleteManyTransactions } from '@/hooks/useTransactionMutations';
 import { useDialog } from '@/hooks/useDialog';
+import { useDeleteManyTransactions } from '@/hooks/useTransactionMutations';
 
 import ButtonIcon from '../../buttons/ButtonIcon';
 import ToolbarButton from '../../buttons/ToolbarButton';

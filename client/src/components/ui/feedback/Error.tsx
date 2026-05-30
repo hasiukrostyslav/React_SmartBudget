@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router';
-
 import clsx from 'clsx';
+import { useNavigate } from 'react-router';
 
 import { ERROR_MESSAGES_CONFIG } from '@/lib/constants/ui';
 

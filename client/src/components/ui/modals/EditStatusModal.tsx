@@ -1,10 +1,11 @@
 import clsx from 'clsx';
 
-import { type Status, STATUSES } from '@/lib/constants/enums';
-import { STATUS_CONFIG } from '@/lib/constants/ui';
 import type { IconName } from '@/types/types';
-import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
+
+import { STATUSES, type Status } from '@/lib/constants/enums';
+import { STATUS_CONFIG } from '@/lib/constants/ui';
 import { useSelectValue } from '@/hooks/useSelectValue';
+import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
 
 import RadioCard from '../selects/RadioCard';
 import Dialog from './Dialog';

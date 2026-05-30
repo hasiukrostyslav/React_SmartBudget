@@ -2,9 +2,9 @@ import clsx from 'clsx';
 
 import type { DeleteItem, ItemType } from '@/types/types';
 
+import { getCurrencySymbol } from '@/lib/utils/currency';
 import { calcDeletedBalance, getFormattedAmount } from '@/lib/utils/utils';
 
-import { getCurrencySymbol } from '@/lib/utils/currency';
 import Dialog from './Dialog';
 import ModalFooter from './ModalFooter';
 import ModalHeader from './ModalHeader';

@@ -1,6 +1,5 @@
-import { NavLink as RouterNavLink } from 'react-router';
-
 import clsx from 'clsx';
+import { NavLink as RouterNavLink } from 'react-router';
 
 import type { IconName } from '@/types/types';
 

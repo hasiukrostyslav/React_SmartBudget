@@ -1,9 +1,10 @@
-import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+
+import type { LoginFormInputs } from '@/types/types';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignInSchema } from '@/lib/schemas/schema';
-import type { LoginFormInputs } from '@/types/types';
 import { useLogin } from '@/hooks/useLogin';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 

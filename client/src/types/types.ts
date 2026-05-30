@@ -1,13 +1,13 @@
-import { icons } from '@/lib/constants/icons';
-
-import type { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
 import type z from 'zod';
+
 import type {
   Currency,
   Status,
   TransactionCategories,
   TransactionType,
 } from '@/lib/constants/enums';
+import { icons } from '@/lib/constants/icons';
+import type { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
 
 // Icon names
 export type IconName = (typeof icons)[number]['role'];

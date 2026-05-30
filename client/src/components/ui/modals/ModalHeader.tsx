@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { ItemType, IconName } from '@/types/types';
+import type { IconName, ItemType } from '@/types/types';
 
 import { MODAL_CONFIG } from '@/lib/constants/ui';
 

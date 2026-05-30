@@ -1,6 +1,8 @@
 import { AxiosError } from 'axios';
-import { api, resetCsrfToken } from './axios.config';
+
 import type { LoginFormInputs, SignUpFormInputs } from '@/types/types';
+
+import { api, resetCsrfToken } from './axios.config';
 
 export async function login({ email, password }: LoginFormInputs) {
   try {

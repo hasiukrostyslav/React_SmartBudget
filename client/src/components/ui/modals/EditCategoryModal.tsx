@@ -1,15 +1,16 @@
 import clsx from 'clsx';
 
+import type { IconName } from '@/types/types';
+
 import {
   TRANSACTION_CATEGORIES,
   type TransactionCategories,
 } from '@/lib/constants/enums';
 import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
-import type { IconName } from '@/types/types';
-import { useChangeTransactionCategory } from '@/hooks/useTransactionMutations';
 import { useSearchInput } from '@/hooks/useSearchInput';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useTheme } from '@/hooks/useTheme';
+import { useChangeTransactionCategory } from '@/hooks/useTransactionMutations';
 
 import EmptySearchResult from '../feedback/EmptySearchResult';
 import Input from '../inputs/Input';

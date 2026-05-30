@@ -3,16 +3,17 @@ import { AxiosError } from 'axios';
 import { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
 import { useTransactions } from '@/hooks/useTransactions';
 
-import EmptyState from '@/components/ui/feedback/EmptyState';
-import Error from '@/components/ui/feedback/Error';
-import Spinner from '@/components/ui/feedback/Spinner';
 import TransactionsCTA from '@/components/ui/features/transactions/TransactionsCTA';
 import TransactionsFilters from '@/components/ui/features/transactions/TransactionsFilters';
 import TransactionsList from '@/components/ui/features/transactions/TransactionsList';
+import EmptyState from '@/components/ui/feedback/EmptyState';
+import Error from '@/components/ui/feedback/Error';
+import Spinner from '@/components/ui/feedback/Spinner';
 import PaginationTable from '@/components/ui/pagination/PaginationTable';
 
 export default function TransactionsPage() {
-  const { transactions, transactionCount, isPending, error } = useTransactions();
+  const { transactions, transactionCount, isPending, error } =
+    useTransactions();
 
   if (isPending)
     return (

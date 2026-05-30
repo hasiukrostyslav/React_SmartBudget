@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
-import AuthFormContainer from '@/components/layouts/AuthFormContainer';
+
 import ForgotPasswordForm from '@/components/forms/ForgotPasswordForm';
+import AuthFormContainer from '@/components/layouts/AuthFormContainer';
 
 export default function ForgotPasswordPage() {
   return (

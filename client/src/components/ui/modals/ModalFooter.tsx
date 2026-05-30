@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { ItemType, IconName } from '@/types/types';
+import type { IconName, ItemType } from '@/types/types';
 
 import { BUTTON_CONFIG, MODAL_CONFIG } from '@/lib/constants/ui';
 
@@ -56,7 +56,9 @@ export default function ModalFooter({
         >
           <Icon
             name={
-              (isSubmitting ? 'loader-circle' : footerConfig.buttonIcon) as IconName
+              (isSubmitting
+                ? 'loader-circle'
+                : footerConfig.buttonIcon) as IconName
             }
             className={isSubmitting ? 'animate-spin' : ''}
             size={16}

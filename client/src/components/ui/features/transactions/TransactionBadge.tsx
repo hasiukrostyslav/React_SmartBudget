@@ -1,8 +1,9 @@
 import clsx from 'clsx';
 
+import type { IconName } from '@/types/types';
+
 import type { TransactionCategories } from '@/lib/constants/enums';
 import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
-import type { IconName } from '@/types/types';
 
 import Icon from '../../icons/Icon';
 
@@ -24,7 +25,10 @@ export default function TransactionBadge({
         )}
       >
         <Icon
-          name={(TRANSACTION_CATEGORIES_CONFIG[category].icon || 'banknote') as IconName}
+          name={
+            (TRANSACTION_CATEGORIES_CONFIG[category].icon ||
+              'banknote') as IconName
+          }
           size={20}
         />
       </span>

@@ -1,5 +1,6 @@
-import { icons } from '@/lib/constants/icons';
 import type { IconName } from '@/types/types';
+
+import { icons } from '@/lib/constants/icons';
 
 interface IconProps {
   name: IconName;

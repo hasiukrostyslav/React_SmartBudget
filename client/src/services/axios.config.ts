@@ -1,4 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
+
 import { getCsrfCookie } from '@/lib/utils/cookie';
 
 type RetryableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
