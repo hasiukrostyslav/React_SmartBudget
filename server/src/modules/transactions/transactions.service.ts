@@ -20,6 +20,12 @@ import {
 
 const PAGE_SIZE_DEFAULT = 10;
 
+// Mirrors TRANSACTION_CATEGORIES_CONFIG[cat].text.header from the client —
+// every header is Title Case of the underscore-replaced category name.
+function categoryHeader(cat: string): string {
+  return cat.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 const SORT_COLUMN: Record<string, string> = {
   name: 'transaction_name',
   account: 'payment_method',
@@ -50,7 +56,33 @@ export class TransactionsService {
     const limit = Math.max(1, Number(params.limit ?? PAGE_SIZE_DEFAULT));
     const page = Math.max(1, Number(params.page ?? 1));
     const skip = limit * (page - 1);
-    const orderBy = buildOrderBy(params.sort ?? 'date', params.order ?? 'desc');
+    const sortKey = params.sort ?? 'date';
+    const order = params.order ?? 'desc';
+
+    // Category sort matches next/lib/db/transactions.ts — alphabetical by
+    // the display header (TRANSACTION_CATEGORIES_CONFIG[cat].text.header)
+    // using localeCompare. Has to be done in JS because the DB enum's
+    // declaration order puts the four @map'd spaced values at the end.
+    if (sortKey === 'category') {
+      const all = await this.pool.query<TransactionRow>(
+        `SELECT * FROM "transactions" WHERE user_id = $1;`,
+        [userId],
+      );
+      const rows = all.rows.map(mapTransactionRow);
+      rows.sort((a, b) => {
+        const labelA = categoryHeader(a.transactionCategory);
+        const labelB = categoryHeader(b.transactionCategory);
+        return order === 'asc'
+          ? labelA.localeCompare(labelB)
+          : labelB.localeCompare(labelA);
+      });
+      return {
+        transactions: rows.slice(skip, skip + limit),
+        transactionCount: rows.length,
+      };
+    }
+
+    const orderBy = buildOrderBy(sortKey, order);
 
     const listSql = `
       SELECT * FROM "transactions"

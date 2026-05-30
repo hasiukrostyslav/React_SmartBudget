@@ -20,6 +20,13 @@ import {
 
 const PAGE_SIZE_DEFAULT = 10;
 
+// Mirrors TRANSACTION_CATEGORIES_CONFIG[cat].text.header from the client —
+// every header is Title Case of the underscore-replaced category name. We
+// reconstruct it here so the backend doesn't need to duplicate the config.
+function categoryHeader(cat: string): string {
+  return cat.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 // Mirrors TRANSACTION_SORT_FIELD_MAP on the client: maps the URL sort param
 // to a real DB column. Keys MUST stay in sync with the client enum.
 const SORT_COLUMN: Record<string, string> = {
@@ -51,7 +58,35 @@ export async function findTransactionsByUserId(
   const limit = Math.max(1, Number(params.limit ?? PAGE_SIZE_DEFAULT));
   const page = Math.max(1, Number(params.page ?? 1));
   const skip = limit * (page - 1);
-  const orderBy = buildOrderBy(params.sort ?? 'date', params.order ?? 'desc');
+  const sortKey = params.sort ?? 'date';
+  const order = params.order ?? 'desc';
+
+  // Category sort matches next/lib/db/transactions.ts — alphabetical by the
+  // display header (TRANSACTION_CATEGORIES_CONFIG[cat].text.header) using
+  // localeCompare. Has to be done in JS because the DB enum's declaration
+  // order puts the four @map'd spaced values (currency exchange / mobile
+  // phone / personal care / pet care) at the end, which is neither the
+  // alphabetical order users see nor the enum-array order on the client.
+  if (sortKey === 'category') {
+    const all = await query(
+      `SELECT * FROM "transactions" WHERE user_id = $1;`,
+      [userId],
+    );
+    const rows = all.rows.map((row: TransactionRow) => mapTransactionRow(row));
+    rows.sort((a, b) => {
+      const labelA = categoryHeader(a.transactionCategory);
+      const labelB = categoryHeader(b.transactionCategory);
+      return order === 'asc'
+        ? labelA.localeCompare(labelB)
+        : labelB.localeCompare(labelA);
+    });
+    return {
+      transactions: rows.slice(skip, skip + limit),
+      transactionCount: rows.length,
+    };
+  }
+
+  const orderBy = buildOrderBy(sortKey, order);
 
   const listSql = `
     SELECT * FROM "transactions"
