@@ -1,7 +1,13 @@
 import { icons } from '@/lib/constants/icons';
 
-import { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
+import type { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
 import type z from 'zod';
+import type {
+  Currency,
+  Status,
+  TransactionCategories,
+  TransactionType,
+} from '@/lib/constants/enums';
 
 // Icon names
 export type IconName = (typeof icons)[number]['role'];
@@ -30,3 +36,42 @@ export interface InputIcons {
 
 export type LoginFormInputs = z.infer<typeof SignInSchema>;
 export type SignUpFormInputs = z.infer<typeof SignUpSchema>;
+
+export interface TransactionItem {
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  userId: string;
+  transactionId: string;
+  transactionName: string;
+  transactionCategory: TransactionCategories;
+  paymentMethod: string;
+  transactionType: TransactionType;
+  currency: Currency;
+  amount: number;
+  description?: string | null;
+  status: Status;
+}
+
+export type TransactionCreateInput = Omit<
+  TransactionItem,
+  'createdAt' | 'updatedAt' | 'userId' | 'transactionId'
+>;
+export type TransactionUpdate = Partial<
+  Omit<TransactionItem, 'updatedAt' | 'userId' | 'transactionId'>
+>;
+
+export type ItemType =
+  | 'transaction'
+  | 'payment'
+  | 'card'
+  | 'saving'
+  | 'loan'
+  | 'deposit';
+
+export interface DeleteItem {
+  id: string;
+  name: string;
+  type: TransactionType;
+  amount: number;
+  currency: Currency;
+}

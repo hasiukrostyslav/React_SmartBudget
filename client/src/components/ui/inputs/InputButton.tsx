@@ -1,24 +1,33 @@
-import Icon from '../Icon';
+import { clsx } from 'clsx';
+
+import { INPUT_CONFIG } from '@/lib/constants/ui';
+
+import Icon from '../icons/Icon';
 
 interface InputButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  isPasswordShown?: boolean;
+  positionPadding: keyof typeof INPUT_CONFIG.padding;
+  role: keyof typeof INPUT_CONFIG.button.roleIcon;
 }
 
 export default function InputButton({
   onClick,
-  isPasswordShown,
+  role,
+  positionPadding,
 }: InputButtonProps) {
   return (
     <button
       type="button"
-      className="outline-round-sm absolute right-3 bottom-3.5"
+      className={clsx(
+        'outline-round-sm absolute right-3',
+        INPUT_CONFIG.button.position[positionPadding],
+      )}
       onClick={onClick}
     >
       <Icon
-        className="text-slate-500 dark:text-slate-400"
+        className="text-slate-500"
         size={16}
-        name={isPasswordShown ? 'show' : 'hide'}
+        name={INPUT_CONFIG.button.roleIcon[role]}
       />
     </button>
   );

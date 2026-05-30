@@ -1,16 +1,22 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignInSchema } from '@/lib/schemas/schema';
-import { useLogin } from '@/hooks/useLogin';
 import type { LoginFormInputs } from '@/types/types';
+import { useLogin } from '@/hooks/useLogin';
+import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
+
+import Button from '../ui/buttons/Button';
+import FormError from '../ui/feedback/FormError';
+import Icon from '../ui/icons/Icon';
 import Input from '../ui/inputs/Input';
 import AuthLink from '../ui/links/AuthLink';
-import Button from '../ui/buttons/Button';
-import Icon from '../ui/Icon';
-import FormError from '../ui/FormError';
 
 export default function LoginForm() {
   const { login, isPending, error } = useLogin();
+  const { buttonRole, toggleVisibility } = usePasswordVisibility();
+
   const {
     register,
     handleSubmit,
@@ -28,21 +34,22 @@ export default function LoginForm() {
       <Input
         label="Email address"
         {...register('email')}
-        placeholder="Please enter your email"
+        placeholder={INPUT_PLACEHOLDER.email}
         disabled={isPending}
         error={errors.email?.message}
-        withError
         icon="email"
       />
       <Input
         label="Password"
         {...register('password')}
-        placeholder="Please enter your password"
+        placeholder={INPUT_PLACEHOLDER.password}
         disabled={isPending}
         error={errors.password?.message}
-        withError
         icon="password"
-        withButton
+        trailingButton={{
+          role: buttonRole,
+          onClick: toggleVisibility,
+        }}
       />
       <AuthLink href="/auth/forgot-password" className="mb-3 self-end">
         Forgot password

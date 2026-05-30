@@ -1,15 +1,21 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSignUp } from '@/hooks/useSignUp';
+
+import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignUpSchema } from '@/lib/schemas/schema';
 import type { SignUpFormInputs } from '@/types/types';
-import Input from '../ui/inputs/Input';
+import { useSignUp } from '@/hooks/useSignUp';
+import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
+
 import Button from '../ui/buttons/Button';
-import FormError from '../ui/FormError';
-import Icon from '../ui/Icon';
+import FormError from '../ui/feedback/FormError';
+import Icon from '../ui/icons/Icon';
+import Input from '../ui/inputs/Input';
 
 export default function SignUpForm() {
   const { signUp, isPending, error } = useSignUp();
+  const { buttonRole, toggleVisibility } = usePasswordVisibility();
+
   const {
     register,
     handleSubmit,
@@ -27,30 +33,30 @@ export default function SignUpForm() {
       <Input
         label="Full name"
         {...register('name')}
-        placeholder="Please enter your full name"
+        placeholder={INPUT_PLACEHOLDER.name}
         error={errors.name?.message}
         disabled={isPending}
-        withError
         icon="name"
       />
       <Input
         label="Email address"
         {...register('email')}
-        placeholder="Please enter your email"
+        placeholder={INPUT_PLACEHOLDER.email}
         error={errors.email?.message}
         disabled={isPending}
-        withError
         icon="email"
       />
       <Input
         label="Password"
         {...register('password')}
-        placeholder="Please enter your password"
+        placeholder={INPUT_PLACEHOLDER.password}
         error={errors.password?.message}
         disabled={isPending}
-        withError
         icon="password"
-        withButton
+        trailingButton={{
+          role: buttonRole,
+          onClick: toggleVisibility,
+        }}
       />
 
       {error && <FormError message={error.message} />}

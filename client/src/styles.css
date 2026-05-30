@@ -9,6 +9,9 @@ body {
 
   & button {
     cursor: pointer;
+    transition-property: hover;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
 
     &:disabled {
       cursor: default;
@@ -16,8 +19,19 @@ body {
   }
 }
 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
 @layer components {
-  .outline-round-sm {
+  .outline-round-sm,
+  .peer:checked ~ .outline-round-sm-ch {
     border-radius: 3px;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -52,13 +66,42 @@ body {
 
   .outline-input {
     border-radius: 6px;
-    transition-property: all;
+    transition-property: border-color, background-color, color, box-shadow;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 100ms;
 
     @apply focus-visible:outline-2;
     @apply focus-visible:-outline-offset-2;
     @apply focus-visible:outline-blue-500;
+  }
+
+  .scrollbar {
+    scrollbar-width: thin;
+
+    &.scrollbar-dark {
+      scrollbar-color: var(--color-slate-700) var(--color-slate-900);
+    }
+  }
+
+  .visible-hover-show:hover > div:last-child {
+    visibility: visible;
+  }
+  .visible-hide > div:last-child {
+    visibility: hidden;
+  }
+  div.next-sibling:hover + div {
+    border-color: transparent !important;
+  }
+}
+
+@layer utilities {
+  .h-55vh {
+    height: 55vh;
+  }
+  @media (min-width: 1537px) {
+    .h-65vh {
+      height: 65vh;
+    }
   }
 }
 
@@ -75,6 +118,7 @@ body {
   }
 
   --animate-spin: spin 1s linear infinite;
+  --animate-spin-slow: spin 2s linear infinite;
   @keyframes spin {
     to {
       transform: rotate(360deg);

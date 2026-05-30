@@ -1,14 +1,18 @@
 import { Link } from 'react-router';
+
 import clsx from 'clsx';
-import Icon from '../Icon';
-import { BUTTON_STYLES } from '@/lib/constants/styles';
+
 import type { IconName } from '@/types/types';
+
+import { BUTTON_CONFIG } from '@/lib/constants/ui';
+
+import Icon from '../icons/Icon';
 
 interface ButtonLinkProps {
   href: string;
   children: React.ReactNode;
   disabled?: boolean;
-  color: keyof typeof BUTTON_STYLES.color;
+  color: keyof typeof BUTTON_CONFIG.color;
   iconName: IconName;
 }
 
@@ -23,7 +27,7 @@ export default function ButtonLink({
     <Link
       className={clsx(
         'outline-round-md flex items-center gap-1.5 rounded-lg border-2 px-4 py-2 text-base',
-        disabled ? 'border-slate-400 bg-slate-400' : BUTTON_STYLES.color[color],
+        disabled ? 'border-slate-400 bg-slate-400' : BUTTON_CONFIG.color[color],
       )}
       to={href}
     >
