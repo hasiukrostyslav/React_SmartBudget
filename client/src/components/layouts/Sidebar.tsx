@@ -1,8 +1,10 @@
 import { useState } from 'react';
+
 import clsx from 'clsx';
-import AnimatedLogo from '../ui/AnimatedLogo';
-import Navbar from './Navbar';
+
 import ButtonIcon from '../ui/buttons/ButtonIcon';
+import AnimatedLogo from '../ui/logos/AnimatedLogo';
+import Navbar from './Navbar';
 
 export default function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);

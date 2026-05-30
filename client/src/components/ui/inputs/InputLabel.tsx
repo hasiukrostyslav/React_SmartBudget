@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 
+import { INPUT_CONFIG } from '@/lib/constants/ui';
+
 interface InputLabelProps {
   label: string;
   htmlFor?: string;
-  margin?: 'sm' | 'md' | 'lg';
+  margin?: keyof typeof INPUT_CONFIG.padding;
 }
 
 export default function InputLabel({

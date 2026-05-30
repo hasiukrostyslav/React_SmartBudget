@@ -5,6 +5,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthMiddleware } from './modules/auth/auth.middleware';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     ConfigModule.forRoot(),
     UsersModule,
     DashboardModule,
+    TransactionsModule,
   ],
 })
 export class AppModule implements NestModule {

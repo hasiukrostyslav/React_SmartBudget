@@ -1,26 +1,28 @@
 import clsx from 'clsx';
-import SearchInput from '../ui/inputs/SearchInput';
+
+import { INPUT_CONFIG } from '@/lib/constants/ui';
+
+import Input from '../ui/inputs/Input';
 
 interface SearchFormProps {
   className?: string;
   placeholder: string;
-  size: 'sm' | 'md' | 'lg';
+  inputPadding: keyof typeof INPUT_CONFIG.padding;
 }
 
 export default function SearchForm({
   className,
   placeholder,
-  size,
+  inputPadding,
 }: SearchFormProps) {
   return (
-    <form
-      className={clsx(
-        'relative rounded-md bg-slate-200 dark:bg-slate-600',
-        className,
-      )}
-      autoComplete="off"
-    >
-      <SearchInput placeholder={placeholder} size={size} />
+    <form className={clsx('relative rounded-md', className)} autoComplete="off">
+      <Input
+        placeholder={placeholder}
+        name="search"
+        padding={inputPadding}
+        icon="search"
+      />
     </form>
   );
 }

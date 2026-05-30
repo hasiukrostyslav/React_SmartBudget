@@ -1,6 +1,7 @@
 import { useAuth } from '@/hooks/useAuth';
-import ButtonIcon from './buttons/ButtonIcon';
+
 import SignOutForm from '../forms/SignOutForm';
+import ButtonIcon from './buttons/ButtonIcon';
 
 export default function UserPanel() {
   const { session } = useAuth();

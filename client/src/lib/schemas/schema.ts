@@ -1,5 +1,13 @@
 import * as z from 'zod';
 
+import {
+  CURRENCIES,
+  STATUSES,
+  TRANSACTION_CATEGORIES,
+  TRANSACTION_TYPES,
+} from '../constants/enums';
+import { transactionSortOptions } from '../constants/ui';
+
 export const SignUpSchema = z.object({
   name: z
     .string()
@@ -36,4 +44,35 @@ export const SignInSchema = z.object({
 
 export const ForgotPasswordSchema = z.object({
   email: z.email({ message: 'Please enter a valid email.' }).trim(),
+});
+
+export const TransactionCreateSchema = z.object({
+  transactionName: z
+    .string()
+    .min(1, { message: 'Transaction name is required.' })
+    .trim(),
+  transactionCategory: z.enum(TRANSACTION_CATEGORIES, {
+    message: 'Category is required.',
+  }),
+  transactionType: z.enum(TRANSACTION_TYPES, {
+    error: 'Transaction type is required.',
+  }),
+  paymentMethod: z.string().min(1, { message: 'Payment method is required.' }),
+  currency: z.enum(CURRENCIES).default('UAH'),
+  amount: z.number().positive({ message: 'Amount must be a positive number.' }),
+  description: z.string().optional(),
+  status: z.enum(STATUSES).default('COMPLETED'),
+});
+
+export const SearchParamsSchema = z.object({
+  limit: z.string().optional().default('10'),
+  page: z.string().optional().default('1'),
+  categories: z.string().optional().default('all'),
+  types: z.string().optional().default('all'),
+  accounts: z.string().optional().default('all'),
+  sort: z
+    .enum(transactionSortOptions.map((opt) => opt.label))
+    .optional()
+    .default('date'),
+  order: z.enum(['asc', 'desc']).optional().default('desc'),
 });
