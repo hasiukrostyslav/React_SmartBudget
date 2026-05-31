@@ -1,34 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-@import 'tailwindcss';
-
-@custom-variant dark (&:where(.dark, .dark *));
-
-body {
-  font-family: 'Roboto', sans-serif;
-
-  & button {
-    cursor: pointer;
-    transition-property: hover;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 500ms;
-
-    &:disabled {
-      cursor: default;
-    }
-  }
-}
-
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type='number'] {
-  -moz-appearance: textfield;
-}
-
 @layer components {
   .outline-round-sm,
   .peer:checked ~ .outline-round-sm-ch {
@@ -91,37 +60,5 @@ input[type='number'] {
   }
   div.next-sibling:hover + div {
     border-color: transparent !important;
-  }
-}
-
-@layer utilities {
-  .h-55vh {
-    height: 55vh;
-  }
-  @media (min-width: 1537px) {
-    .h-65vh {
-      height: 65vh;
-    }
-  }
-}
-
-@theme {
-  --animate-wiggle: wiggle 2s ease-in-out;
-  @keyframes wiggle {
-    0%,
-    100% {
-      transform: rotate(0deg);
-    }
-    50% {
-      transform: rotate(360deg);
-    }
-  }
-
-  --animate-spin: spin 1s linear infinite;
-  --animate-spin-slow: spin 2s linear infinite;
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
   }
 }

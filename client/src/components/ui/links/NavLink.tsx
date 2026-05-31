@@ -3,18 +3,19 @@ import { NavLink as RouterNavLink } from 'react-router';
 
 import type { IconName } from '@/types/types';
 
+import Tooltip from '../atomic/Tooltip';
 import Icon from '../icons/Icon';
 
 interface NavLinkProps {
   href: string;
-  text: string;
+  label: string;
   iconName: IconName;
   isCollapsed: boolean;
 }
 
 export default function NavLink({
   href,
-  text,
+  label,
   iconName,
   isCollapsed,
 }: NavLinkProps) {
@@ -31,19 +32,23 @@ export default function NavLink({
       style={{
         transition: 'padding 0.5s ease-in-out',
         padding: isCollapsed ? '0.5rem' : '0.5rem 1.75rem',
-        borderRadius: isCollapsed ? '9999px ' : '1.5rem',
+        borderRadius: isCollapsed ? '9999px' : '1.5rem',
       }}
       to={href}
       end
     >
-      <Icon className="shrink-0" name={iconName} size={24} />
+      <Tooltip label={isCollapsed ? label : undefined} side="right">
+        <span className="shrink-0">
+          <Icon name={iconName} size={24} />
+        </span>
+      </Tooltip>
       <span
         className={clsx(
           'transition-transform duration-500 ease-out',
           isCollapsed ? 'translate-x-5 delay-500' : 'translate-x-0',
         )}
       >
-        {text}
+        {label}
       </span>
     </RouterNavLink>
   );

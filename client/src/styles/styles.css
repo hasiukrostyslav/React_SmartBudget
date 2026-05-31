@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import 'tailwindcss';
+@import './animations.css';
+@import './components.css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --tooltip-bg: #e2e8f0; /* slate-200 */
+  --tooltip-fg: #1e293b; /* slate-800 */
+  --tooltip-arrow: #94a3b8; /* slate-400 — visible against light page bg */
+}
+
+.dark {
+  --tooltip-bg: #1d4ed8; /* blue-700 */
+  --tooltip-fg: #f1f5f9; /* slate-100 */
+  --tooltip-arrow: #1d4ed8; /* matches bg */
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+
+  & button {
+    cursor: pointer;
+    transition-property: hover;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+
+    &:disabled {
+      cursor: default;
+    }
+  }
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@layer utilities {
+  .h-55vh {
+    height: 55vh;
+  }
+  @media (min-width: 1537px) {
+    .h-65vh {
+      height: 65vh;
+    }
+  }
+}
