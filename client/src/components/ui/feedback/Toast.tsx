@@ -1,62 +1,38 @@
-import type { ToastRoles } from '@/types/types';
+import { clsx } from 'clsx';
+
+import { TOAST_CONFIG } from '@/lib/constants/ui';
 
 import Icon from '../icons/Icon';
 
-const messages = {
-  signUp: {
-    heading: 'Thanks for registration!',
-    text: 'Your account has been created!',
-  },
-  login: {
-    heading: 'Logged in successfully!',
-    text: 'You are now ready to use SmartBudget!',
-  },
-};
-
-const roles: ToastRoles = {
-  success: {
-    icon: 'check',
-    bgIcon: 'bg-linear-to-b from-green-400 from-30% to-emerald-600',
-    border: 'border-emerald-300 dark:border-emerald-500',
-    bg: 'bg-emerald-50 dark:bg-slate-700',
-  },
-  error: {
-    icon: 'close',
-    bgIcon: 'bg-linear-to-b from-red-400 from-30% to-red-600',
-    border: 'border-red-300 dark:border-red-500',
-    bg: 'bg-red-50 dark:bg-slate-700',
-  },
-  info: {
-    icon: 'info',
-    bgIcon: 'bg-linear-to-b from-blue-400 from-30% to-blue-600',
-    border: 'border-blue-400 dark:border-blue-500',
-    bg: 'bg-blue-50 dark:bg-slate-700',
-  },
-  warning: {
-    icon: 'warning',
-    bgIcon: 'bg-linear-to-b from-amber-400 from-30% to-amber-600',
-    border: 'border-amber-400 dark:border-amber-500',
-    bg: 'bg-amber-50 dark:bg-slate-700',
-  },
-};
-
 interface ToastProps {
-  type: keyof typeof messages;
-  role: keyof typeof roles;
+  role: keyof typeof TOAST_CONFIG;
+  operation: keyof typeof TOAST_CONFIG.success.header;
+  entity: string;
 }
 
-export default function Toast({ type, role }: ToastProps) {
+export default function Toast({ role, operation, entity }: ToastProps) {
+  const config = TOAST_CONFIG[role];
+
+  const header = config.header[operation].replace('{x}', entity);
+  const description = config.description[operation].replace('{x}', entity);
+
   return (
     <div
-      className={`relative min-w-84 rounded-xl border-2 py-6 pl-12 dark:text-slate-100 ${roles[role].bg} ${roles[role].border}`}
+      className={clsx(
+        'flex w-full items-center gap-3 rounded-md border-l-4 px-4 py-2',
+        'bg-slate-50 shadow-slate-800 dark:bg-slate-800',
+        config.style.border,
+      )}
     >
-      <h3 className="mb-1 text-base font-semibold">{messages[type].heading}</h3>
-      <p className="text-xs font-normal">{messages[type].text}</p>
-      <span
-        className={`absolute top-6 left-3 rounded-md p-1 ${roles[role].bgIcon}`}
-      >
-        <Icon size={16} name={roles[role].icon} className="text-slate-50" />
-      </span>
+      <div className={clsx('rounded-md p-1.5', config.style.icon)}>
+        <Icon name={config.icon} size={16} />
+      </div>
+      <div>
+        <h2 className="flex items-center gap-2 font-semibold dark:text-slate-400">
+          {header}
+        </h2>
+        <p className="text-xs text-slate-500">{description}</p>
+      </div>
     </div>
   );
 }

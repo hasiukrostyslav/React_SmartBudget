@@ -4,6 +4,7 @@ import type { DeleteItem, ItemType } from '@/types/types';
 
 import { getCurrencySymbol } from '@/lib/utils/currency';
 import { calcDeletedBalance, getFormattedAmount } from '@/lib/utils/utils';
+import { useToast } from '@/hooks/useToast';
 
 import Dialog from './Dialog';
 import ModalFooter from './ModalFooter';
@@ -26,10 +27,13 @@ export default function DeleteModal({
   handleClose,
   handleSubmit,
 }: DeleteModalProps) {
+  const { toastSuccess } = useToast();
+
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     await handleSubmit();
     handleClose();
+    toastSuccess('delete', 'Transaction');
   };
 
   const balance = calcDeletedBalance(items);

@@ -10,6 +10,7 @@ import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
 import { useSearchInput } from '@/hooks/useSearchInput';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useTheme } from '@/hooks/useTheme';
+import { useToast } from '@/hooks/useToast';
 import { useChangeTransactionCategory } from '@/hooks/useTransactionMutations';
 
 import EmptySearchResult from '../feedback/EmptySearchResult';
@@ -38,6 +39,7 @@ export default function EditCategoryModal({
   const { searchQuery, role, onChange, onClear } = useSearchInput();
   const { mutateAsync: changeCategory, isPending } =
     useChangeTransactionCategory();
+  const { toastSuccess } = useToast();
 
   const initialValue = [...new Set(selectedItems.map((el) => el.category))];
   const filteredCategories = TRANSACTION_CATEGORIES.filter((el) =>
@@ -58,6 +60,7 @@ export default function EditCategoryModal({
     });
 
     handleClose();
+    toastSuccess('edit', 'Transaction');
   };
 
   return (

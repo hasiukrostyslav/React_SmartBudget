@@ -58,7 +58,18 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
-      <ToastContainer limit={1} />
+      <ToastContainer
+        limit={3}
+        closeButton={false}
+        hideProgressBar
+        toastStyle={{
+          background: 'transparent',
+          boxShadow: 'none',
+          padding: 0,
+          minHeight: 'unset',
+          overflow: 'visible',
+        }}
+      />
       <ReactQueryDevtools buttonPosition="top-left" />
     </QueryClientProvider>
   );

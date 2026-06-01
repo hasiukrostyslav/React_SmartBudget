@@ -5,6 +5,7 @@ import type { IconName } from '@/types/types';
 import { STATUSES, type Status } from '@/lib/constants/enums';
 import { STATUS_CONFIG } from '@/lib/constants/ui';
 import { useSelectValue } from '@/hooks/useSelectValue';
+import { useToast } from '@/hooks/useToast';
 import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
 
 import RadioCard from '../selects/RadioCard';
@@ -27,6 +28,7 @@ export default function EditStatusModal({
   selectedItems,
 }: EditStatusModalProps) {
   const { selectedValue, setSelectedValue } = useSelectValue();
+  const { toastSuccess } = useToast();
   const initialValue = [...new Set(selectedItems.map((el) => el.status))];
 
   const { mutateAsync: changeStatus, isPending } = useChangeTransactionStatus();
@@ -40,6 +42,7 @@ export default function EditStatusModal({
     });
 
     handleClose();
+    toastSuccess('edit', 'Transaction');
   };
 
   return (

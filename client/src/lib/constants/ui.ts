@@ -650,3 +650,41 @@ export const INPUT_CONFIG = {
     },
   },
 } as const;
+
+// Toast Config
+export const TOAST_CONFIG = {
+  success: {
+    header: {
+      create: '{x} created',
+      edit: 'Changes saved',
+      delete: '{x} deleted',
+    },
+    description: {
+      create: '{x} added successfully.',
+      edit: '{x} updated successfully.',
+      delete: '{x} removed successfully.',
+    },
+    icon: 'check' as IconName,
+    style: {
+      icon: 'bg-green-200 text-green-600 dark:bg-green-500/20',
+      border: 'border-l-green-500 dark:border-l-green-400',
+    },
+  },
+  error: {
+    header: {
+      create: 'Failed to create {x}',
+      edit: 'Failed to save changes',
+      delete: 'Failed to delete {x}',
+    },
+    description: {
+      create: '{x} could not be created.',
+      edit: '{x} could not be updated.',
+      delete: '{x} could not be deleted.',
+    },
+    icon: 'close' as IconName,
+    style: {
+      icon: 'bg-red-200 text-red-600 dark:bg-red-500/20',
+      border: 'border-l-red-500 dark:border-l-red-400',
+    },
+  },
+} as const;
