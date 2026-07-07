@@ -34,9 +34,9 @@ export default function ModalFooter({
   return (
     <footer
       className={clsx(
-        'flex items-center justify-between gap-8 rounded-b-md px-6 py-5 text-base',
+        'flex items-center justify-between gap-8 rounded-b-xl px-6 py-4 text-base',
         'border-t border-slate-300 bg-slate-100',
-        'dark:border-slate-600 dark:bg-slate-900',
+        'dark:border-slate-600 dark:bg-slate-800',
       )}
     >
       <div className={clsx('flex gap-1', footerConfig.infoColor)}>
@@ -44,15 +44,15 @@ export default function ModalFooter({
         <span className="text-xs">{footerConfig.infoText}</span>
       </div>
       <div className="flex items-center justify-center gap-3">
-        <Button type="button" color="outline" size="md" onClick={handleClose}>
+        <Button type="button" color="outline" size="sm" onClick={handleClose}>
           Cancel
         </Button>
         <Button
           type="submit"
           color={footerConfig.buttonColor as keyof typeof BUTTON_CONFIG.color}
-          size="md"
+          size="sm"
           className="flex items-center gap-1"
-          disabled={disabled}
+          disabled={disabled || isSubmitting}
         >
           <Icon
             name={

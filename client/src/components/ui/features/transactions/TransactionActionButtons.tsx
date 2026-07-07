@@ -1,10 +1,12 @@
 import type { DeleteItem } from '@/types/types';
 
-import { useDialog } from '@/hooks/useDialog';
+import { useModal } from '@/hooks/useModal';
 import { useDeleteTransaction } from '@/hooks/useTransactionMutations';
 
+import DeleteForm from '@/components/forms/DeleteForm';
+
 import ButtonIcon from '../../buttons/ButtonIcon';
-import DeleteModal from '../../modals/DeleteModal';
+import Modal from '../../modals/Modal';
 
 interface TransactionActionButtonsProps {
   item: DeleteItem;
@@ -13,47 +15,45 @@ interface TransactionActionButtonsProps {
 export default function TransactionActionButtons({
   item,
 }: TransactionActionButtonsProps) {
-  const { isOpen, dialogRef, handleOpen, handleClose } = useDialog();
+  const { isOpen, dialogRef, handleOpen, handleClose } = useModal();
   const { mutateAsync: deleteOne, isPending } = useDeleteTransaction();
 
   return (
     <>
-      <div className="flex text-slate-500">
+      <div className="flex text-slate-500 dark:text-slate-300">
         <ButtonIcon
           iconName="copy"
           shape="square"
-          variant="outline"
+          variant="ghost"
           size={14}
-          className="hover:text-slate-400"
           tooltipLabel="Duplicate transaction"
         />
         <ButtonIcon
           iconName="edit"
           shape="square"
-          variant="outline"
+          variant="ghost"
           size={14}
-          className="hover:text-slate-400"
           tooltipLabel="Edit transaction"
         />
         <ButtonIcon
           iconName="delete"
           shape="square"
-          variant="outline"
+          variant="ghost"
           size={14}
-          className="hover:text-slate-400"
           onClick={handleOpen}
           tooltipLabel="Delete transaction"
         />
       </div>
       {isOpen && (
-        <DeleteModal
-          ref={dialogRef}
-          handleClose={handleClose}
-          itemType="transaction"
-          items={[item]}
-          isSubmitting={isPending}
-          handleSubmit={() => deleteOne(item.id)}
-        />
+        <Modal ref={dialogRef} className="max-w-4/12">
+          <DeleteForm
+            onClose={handleClose}
+            itemType="transaction"
+            items={[item]}
+            isSubmitting={isPending}
+            onSubmit={() => deleteOne(item.id)}
+          />
+        </Modal>
       )}
     </>
   );

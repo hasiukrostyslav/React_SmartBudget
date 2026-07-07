@@ -45,7 +45,7 @@ export default function CheckBox({
             : 'peer-checked:border-blue-400 peer-checked:bg-blue-400 peer-checked:text-slate-50',
         )}
       >
-        <Icon name="check" size={14} aria-checked />
+        <Icon name="check" size={14} />
       </span>
     </label>
   );

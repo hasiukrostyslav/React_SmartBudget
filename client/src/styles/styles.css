@@ -44,12 +44,12 @@ input[type='number'] {
 }
 
 @layer utilities {
-  .h-55vh {
-    height: 55vh;
+  .h-50vh {
+    height: 50vh;
   }
   @media (min-width: 1537px) {
-    .h-65vh {
-      height: 65vh;
+    .h-61vh {
+      height: 61vh;
     }
   }
 }

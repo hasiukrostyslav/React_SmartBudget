@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/immutability */
 import { useEffect, useRef, useState } from 'react';
 
-export function useDialog() {
+export function useModal() {
   const [isOpen, setIsOpen] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -16,7 +16,22 @@ export function useDialog() {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
+    const handleCloseOnKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') handleClose();
+    };
+
+    dialog.addEventListener('keydown', handleCloseOnKey);
+    return () => dialog.removeEventListener('keydown', handleCloseOnKey);
+  });
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
     const handleClickOutside = (event: MouseEvent) => {
+      if (event.target !== dialog && dialog.contains(event.target as Node))
+        return;
+
       const rect = dialog.getBoundingClientRect();
       if (
         event.clientX < rect.left ||

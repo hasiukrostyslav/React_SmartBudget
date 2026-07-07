@@ -38,7 +38,7 @@ export default function LoginForm() {
         placeholder={INPUT_PLACEHOLDER.email}
         disabled={isPending}
         error={errors.email?.message}
-        icon="email"
+        iconName="email"
       />
       <Input
         label="Password"
@@ -46,7 +46,7 @@ export default function LoginForm() {
         placeholder={INPUT_PLACEHOLDER.password}
         disabled={isPending}
         error={errors.password?.message}
-        icon="password"
+        iconName="password"
         trailingButton={{
           role: buttonRole,
           onClick: toggleVisibility,

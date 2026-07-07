@@ -6,14 +6,17 @@ import type {
   TransactionCategories,
   TransactionType,
 } from '@/lib/constants/enums';
-import { useDialog } from '@/hooks/useDialog';
+import { useModal } from '@/hooks/useModal';
 import { useDeleteManyTransactions } from '@/hooks/useTransactionMutations';
+
+import DeleteForm from '@/components/forms/DeleteForm';
+import EditItemStatusForm from '@/components/forms/EditItemStatusForm';
+import EditTransactionCategoryForm from '@/components/forms/EditTransactionCategoryForm';
+import SectionWrapper from '@/components/layouts/SectionWrapper';
 
 import ButtonIcon from '../../buttons/ButtonIcon';
 import ToolbarButton from '../../buttons/ToolbarButton';
-import DeleteModal from '../../modals/DeleteModal';
-import EditCategoryModal from '../../modals/EditCategoryModal';
-import EditStatusModal from '../../modals/EditStatusModal';
+import Modal from '../../modals/Modal';
 
 interface BulkToolbarProps {
   isShown: boolean;
@@ -45,46 +48,50 @@ export default function BulkToolbar({
     dialogRef: editStatusModalRef,
     handleOpen: openEditStatusModal,
     handleClose: closeEditStatusModal,
-  } = useDialog();
+  } = useModal();
 
   const {
     isOpen: isOpenEditCategoryModal,
     dialogRef: editCategoryModalRef,
     handleOpen: openEditCategoryModal,
     handleClose: closeEditCategoryModal,
-  } = useDialog();
+  } = useModal();
 
   const {
     isOpen: isOpenDeleteModal,
     dialogRef: deleteModalRef,
     handleOpen: openDeleteModal,
     handleClose: closeDeleteModal,
-  } = useDialog();
+  } = useModal();
 
   const { mutateAsync: deleteMany, isPending: isDeleting } =
     useDeleteManyTransactions();
 
   return (
-    <div
+    <SectionWrapper
       className={clsx(
-        'flex items-center rounded-md px-3 py-2.5 text-sm',
-        'bg-blue-600 text-slate-100 dark:bg-blue-800/20',
-        'absolute top-full left-1/5 translate-y-3',
+        'flex items-center text-sm',
+        'absolute top-full right-1/5 translate-y-6',
         !isShown ? 'hidden' : '',
       )}
     >
-      <div className="mr-3 flex gap-1 border-r pr-3">
+      <div
+        className={clsx(
+          'mr-2 flex gap-1 bg-blue-300/40 px-4 py-1 pr-3 dark:bg-blue-800/70',
+          'rounded-md',
+        )}
+      >
         <span
           className={clsx(
             'grid h-5 min-w-5 place-content-center rounded-md px-2',
-            'bg-blue-500',
+            'bg-blue-500 text-slate-100',
           )}
         >
           {selectedNumber}
         </span>
-        <span>selected</span>
+        <span className="text-blue-700 dark:text-blue-200">selected</span>
       </div>
-      <div className="mr-9 flex items-center justify-center gap-3">
+      <div className="mr-3 flex items-center justify-center gap-3">
         <ToolbarButton
           iconName="select"
           iconSize={14}
@@ -96,18 +103,21 @@ export default function BulkToolbar({
           iconName="refresh"
           iconSize={14}
           label="Change status"
+          modalCategory="editStatus"
           onClick={openEditStatusModal}
         />
         <ToolbarButton
           iconName="tag"
           iconSize={14}
           label="Change category"
+          modalCategory="editCategory"
           onClick={openEditCategoryModal}
         />
         <ToolbarButton
           iconName="delete"
           iconSize={14}
           label="Delete"
+          modalCategory="delete"
           onClick={openDeleteModal}
         />
       </div>
@@ -115,50 +125,51 @@ export default function BulkToolbar({
         iconName="close"
         size={14}
         shape="square"
-        variant="outline"
-        padding="base"
+        variant="ghost"
         onClick={bulkUnSelect}
-        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800/10"
       />
 
       {isOpenEditStatusModal && (
-        <EditStatusModal
-          ref={editStatusModalRef}
-          handleClose={closeEditStatusModal}
-          selectedItems={selectedItems.map((el) => ({
-            id: el.itemId,
-            status: el.status,
-          }))}
-        />
+        <Modal ref={editStatusModalRef} className="w-4/12">
+          <EditItemStatusForm
+            onClose={closeEditStatusModal}
+            selectedItems={selectedItems.map((el) => ({
+              id: el.itemId,
+              status: el.status,
+            }))}
+          />
+        </Modal>
       )}
 
       {isOpenEditCategoryModal && (
-        <EditCategoryModal
-          ref={editCategoryModalRef}
-          handleClose={closeEditCategoryModal}
-          selectedItems={selectedItems.map((el) => ({
-            id: el.itemId,
-            category: el.category,
-          }))}
-        />
+        <Modal ref={editCategoryModalRef} className="w-5/12">
+          <EditTransactionCategoryForm
+            onClose={closeEditCategoryModal}
+            selectedItems={selectedItems.map((el) => ({
+              id: el.itemId,
+              category: el.category,
+            }))}
+          />
+        </Modal>
       )}
 
       {isOpenDeleteModal && (
-        <DeleteModal
-          ref={deleteModalRef}
-          itemType="transaction"
-          isSubmitting={isDeleting}
-          items={selectedItems.map((el) => ({
-            id: el.itemId,
-            name: el.itemName,
-            type: el.type,
-            currency: el.currency,
-            amount: el.amount,
-          }))}
-          handleClose={closeDeleteModal}
-          handleSubmit={() => deleteMany(selectedItems.map((el) => el.itemId))}
-        />
+        <Modal ref={deleteModalRef} className="w-4/12">
+          <DeleteForm
+            itemType="transaction"
+            isSubmitting={isDeleting}
+            items={selectedItems.map((el) => ({
+              id: el.itemId,
+              name: el.itemName,
+              type: el.type,
+              currency: el.currency,
+              amount: el.amount,
+            }))}
+            onClose={closeDeleteModal}
+            onSubmit={() => deleteMany(selectedItems.map((el) => el.itemId))}
+          />
+        </Modal>
       )}
-    </div>
+    </SectionWrapper>
   );
 }

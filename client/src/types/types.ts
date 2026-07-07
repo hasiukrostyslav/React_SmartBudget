@@ -39,7 +39,7 @@ export interface TransactionItem {
 
 export type TransactionCreateInput = Omit<
   TransactionItem,
-  'createdAt' | 'updatedAt' | 'userId' | 'transactionId'
+  'updatedAt' | 'userId' | 'transactionId'
 >;
 export type TransactionUpdate = Partial<
   Omit<TransactionItem, 'updatedAt' | 'userId' | 'transactionId'>
@@ -59,4 +59,13 @@ export interface DeleteItem {
   type: TransactionType;
   amount: number;
   currency: Currency;
+}
+
+export interface SelectOption {
+  value: string | number;
+  label: string;
+  description?: string;
+  icon?: IconName;
+  symbol?: string;
+  color?: string;
 }

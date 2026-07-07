@@ -21,7 +21,7 @@ export default function SearchForm({
         placeholder={placeholder}
         name="search"
         padding={inputPadding}
-        icon="search"
+        iconName="search"
       />
     </form>
   );

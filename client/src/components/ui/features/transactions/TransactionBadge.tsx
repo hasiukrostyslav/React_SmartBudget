@@ -29,7 +29,7 @@ export default function TransactionBadge({
             (TRANSACTION_CATEGORIES_CONFIG[category].icon ||
               'banknote') as IconName
           }
-          size={20}
+          size={18}
         />
       </span>
       <div className="flex items-center">

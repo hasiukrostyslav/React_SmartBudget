@@ -10,7 +10,7 @@ export default function ThemeButton({ className }: { className?: string }) {
 
   return (
     <div
-      className={`flex gap-6 rounded-2xl border-2 border-blue-400 px-2 py-1 ${className}`}
+      className={`flex gap-4 rounded-2xl border-2 border-blue-400 px-1 py-0.5 ${className}`}
     >
       <button
         className={`outline-round-full p-1 ${

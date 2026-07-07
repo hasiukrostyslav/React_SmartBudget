@@ -1,5 +1,6 @@
 import {
   Apple,
+  ArrowDown,
   ArrowLeft,
   ArrowLeftRight,
   ArrowRightLeft,
@@ -11,6 +12,7 @@ import {
   Bell,
   BookOpenText,
   Briefcase,
+  Calendar,
   Car,
   CarTaxiFront,
   Cat,
@@ -89,6 +91,7 @@ export const icons = [
   { role: 'advertisement', name: 'megaphone', component: Megaphone },
   { role: 'appliance', name: 'washing-machine', component: WashingMachine },
   { role: 'arrow-up', name: 'arrow-up', component: ArrowUp },
+  { role: 'arrow-down', name: 'arrow-down', component: ArrowDown },
   { role: 'arrow-left', name: 'arrow-left', component: ArrowLeft },
   {
     role: 'arrow-right-left',
@@ -98,6 +101,7 @@ export const icons = [
   { role: 'banknote', name: 'banknote', component: Banknote },
   { role: 'books', name: 'book-open-text', component: BookOpenText },
   { role: 'cafe', name: 'utensils', component: Utensils },
+  { role: 'calendar', name: 'calendar', component: Calendar },
   { role: 'car', name: 'car', component: Car },
   { role: 'card', name: 'credit-card', component: CreditCard },
   { role: 'chat', name: 'message-circle-more', component: MessageCircleMore },
