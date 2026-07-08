@@ -1,4 +1,5 @@
 import {
+  createTransaction,
   deleteAllTransactions,
   deleteTransaction,
   deleteTransactions,
@@ -7,6 +8,8 @@ import {
 } from '@/services/apiTransactions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import type { TransactionCreateInput } from '@/types/types';
+
 import type { Status, TransactionCategories } from '@/lib/constants/enums';
 
 const TRANSACTIONS_KEY = ['transactions'];
@@ -14,6 +17,15 @@ const TRANSACTIONS_KEY = ['transactions'];
 function useInvalidateTransactions() {
   const queryClient = useQueryClient();
   return () => queryClient.invalidateQueries({ queryKey: TRANSACTIONS_KEY });
+}
+
+export function useCreateTransaction() {
+  const invalidate = useInvalidateTransactions();
+
+  return useMutation({
+    mutationFn: (data: TransactionCreateInput) => createTransaction(data),
+    onSuccess: invalidate,
+  });
 }
 
 export function useDeleteTransaction() {

@@ -9,15 +9,21 @@ interface ButtonIconProps {
   iconName: IconName;
   size: number;
   shape: 'round' | 'square';
-  variant: 'solid' | 'outline';
+  variant: 'solid' | 'ghost' | 'outline';
   tooltipLabel?: string;
   tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
-  tooltipContainer?: HTMLElement | null;
-  padding?: 'sm' | 'base';
+  type?: 'button' | 'submit';
   className?: string;
   iconClassName?: string;
   onClick?: () => void;
 }
+
+const style = {
+  solid: 'bg-blue-200/45 text-slate-500 dark:bg-slate-600 dark:text-slate-400',
+  ghost: 'hover:bg-slate-200 dark:hover:bg-slate-700',
+  outline:
+    'border border-slate-300 dark:border-slate-600 hover:border-slate-400',
+};
 
 export default function ButtonIcon({
   iconName,
@@ -26,28 +32,20 @@ export default function ButtonIcon({
   variant,
   tooltipLabel,
   tooltipSide,
-  tooltipContainer,
+  type = 'button',
   className,
   iconClassName,
   onClick,
-  padding = 'base',
 }: ButtonIconProps) {
   return (
-    <Tooltip
-      label={tooltipLabel}
-      side={tooltipSide}
-      container={tooltipContainer}
-    >
+    <Tooltip label={tooltipLabel} side={tooltipSide}>
       <button
+        type={type}
         onClick={onClick}
         className={clsx(
-          padding === 'base' ? 'p-1.5' : 'p-0.5',
-          shape === 'round'
-            ? 'outline-round-full rounded-full'
-            : 'outline-round-sm',
-          variant === 'solid'
-            ? 'bg-blue-200/45 text-slate-500 dark:bg-slate-600 dark:text-slate-400'
-            : '',
+          'outline-input p-1.5',
+          style[variant],
+          shape === 'round' ? 'rounded-full' : 'rounded-md',
           className,
         )}
       >

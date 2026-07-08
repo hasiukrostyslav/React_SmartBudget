@@ -1,5 +1,4 @@
 import { TooltipProvider } from '@radix-ui/react-tooltip';
-import clsx from 'clsx';
 import { Outlet } from 'react-router';
 
 import Footer from '@/components/layouts/Footer';
@@ -12,12 +11,7 @@ export default function DashboardLayout() {
       <TooltipProvider>
         <Sidebar />
         <Header />
-        <section
-          className={clsx(
-            'relative mx-5 rounded-2xl border',
-            'border-slate-300 px-3 py-4 dark:border-slate-600',
-          )}
-        >
+        <section className="relative bg-slate-50 px-6 py-4 dark:bg-slate-900">
           <Outlet />
         </section>
         <Footer />

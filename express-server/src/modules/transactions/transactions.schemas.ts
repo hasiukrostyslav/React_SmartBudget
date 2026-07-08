@@ -64,6 +64,7 @@ export const TransactionCreateSchema = z.object({
   amount: z.number().positive('Amount must be a positive number.'),
   description: z.string().optional(),
   status: z.enum(STATUSES).default('COMPLETED'),
+  createdAt: z.coerce.date().optional(),
 });
 
 export const TransactionUpdateSchema = TransactionCreateSchema.partial();

@@ -34,6 +34,65 @@ export const currency = [
   { local: 'eng', currency: 'GBP' },
 ] as const;
 
+export const TRANSACTION_TYPE_CONFIG = [
+  { option: 'Income', icon: 'arrow-up', color: 'text-green-500' },
+  { option: 'Expenses', icon: 'arrow-down', color: 'text-red-500' },
+] as const;
+
+export const CURRENCY_CONFIG = [
+  { currency: 'UAH', description: 'Ukrainian Hryvnia' },
+  { currency: 'USD', description: 'US Dollar' },
+  { currency: 'EUR', description: 'Euro' },
+  { currency: 'PLN', description: 'Polish Złoty' },
+  { currency: 'GBP', description: 'British Pound' },
+  { currency: 'HUF', description: 'Hungarian Forint' },
+] as const;
+
+export const CREATE_TRANSACTION_FIELDS = {
+  TYPE: {
+    label: 'Type',
+    name: 'transactionType',
+  },
+  STATUS: {
+    label: 'Status',
+    name: 'status',
+    placeholder: 'Select Status',
+  },
+  NAME: {
+    label: 'Name',
+    name: 'transactionName',
+    placeholder: 'e.g. Grocery shopping',
+  },
+  AMOUNT: {
+    label: 'Amount',
+    name: 'amount',
+    placeholder: '0.00',
+  },
+  CURRENCY: {
+    label: 'Currency',
+    name: 'currency',
+  },
+  CATEGORY: {
+    label: 'Category',
+    name: 'transactionCategory',
+    placeholder: 'Search categories...',
+  },
+  DATE: {
+    label: 'Date & Time',
+    name: 'createdAt',
+  },
+  PAYMENT_METHOD: {
+    label: 'Payment method',
+    name: 'paymentMethod',
+    placeholder: 'Select Payment method',
+  },
+  DESCRIPTION: {
+    label: 'Description',
+    name: 'description',
+    placeholder: 'Add a note for context, receipt number, etc.',
+  },
+} as const;
+
 export const transactionSortOptions = [
   { name: 'Transaction Name', label: 'name' },
   { name: 'Category', label: 'category' },
@@ -91,10 +150,10 @@ export const BUTTON_CONFIG = {
     focus-visible:border-transparent dark:hover:bg-slate-800`,
   },
   size: {
-    xs: 'outline-round-sm px-2 ',
-    sm: 'outline-round-sm px-2 py-1',
-    md: 'outline-round-sm px-2 py-1.5',
-    lg: 'outline-round-md px-3 py-2.5',
+    xs: 'outline-round-sm px-3 py-1 text-sm',
+    sm: 'outline-round-sm px-3 py-1.5',
+    md: 'outline-round-sm px-3 py-2',
+    lg: 'outline-round-md px-3.5 py-2.5',
   },
 } as const;
 
@@ -103,6 +162,8 @@ export const MODAL_CONFIG = {
     create: {
       icon: 'plus',
       iconColor: 'text-blue-500',
+      button:
+        'border border-blue-500 text-blue-500 bg-blue-100 dark:bg-blue-500/10',
       iconBgColor: 'bg-blue-100 dark:bg-blue-500/20',
       header: 'Add new',
       infoText: 'Enter an income or expense record',
@@ -110,6 +171,8 @@ export const MODAL_CONFIG = {
     editStatus: {
       icon: 'refresh',
       iconColor: 'text-blue-500',
+      button:
+        'border border-blue-500 text-blue-500 bg-blue-100 dark:bg-blue-500/10 dark:border-blue-400 dark:text-blue-400',
       iconBgColor: 'bg-blue-100 dark:bg-blue-500/20',
       header: 'Change status',
       infoText: 'Update what happened with this transaction',
@@ -117,6 +180,8 @@ export const MODAL_CONFIG = {
     editCategory: {
       icon: 'tag',
       iconColor: 'text-purple-500',
+      button:
+        'border border-purple-500 text-purple-500 bg-purple-100 dark:bg-purple-500/10 dark:border-purple-400 dark:text-purple-400',
       iconBgColor: 'bg-purple-200 dark:bg-purple-500/20',
       header: 'Change category',
       infoText: 'Re-categorize what these transactions are for',
@@ -124,6 +189,8 @@ export const MODAL_CONFIG = {
     delete: {
       icon: 'delete',
       iconColor: 'text-red-500',
+      button:
+        'border border-red-500 text-red-500 bg-red-100 dark:bg-red-500/10 dark:border-red-400 dark:text-red-400',
       iconBgColor: 'bg-red-200 dark:bg-red-500/10',
       header: 'Delete',
       infoText: 'This action cannot be undone',
@@ -647,7 +714,19 @@ export const INPUT_CONFIG = {
       clear: 'close',
       showPassword: 'hide',
       hidePassword: 'show',
+      increaseValue: 'chevron-up',
+      decreaseValue: 'chevron-down',
     },
+  },
+} as const;
+
+export const SELECT_CONFIG = {
+  padding: { xs: 'py-1', sm: 'py-1.5', md: 'py-2', lg: 'py-2.5' },
+  variant: {
+    primary:
+      'border-slate-300 dark:border-slate-500 dark:bg-slate-800 text-slate-700',
+    secondary:
+      'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-500 dark:bg-slate-800',
   },
 } as const;
 

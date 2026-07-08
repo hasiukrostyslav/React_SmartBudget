@@ -25,7 +25,6 @@ export default function UserPanel() {
           iconName="user"
           shape="round"
           variant="outline"
-          className="outline-input border border-slate-700"
         />
       </div>
       <SignOutForm />

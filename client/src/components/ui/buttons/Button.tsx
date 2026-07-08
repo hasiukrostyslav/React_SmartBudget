@@ -25,7 +25,9 @@ export default function Button({
     <button
       className={clsx(
         'flex items-center justify-center gap-1 rounded-md border text-slate-100',
-        disabled ? 'border-slate-400 bg-slate-400' : BUTTON_CONFIG.color[color],
+        disabled
+          ? 'border-slate-400 bg-slate-400 dark:border-slate-600 dark:bg-slate-600 dark:text-slate-500'
+          : BUTTON_CONFIG.color[color],
         BUTTON_CONFIG.size[size],
         className,
       )}

@@ -1,47 +1,29 @@
-import { TRANSACTION_CATEGORIES } from '@/lib/constants/enums';
-import { currency, transactionTypes } from '@/lib/constants/ui';
-
 import SearchForm from '@/components/forms/SearchForm';
-
-import Select from '../../selects/Select';
-import TransactionsCTA from './TransactionsCTA';
 
 export default function TransactionsFilters() {
   return (
-    <div className="flex items-center gap-4 px-1">
+    <>
       <SearchForm inputPadding="sm" placeholder="Search Transaction..." />
 
       <div className="ml-2 flex items-center gap-2">
-        <Select
-          name="categories"
-          data={TRANSACTION_CATEGORIES.map((el) => el.replace('_', ' '))}
-          autoFetchOnChange
-          defaultOption="all"
+        {/* <Select
+          label="categories"
+          param="categories"
+          options={TRANSACTION_CATEGORIES.map((el) => el.replace('_', ' '))}
           width="lg"
         />
+        <Select label="accounts" param="accounts" options={[]} />
         <Select
-          name="accounts"
-          data={[]}
-          autoFetchOnChange
-          defaultOption="all"
+          label="types"
+          param="types"
+          options={TRANSACTION_TYPE_CONFIG.map((c) => c.option)}
         />
         <Select
-          name="types"
-          data={transactionTypes.map((c) => c.name)}
-          autoFetchOnChange
-          defaultOption="all"
-        />
-        <Select
-          name="currency"
-          data={currency.map((c) => c.currency)}
-          autoFetchOnChange
-          defaultOption="all"
-        />
+          label="currency"
+          param="currency"
+          options={CURRENCY.map((c) => c.currency)}
+        /> */}
       </div>
-
-      <div className="ml-auto flex items-center gap-4">
-        <TransactionsCTA buttonSize="md" iconSize={16} />
-      </div>
-    </div>
+    </>
   );
 }

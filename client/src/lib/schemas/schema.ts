@@ -59,9 +59,12 @@ export const TransactionCreateSchema = z.object({
   }),
   paymentMethod: z.string().min(1, { message: 'Payment method is required.' }),
   currency: z.enum(CURRENCIES).default('UAH'),
-  amount: z.number().positive({ message: 'Amount must be a positive number.' }),
+  amount: z.coerce
+    .number()
+    .positive({ message: 'Amount must be a positive number.' }),
   description: z.string().optional(),
   status: z.enum(STATUSES).default('COMPLETED'),
+  createdAt: z.date(),
 });
 
 export const SearchParamsSchema = z.object({

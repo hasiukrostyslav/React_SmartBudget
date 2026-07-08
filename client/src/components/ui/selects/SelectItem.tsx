@@ -1,42 +1,46 @@
 import clsx from 'clsx';
 
+import type { SelectOption } from '@/types/types';
+
+import SelectOptionItem from './SelectOptionItem';
+
 interface SelectItemProps {
-  isSelectExpanded: boolean;
-  selectedOption: string | number | undefined;
-  bulkLabel: string;
-  option: string | number;
+  isContentExpanded: boolean;
+  showSelectedOption: boolean;
+  selectedValue: string | number | undefined;
+  option: SelectOption;
   onSelect: (option: string | number) => void;
 }
 
 export default function SelectItem({
-  isSelectExpanded,
-  selectedOption,
-  bulkLabel,
+  isContentExpanded,
+  showSelectedOption,
+  selectedValue,
   option,
   onSelect,
 }: SelectItemProps) {
   return (
     <button
       role="option"
-      tabIndex={isSelectExpanded ? 0 : -1}
-      aria-selected={selectedOption === option}
-      disabled={selectedOption === option}
-      onClick={() => onSelect(option)}
+      tabIndex={isContentExpanded ? 0 : -1}
+      aria-selected={selectedValue === option.value}
+      disabled={selectedValue === option.value}
+      onClick={() => onSelect(option.value)}
       type="button"
       className={clsx(
         'outline-input flex w-full rounded-md px-1.5 py-1',
-        'hover:bg-blue-200/50 dark:hover:bg-slate-600/40',
-        selectedOption === option ? 'hidden' : '',
+        selectedValue === option.value && !showSelectedOption ? 'hidden' : '',
+        selectedValue === option.value
+          ? 'bg-blue-400/50 dark:bg-slate-900/50'
+          : 'hover:bg-blue-200/50 dark:hover:bg-slate-600/40',
       )}
     >
-      {typeof option === 'number'
-        ? option
-        : option === 'all'
-          ? `All ${bulkLabel.at(0)?.toUpperCase() + bulkLabel.slice(1)}`
-          : option
-              .split(' ')
-              .map((word) => word.replace(word[0], word[0].toUpperCase()))
-              .join(' ')}
+      <SelectOptionItem
+        option={option}
+        context="list"
+        selectedValue={selectedValue}
+        showSelectedOption={showSelectedOption}
+      />
     </button>
   );
 }

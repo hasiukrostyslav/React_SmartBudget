@@ -20,6 +20,13 @@ import {
 
 const PAGE_SIZE_DEFAULT = 10;
 
+// Format a Date as a UTC wall-clock string ("YYYY-MM-DD HH:mm:ss.SSS") for a
+// `timestamp without time zone` column, so the stored value is UTC and matches
+// Prisma/Next regardless of the server's local timezone.
+function toUtcTimestamp(date: Date): string {
+  return date.toISOString().replace('T', ' ').replace('Z', '');
+}
+
 // Mirrors TRANSACTION_CATEGORIES_CONFIG[cat].text.header from the client —
 // every header is Title Case of the underscore-replaced category name.
 function categoryHeader(cat: string): string {
@@ -120,8 +127,9 @@ export class TransactionsService {
     const result = await this.pool.query<TransactionRow>(
       `INSERT INTO "transactions" (
         transaction_id, user_id, transaction_name, transaction_category,
-        payment_method, transaction_type, currency, amount, description, status
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        payment_method, transaction_type, currency, amount, description, status,
+        created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       RETURNING *;`,
       [
         transactionId,
@@ -134,6 +142,11 @@ export class TransactionsService {
         dto.amount,
         dto.description ?? null,
         dto.status,
+        // Store the UTC wall-clock so the value matches Prisma/Next. Passing a
+        // Date would let node-postgres serialize it in the process's local TZ,
+        // writing a shifted value into this `timestamp without time zone`
+        // column.
+        toUtcTimestamp(dto.createdAt ?? new Date()),
       ],
     );
     return mapTransactionRow(result.rows[0]);
