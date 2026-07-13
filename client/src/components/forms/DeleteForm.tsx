@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import type { DeleteItem, ItemType } from '@/types/types';
+import type { ItemType, TransactionItem } from '@/types/types';
 
 import { getCurrencySymbol } from '@/lib/utils/currency';
 import { calcDeletedBalance, getFormattedAmount } from '@/lib/utils/utils';
@@ -11,7 +11,7 @@ import ModalHeader from '../ui/modals/ModalHeader';
 
 interface DeleteFormProps {
   itemType: ItemType;
-  items: DeleteItem[];
+  items: TransactionItem[];
   isSubmitting?: boolean;
   onClose: () => void;
   onSubmit: () => unknown | Promise<unknown>;
@@ -51,7 +51,7 @@ export default function DeleteForm({
         <div className="text-sm dark:text-slate-300">
           You're about to permanently delete{' '}
           <span className="font-semibold">
-            {`${items.length === 1 ? items[0].name : items.length}
+            {`${items.length === 1 ? items[0].transactionName : items.length}
             ${itemType}${items.length > 1 ? 's' : ''}`}
           </span>
           . Their amounts will be removed from your account balances and

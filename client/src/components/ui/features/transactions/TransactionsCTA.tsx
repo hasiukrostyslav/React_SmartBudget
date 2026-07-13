@@ -1,11 +1,10 @@
 import type { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
-import { useModal } from '@/hooks/useModal';
 
 import CreateTransactionForm from '@/components/forms/CreateTransactionForm';
 
 import Button from '../../buttons/Button';
 import Icon from '../../icons/Icon';
-import Modal from '../../modals/Modal';
+import ModalTrigger from '../../modals/ModalTrigger';
 
 interface TransactionsCTAProps {
   buttonSize: 'sm' | 'md' | 'lg';
@@ -18,19 +17,24 @@ export default function TransactionsCTA({
   iconSize,
   configCTA,
 }: TransactionsCTAProps) {
-  const { dialogRef, isOpen, handleOpen, handleClose } = useModal();
-
   return (
     <div className="flex gap-2">
-      <Button
-        onClick={handleOpen}
-        className="flex items-center"
-        color="blue"
-        size={buttonSize}
-      >
-        <Icon name="plus" size={iconSize} />
-        <span>{configCTA?.primaryLabel || 'New Transaction'}</span>
-      </Button>
+      <ModalTrigger
+        modalWidth="lg"
+        renderTrigger={(open) => (
+          <Button
+            onClick={open}
+            className="flex items-center"
+            color="blue"
+            size={buttonSize}
+          >
+            <Icon name="plus" size={iconSize} />
+            <span>{configCTA?.primaryLabel || 'New Transaction'}</span>
+          </Button>
+        )}
+        renderContent={(close) => <CreateTransactionForm onClose={close} />}
+      />
+
       {configCTA &&
         'secondaryLabel' in configCTA &&
         configCTA.secondaryLabel && (
@@ -38,11 +42,6 @@ export default function TransactionsCTA({
             {configCTA.secondaryLabel}
           </Button>
         )}
-      {isOpen && (
-        <Modal ref={dialogRef} className="w-2/5">
-          <CreateTransactionForm onClose={handleClose} />
-        </Modal>
-      )}
     </div>
   );
 }
