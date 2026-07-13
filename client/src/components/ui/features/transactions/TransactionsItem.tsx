@@ -22,19 +22,6 @@ export default function TransactionsItem({
   checked,
   toggleSelectTransaction,
 }: TransactionsItemProps) {
-  const {
-    transactionId,
-    transactionCategory,
-    transactionName,
-    transactionType,
-    paymentMethod,
-    createdAt,
-    currency,
-    amount,
-    description,
-    status,
-  } = item;
-
   return (
     <div
       className={clsx(
@@ -46,30 +33,25 @@ export default function TransactionsItem({
       )}
     >
       <CheckBox
-        name={transactionName}
+        name={item.transactionName}
         checked={checked}
         onChange={toggleSelectTransaction}
       />
-      <TransactionBadge category={transactionCategory} name={transactionName} />
-      <TransactionCategory category={transactionCategory} />
-      <TransactionAccount paymentMethod={paymentMethod} />
-      <TransactionDate date={createdAt} />
+      <TransactionBadge
+        category={item.transactionCategory}
+        name={item.transactionName}
+      />
+      <TransactionCategory category={item.transactionCategory} />
+      <TransactionAccount paymentMethod={item.paymentMethod} />
+      <TransactionDate date={item.createdAt} />
       <TransactionAmount
-        type={transactionType}
-        amount={amount}
-        currency={currency}
+        type={item.transactionType}
+        amount={item.amount}
+        currency={item.currency}
       />
-      <div className="px-1.5">{description}</div>
-      <TransactionStatus status={status} />
-      <TransactionActionButtons
-        item={{
-          id: transactionId,
-          name: transactionName,
-          type: transactionType,
-          amount,
-          currency,
-        }}
-      />
+      <div className="px-1.5">{item.description}</div>
+      <TransactionStatus status={item.status} />
+      <TransactionActionButtons item={item} />
     </div>
   );
 }
