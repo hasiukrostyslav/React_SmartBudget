@@ -4,7 +4,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import type { SignUpFormInputs } from '@/types/types';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
-import { SignUpSchema } from '@/lib/schemas/schema';
+import { SignUpSchema } from '@/lib/schemas/auth.schema';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 import { useSignUp } from '@/hooks/useSignUp';
 

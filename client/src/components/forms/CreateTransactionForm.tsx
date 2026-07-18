@@ -4,7 +4,11 @@ import type { z } from 'zod';
 
 import type { TransactionCreateInput } from '@/types/types';
 
-import { STATUSES, TRANSACTION_CATEGORIES } from '@/lib/constants/enums';
+import {
+  OperationType,
+  STATUSES,
+  TRANSACTION_CATEGORIES,
+} from '@/lib/constants/enums';
 import {
   CREATE_TRANSACTION_FIELDS,
   CURRENCY_CONFIG,
@@ -12,7 +16,7 @@ import {
   TRANSACTION_CATEGORIES_CONFIG,
   TRANSACTION_TYPE_CONFIG,
 } from '@/lib/constants/transactions';
-import { TransactionCreateSchema } from '@/lib/schemas/schema';
+import { TransactionSchema } from '@/lib/schemas/transaction.schema';
 import { useToast } from '@/hooks/useToast';
 import { useCreateTransaction } from '@/hooks/useTransactionMutations';
 
@@ -27,7 +31,7 @@ import ModalHeader from '../ui/modals/ModalHeader';
 import DatePicker from '../ui/selects/DatePicker';
 import Select from '../ui/selects/Select';
 
-type FormData = z.infer<typeof TransactionCreateSchema>;
+type FormData = z.infer<typeof TransactionSchema>;
 
 interface CreateTransactionFormProps {
   onClose: () => void;
@@ -40,7 +44,7 @@ export default function CreateTransactionForm({
   const { mutate: createTransaction, isPending } = useCreateTransaction();
 
   const { register, handleSubmit, control } = useForm({
-    resolver: zodResolver(TransactionCreateSchema),
+    resolver: zodResolver(TransactionSchema),
     defaultValues: {
       transactionType: 'Expenses',
       currency: 'UAH',
@@ -53,9 +57,9 @@ export default function CreateTransactionForm({
     createTransaction(data as TransactionCreateInput, {
       onSuccess: () => {
         onClose();
-        toastSuccess('create', 'Transaction');
+        toastSuccess(OperationType.CREATE, 'Transaction');
       },
-      onError: () => toastError('create', 'Transaction'),
+      onError: () => toastError(OperationType.CREATE, 'Transaction'),
     });
   }
 
@@ -66,7 +70,7 @@ export default function CreateTransactionForm({
       className="flex flex-col dark:text-slate-400"
     >
       <ModalHeader
-        operationType="create"
+        operationType={OperationType.CREATE}
         itemType="transaction"
         handleClose={onClose}
       />
@@ -254,7 +258,7 @@ export default function CreateTransactionForm({
       </section>
 
       <ModalFooter
-        operationType="create"
+        operationType={OperationType.CREATE}
         itemType="transaction"
         isSubmitting={isPending}
         handleClose={onClose}

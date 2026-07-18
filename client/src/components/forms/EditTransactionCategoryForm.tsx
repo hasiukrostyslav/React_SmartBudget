@@ -3,10 +3,11 @@ import clsx from 'clsx';
 import type { IconName } from '@/types/types';
 
 import {
+  OperationType,
   TRANSACTION_CATEGORIES,
   type TransactionCategories,
 } from '@/lib/constants/enums';
-
+import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/transactions';
 import { useSearchInput } from '@/hooks/useSearchInput';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useTheme } from '@/hooks/useTheme';
@@ -20,7 +21,6 @@ import ModalFieldLabel from '../ui/modals/ModalFieldLabel';
 import ModalFieldWrapper from '../ui/modals/ModalFieldWrapper';
 import ModalFooter from '../ui/modals/ModalFooter';
 import ModalHeader from '../ui/modals/ModalHeader';
-import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/transactions';
 
 interface EditTransactionCategoryFormProps {
   onClose: () => void;
@@ -60,7 +60,7 @@ export default function EditTransactionCategoryForm({
     });
 
     onClose();
-    toastSuccess('edit', 'Transaction');
+    toastSuccess(OperationType.EDIT, 'Transaction');
   };
 
   return (
@@ -133,7 +133,7 @@ export default function EditTransactionCategoryForm({
       </section>
 
       <ModalFooter
-        operationType="edit"
+        operationType={OperationType.EDIT}
         itemType="transaction"
         disabled={
           isPending ||

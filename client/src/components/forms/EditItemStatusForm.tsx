@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { STATUSES, type Status } from '@/lib/constants/enums';
+import { OperationType, STATUSES, type Status } from '@/lib/constants/enums';
 
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useToast } from '@/hooks/useToast';
@@ -42,7 +42,7 @@ export default function EditItemStatusForm({
     });
 
     onClose();
-    toastSuccess('edit', 'Transaction');
+    toastSuccess(OperationType.EDIT, 'Transaction');
   };
 
   return (
@@ -89,7 +89,7 @@ export default function EditItemStatusForm({
       </section>
 
       <ModalFooter
-        operationType="edit"
+        operationType={OperationType.EDIT}
         itemType="transaction"
         disabled={
           isPending ||
