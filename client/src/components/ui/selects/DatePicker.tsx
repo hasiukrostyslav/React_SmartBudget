@@ -105,8 +105,8 @@ export default function DatePicker({
           cursor={cursor}
           selected={draft}
           days={days}
-          toNextMonth={toNextMonth}
-          toPrevMonth={toPrevMonth}
+          onNextMonth={toNextMonth}
+          onPrevMonth={toPrevMonth}
         />
         <TimeSelect selectedValue={draft} onChange={setDraft}>
           <Button

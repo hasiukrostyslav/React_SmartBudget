@@ -42,8 +42,8 @@ export default function TimeSelect({
           value={hour}
           onChange={(e) => changeHour(Math.min(Number(e.target.value), 23))}
           rangeButtons={{
-            increaseValue: () => changeHour(getHours(date) + 1),
-            decreaseValue: () => changeHour(getHours(date) - 1),
+            onIncrease: () => changeHour(getHours(date) + 1),
+            onDecrease: () => changeHour(getHours(date) - 1),
           }}
         />
         <span className="font-bold">:</span>
@@ -54,8 +54,8 @@ export default function TimeSelect({
           value={minute}
           onChange={(e) => changeMinute(Math.min(Number(e.target.value), 59))}
           rangeButtons={{
-            increaseValue: () => changeMinute(getMinutes(date) + 1),
-            decreaseValue: () => changeMinute(getMinutes(date) - 1),
+            onIncrease: () => changeMinute(getMinutes(date) + 1),
+            onDecrease: () => changeMinute(getMinutes(date) - 1),
           }}
         />
       </div>

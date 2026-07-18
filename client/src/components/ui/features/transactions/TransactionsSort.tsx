@@ -5,12 +5,12 @@ import TransactionsSortList from './TransactionsSortList';
 
 interface TransactionsSortProps {
   isAllSelected: boolean;
-  toggleSelectAll: () => void;
+  onToggleSelectAll: () => void;
 }
 
 export default function TransactionsSort({
   isAllSelected,
-  toggleSelectAll,
+  onToggleSelectAll,
 }: TransactionsSortProps) {
   return (
     <div
@@ -18,7 +18,7 @@ export default function TransactionsSort({
         'col-span-full mb-4 grid grid-cols-subgrid items-center px-2',
       )}
     >
-      <CheckBox name="all" checked={isAllSelected} onChange={toggleSelectAll} />
+      <CheckBox name="all" checked={isAllSelected} onChange={onToggleSelectAll} />
 
       <TransactionsSortList />
     </div>

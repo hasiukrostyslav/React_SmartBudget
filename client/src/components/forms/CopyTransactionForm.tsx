@@ -87,7 +87,7 @@ export default function CopyTransactionForm({
       <ModalHeader
         operationType={OperationType.COPY}
         itemType="transaction"
-        handleClose={onClose}
+        onClose={onClose}
       />
       <section className="mx-6 my-4">
         <ModalFieldWrapper>
@@ -221,7 +221,7 @@ export default function CopyTransactionForm({
         operationType={OperationType.COPY}
         itemType="transaction"
         isSubmitting={isPending}
-        handleClose={onClose}
+        onClose={onClose}
         disabled={!isValid}
       />
     </form>

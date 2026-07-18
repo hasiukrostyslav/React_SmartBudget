@@ -91,7 +91,7 @@ export default function TransactionForm(props: TransactionFormProps) {
       <ModalHeader
         operationType={isEdit ? OperationType.EDIT : OperationType.CREATE}
         itemType="transaction"
-        handleClose={props.onClose}
+        onClose={props.onClose}
       />
 
       <section className="flex flex-col gap-4 px-6 py-4">
@@ -280,7 +280,7 @@ export default function TransactionForm(props: TransactionFormProps) {
         operationType={isEdit ? OperationType.EDIT : OperationType.CREATE}
         itemType="transaction"
         isSubmitting={isPending}
-        handleClose={props.onClose}
+        onClose={props.onClose}
         disabled={isEdit ? !isDirty : !isValid}
       />
     </form>

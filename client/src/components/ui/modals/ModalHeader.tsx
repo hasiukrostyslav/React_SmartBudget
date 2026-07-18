@@ -11,14 +11,14 @@ interface ModalHeaderProps {
   operationType: keyof typeof MODAL_CONFIG.header;
   itemType: ItemType;
   itemsCount?: number;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 export default function ModalHeader({
   itemsCount,
   itemType,
   operationType,
-  handleClose,
+  onClose,
 }: ModalHeaderProps) {
   const headerConfig = MODAL_CONFIG.header[operationType];
 
@@ -55,7 +55,7 @@ export default function ModalHeader({
         shape="square"
         variant="ghost"
         className="ml-auto"
-        onClick={handleClose}
+        onClick={onClose}
       />
     </header>
   );

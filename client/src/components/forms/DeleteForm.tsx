@@ -45,7 +45,7 @@ export default function DeleteForm({
         itemsCount={items.length}
         itemType={itemType}
         operationType={OperationType.DELETE}
-        handleClose={onClose}
+        onClose={onClose}
       />
 
       <section className="flex flex-col gap-4 px-6 py-5">
@@ -103,7 +103,7 @@ export default function DeleteForm({
         disabled={isSubmitting}
         operationType={OperationType.DELETE}
         isSubmitting={isSubmitting}
-        handleClose={onClose}
+        onClose={onClose}
       />
     </form>
   );

@@ -53,7 +53,7 @@ export default function EditItemStatusForm({
       <ModalHeader
         operationType="editStatus"
         itemType="transaction"
-        handleClose={onClose}
+        onClose={onClose}
       />
 
       <section className="px-6 py-5">
@@ -97,7 +97,7 @@ export default function EditItemStatusForm({
           (initialValue.length === 1 && initialValue[0] === selectedValue)
         }
         isSubmitting={isPending}
-        handleClose={onClose}
+        onClose={onClose}
       />
     </form>
   );

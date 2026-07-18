@@ -9,8 +9,8 @@ interface BulkToolbarProps {
   isShown: boolean;
   selectedNumber: number;
   isAllSelected: boolean;
-  selectAll: () => void;
-  deselectAll: () => void;
+  onSelectAll: () => void;
+  onDeselectAll: () => void;
   children: React.ReactNode;
 }
 
@@ -18,8 +18,8 @@ export default function BulkToolbar({
   isShown,
   selectedNumber,
   isAllSelected,
-  selectAll,
-  deselectAll,
+  onSelectAll,
+  onDeselectAll,
   children,
 }: BulkToolbarProps) {
   return (
@@ -51,7 +51,7 @@ export default function BulkToolbar({
           iconName="select"
           iconSize={14}
           label="Select all"
-          onClick={selectAll}
+          onClick={onSelectAll}
           disabled={isAllSelected}
         />
         {children}
@@ -61,7 +61,7 @@ export default function BulkToolbar({
         size={14}
         shape="square"
         variant="ghost"
-        onClick={deselectAll}
+        onClick={onDeselectAll}
       />
     </SectionWrapper>
   );
