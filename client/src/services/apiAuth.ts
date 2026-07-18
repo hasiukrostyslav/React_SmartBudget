@@ -1,8 +1,12 @@
 import { AxiosError } from 'axios';
+import type { z } from 'zod';
 
-import type { LoginFormInputs, SignUpFormInputs } from '@/types/types';
+import { SignInSchema, SignUpSchema } from '@/lib/schemas/auth.schema';
 
 import { api, resetCsrfToken } from './axios.config';
+
+type LoginFormInputs = z.infer<typeof SignInSchema>;
+type SignUpFormInputs = z.infer<typeof SignUpSchema>;
 
 export async function login({ email, password }: LoginFormInputs) {
   try {

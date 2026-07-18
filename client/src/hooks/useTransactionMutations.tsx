@@ -8,7 +8,7 @@ import {
 } from '@/services/apiTransactions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { TransactionCreateInput } from '@/types/types';
+import type { TransactionItem } from '@/types/types';
 
 import type { Status, TransactionCategories } from '@/lib/constants/enums';
 
@@ -23,7 +23,7 @@ export function useCreateTransaction() {
   const invalidate = useInvalidateTransactions();
 
   return useMutation({
-    mutationFn: (data: TransactionCreateInput) => createTransaction(data),
+    mutationFn: (data: TransactionItem) => createTransaction(data),
     onSuccess: invalidate,
   });
 }

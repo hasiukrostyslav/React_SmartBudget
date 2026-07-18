@@ -67,7 +67,7 @@ export default function CopyTransactionForm({
         transactionCategory: sourceTransaction.transactionCategory,
         paymentMethod: sourceTransaction.paymentMethod,
         status: sourceTransaction.status,
-      },
+      } as TransactionItem,
       {
         onSuccess: () => {
           onClose();

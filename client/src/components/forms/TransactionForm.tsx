@@ -73,7 +73,7 @@ export default function TransactionForm(props: TransactionFormProps) {
   });
 
   function onSubmit(data: FormData) {
-    createTransaction(data, {
+    createTransaction(data as TransactionItem, {
       onSuccess: () => {
         props.onClose();
         toastSuccess(OperationType.CREATE, 'Transaction');

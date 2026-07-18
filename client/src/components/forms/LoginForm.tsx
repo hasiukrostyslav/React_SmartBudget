@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, type SubmitHandler } from 'react-hook-form';
-
-import type { LoginFormInputs } from '@/types/types';
+import type { z } from 'zod';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignInSchema } from '@/lib/schemas/auth.schema';
@@ -14,6 +13,8 @@ import Icon from '../ui/icons/Icon';
 import Input from '../ui/inputs/Input';
 import AuthLink from '../ui/links/AuthLink';
 
+type FormInputs = z.infer<typeof SignInSchema>;
+
 export default function LoginForm() {
   const { login, isPending, error } = useLogin();
   const { buttonRole, toggleVisibility } = usePasswordVisibility();
@@ -24,7 +25,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(SignInSchema) });
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = (data) => login(data);
+  const onSubmit: SubmitHandler<FormInputs> = (data) => login(data);
 
   return (
     <form
