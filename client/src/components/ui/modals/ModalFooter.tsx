@@ -27,7 +27,7 @@ export default function ModalFooter({
   const footerConfig = MODAL_CONFIG.footer[operationType];
 
   const submitButtonText =
-    operationType !== 'edit'
+    operationType !== 'edit' && operationType !== 'copy'
       ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
       : '';
 

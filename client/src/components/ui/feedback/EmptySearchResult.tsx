@@ -22,7 +22,7 @@ export default function EmptySearchResult({
     >
       <div className="flex flex-col items-center justify-center gap-2">
         <img
-          className="h-[120px] w-[120px]"
+          className="h-30 w-30"
           alt="Error"
           src="/error-404.png"
           width={120}

@@ -43,7 +43,7 @@ export default function TransactionsItem({
       />
       <TransactionCategory category={item.transactionCategory} />
       <TransactionAccount paymentMethod={item.paymentMethod} />
-      <TransactionDate date={item.createdAt} />
+      <TransactionDate date={item.createdAt} withTime />
       <TransactionAmount
         type={item.transactionType}
         amount={item.amount}

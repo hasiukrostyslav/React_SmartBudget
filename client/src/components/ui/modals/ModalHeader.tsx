@@ -22,9 +22,10 @@ export default function ModalHeader({
 }: ModalHeaderProps) {
   const headerConfig = MODAL_CONFIG.header[operationType];
 
-  const headerText = !operationType.startsWith('edit')
-    ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
-    : '';
+  const headerText =
+    !operationType.startsWith('edit') || operationType === 'edit'
+      ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
+      : '';
 
   return (
     <header

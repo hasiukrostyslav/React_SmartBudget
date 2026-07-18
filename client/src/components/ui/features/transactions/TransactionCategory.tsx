@@ -14,7 +14,7 @@ export default function TransactionCategory({
     <div>
       <span
         className={clsx(
-          'inline-block rounded-xl border-2 px-2.5 py-1',
+          'inline-block rounded-md px-2 py-0.5',
           TRANSACTION_CATEGORIES_CONFIG[category].style.badge,
         )}
       >

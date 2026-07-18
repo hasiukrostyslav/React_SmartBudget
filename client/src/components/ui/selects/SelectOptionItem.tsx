@@ -26,7 +26,8 @@ export default function SelectOptionItem(props: SelectOptionItemProps) {
       {(option.color || option.symbol || option.icon) && (
         <div
           className={clsx(
-            'rounded-md p-0.5',
+            'rounded-md',
+            context === 'list' ? 'p-1' : 'p-0.5',
             option.color,
             !option.icon && !option.symbol && 'p-2',
           )}
