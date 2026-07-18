@@ -11,8 +11,10 @@ import ModalTrigger from '../../modals/ModalTrigger';
 
 export default function TransactionBulkActionButtons({
   selectedItems,
+  onSuccess,
 }: {
   selectedItems: TransactionItem[];
+  onSuccess: () => void;
 }) {
   const { mutateAsync: deleteMany, isPending: isDeleting } =
     useDeleteManyTransactions();
@@ -32,6 +34,7 @@ export default function TransactionBulkActionButtons({
         renderContent={(close) => (
           <EditItemStatusForm
             onClose={close}
+            onSuccess={onSuccess}
             selectedItems={selectedItems.map((el) => ({
               id: el.transactionId,
               status: el.status,
@@ -53,6 +56,7 @@ export default function TransactionBulkActionButtons({
         renderContent={(close) => (
           <EditTransactionCategoryForm
             onClose={close}
+            onSuccess={onSuccess}
             selectedItems={selectedItems.map((el) => ({
               id: el.transactionId,
               category: el.transactionCategory,
@@ -76,9 +80,10 @@ export default function TransactionBulkActionButtons({
             items={selectedItems}
             isSubmitting={isDeleting}
             onClose={close}
-            onSubmit={() =>
-              deleteMany(selectedItems.map((el) => el.transactionId))
-            }
+            onSubmit={async () => {
+              await deleteMany(selectedItems.map((el) => el.transactionId));
+              onSuccess();
+            }}
           />
         )}
       />
