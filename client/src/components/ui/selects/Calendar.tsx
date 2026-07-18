@@ -10,8 +10,8 @@ interface CalendarProps {
   selected?: Date;
   days: Date[];
   onSelect: (value: Date) => void;
-  toPrevMonth: () => void;
-  toNextMonth: () => void;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 export default function Calendar({
@@ -19,8 +19,8 @@ export default function Calendar({
   selected,
   days,
   onSelect,
-  toPrevMonth,
-  toNextMonth,
+  onPrevMonth,
+  onNextMonth,
 }: CalendarProps) {
   return (
     <div className="p-3">
@@ -31,7 +31,7 @@ export default function Calendar({
           shape="square"
           variant="outline"
           className="outline-input"
-          onClick={toPrevMonth}
+          onClick={onPrevMonth}
         />
         <p className="font-bold">{format(cursor, 'LLLL yyyy')}</p>
         <ButtonIcon
@@ -39,7 +39,7 @@ export default function Calendar({
           size={16}
           shape="square"
           variant="outline"
-          onClick={toNextMonth}
+          onClick={onNextMonth}
         />
       </div>
 

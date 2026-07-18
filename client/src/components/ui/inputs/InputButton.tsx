@@ -1,8 +1,9 @@
 import { clsx } from 'clsx';
 
-import { INPUT_CONFIG } from '@/lib/constants/ui';
+
 
 import Icon from '../icons/Icon';
+import { INPUT_CONFIG } from '@/lib/constants/components';
 
 interface InputButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

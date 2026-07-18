@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import type { IconName, ItemType } from '@/types/types';
 
-import { BUTTON_CONFIG, MODAL_CONFIG } from '@/lib/constants/ui';
+import { BUTTON_CONFIG, MODAL_CONFIG } from '@/lib/constants/components';
 
 import Button from '../buttons/Button';
 import Icon from '../icons/Icon';
@@ -13,7 +13,7 @@ interface ModalFooterProps {
   itemsCount?: number;
   disabled?: boolean;
   isSubmitting: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 export default function ModalFooter({
@@ -22,12 +22,12 @@ export default function ModalFooter({
   disabled,
   isSubmitting,
   operationType,
-  handleClose,
+  onClose,
 }: ModalFooterProps) {
   const footerConfig = MODAL_CONFIG.footer[operationType];
 
   const submitButtonText =
-    operationType !== 'edit'
+    operationType !== 'edit' && operationType !== 'copy'
       ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
       : '';
 
@@ -44,7 +44,7 @@ export default function ModalFooter({
         <span className="text-xs">{footerConfig.infoText}</span>
       </div>
       <div className="flex items-center justify-center gap-3">
-        <Button type="button" color="outline" size="sm" onClick={handleClose}>
+        <Button type="button" color="outline" size="sm" onClick={onClose}>
           Cancel
         </Button>
         <Button

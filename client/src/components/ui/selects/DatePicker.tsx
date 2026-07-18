@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { SELECT_CONFIG } from '@/lib/constants/ui';
+import { SELECT_CONFIG } from '@/lib/constants/components';
 import { useCalendar } from '@/hooks/useCalendar';
 import { useSelectDropdown } from '@/hooks/useSelectDropdown';
 
@@ -35,6 +35,9 @@ export default function DatePicker({
   padding = 'sm',
   variant = 'primary',
   groupPosition,
+  contentPosition = 'top',
+  contentExpandedAlign,
+  contentWidthExpandedTo,
   disabled,
   onSelect,
 }: DatePickerProps) {
@@ -90,14 +93,20 @@ export default function DatePicker({
         />
       </SelectTrigger>
 
-      <PopoverPanel id={id} isContentExpanded={isContentExpanded} position="top">
+      <PopoverPanel
+        id={id}
+        isContentExpanded={isContentExpanded}
+        position={contentPosition}
+        widthExpandedTo={contentWidthExpandedTo}
+        expandedAlign={contentExpandedAlign}
+      >
         <Calendar
           onSelect={handleSelectDay}
           cursor={cursor}
           selected={draft}
           days={days}
-          toNextMonth={toNextMonth}
-          toPrevMonth={toPrevMonth}
+          onNextMonth={toNextMonth}
+          onPrevMonth={toPrevMonth}
         />
         <TimeSelect selectedValue={draft} onChange={setDraft}>
           <Button

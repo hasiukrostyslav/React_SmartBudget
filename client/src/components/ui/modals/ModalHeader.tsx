@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import type { IconName, ItemType } from '@/types/types';
 
-import { MODAL_CONFIG } from '@/lib/constants/ui';
+import { MODAL_CONFIG } from '@/lib/constants/components';
 
 import ButtonIcon from '../buttons/ButtonIcon';
 import Icon from '../icons/Icon';
@@ -11,20 +11,21 @@ interface ModalHeaderProps {
   operationType: keyof typeof MODAL_CONFIG.header;
   itemType: ItemType;
   itemsCount?: number;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 export default function ModalHeader({
   itemsCount,
   itemType,
   operationType,
-  handleClose,
+  onClose,
 }: ModalHeaderProps) {
   const headerConfig = MODAL_CONFIG.header[operationType];
 
-  const headerText = !operationType.startsWith('edit')
-    ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
-    : '';
+  const headerText =
+    !operationType.startsWith('edit') || operationType === 'edit'
+      ? ` ${itemsCount && itemsCount > 1 ? `${itemsCount} ${itemType}s` : itemType}`
+      : '';
 
   return (
     <header
@@ -54,7 +55,7 @@ export default function ModalHeader({
         shape="square"
         variant="ghost"
         className="ml-auto"
-        onClick={handleClose}
+        onClick={onClose}
       />
     </header>
   );

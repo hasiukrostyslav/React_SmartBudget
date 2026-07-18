@@ -2,6 +2,7 @@ import clsx from 'clsx';
 
 import type { ItemType, TransactionItem } from '@/types/types';
 
+import { OperationType } from '@/lib/constants/enums';
 import { getCurrencySymbol } from '@/lib/utils/currency';
 import { calcDeletedBalance, getFormattedAmount } from '@/lib/utils/utils';
 import { useToast } from '@/hooks/useToast';
@@ -30,7 +31,7 @@ export default function DeleteForm({
     e.preventDefault();
     await onSubmit();
     onClose();
-    toastSuccess('delete', 'Transaction');
+    toastSuccess(OperationType.DELETE, 'Transaction');
   };
 
   const balance = calcDeletedBalance(items);
@@ -43,8 +44,8 @@ export default function DeleteForm({
       <ModalHeader
         itemsCount={items.length}
         itemType={itemType}
-        operationType="delete"
-        handleClose={onClose}
+        operationType={OperationType.DELETE}
+        onClose={onClose}
       />
 
       <section className="flex flex-col gap-4 px-6 py-5">
@@ -100,9 +101,9 @@ export default function DeleteForm({
         itemsCount={items.length}
         itemType={itemType}
         disabled={isSubmitting}
-        operationType="delete"
+        operationType={OperationType.DELETE}
         isSubmitting={isSubmitting}
-        handleClose={onClose}
+        onClose={onClose}
       />
     </form>
   );

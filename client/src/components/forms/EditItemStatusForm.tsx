@@ -2,8 +2,8 @@ import clsx from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { STATUSES, type Status } from '@/lib/constants/enums';
-import { STATUS_CONFIG } from '@/lib/constants/ui';
+import { OperationType, STATUSES, type Status } from '@/lib/constants/enums';
+
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useToast } from '@/hooks/useToast';
 import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
@@ -13,6 +13,7 @@ import ModalFieldLabel from '../ui/modals/ModalFieldLabel';
 import ModalFieldWrapper from '../ui/modals/ModalFieldWrapper';
 import ModalFooter from '../ui/modals/ModalFooter';
 import ModalHeader from '../ui/modals/ModalHeader';
+import { STATUS_CONFIG } from '@/lib/constants/transactions';
 
 interface EditItemStatusFormProps {
   onClose: () => void;
@@ -41,7 +42,7 @@ export default function EditItemStatusForm({
     });
 
     onClose();
-    toastSuccess('edit', 'Transaction');
+    toastSuccess(OperationType.EDIT, 'Transaction');
   };
 
   return (
@@ -52,7 +53,7 @@ export default function EditItemStatusForm({
       <ModalHeader
         operationType="editStatus"
         itemType="transaction"
-        handleClose={onClose}
+        onClose={onClose}
       />
 
       <section className="px-6 py-5">
@@ -88,7 +89,7 @@ export default function EditItemStatusForm({
       </section>
 
       <ModalFooter
-        operationType="edit"
+        operationType={OperationType.EDIT}
         itemType="transaction"
         disabled={
           isPending ||
@@ -96,7 +97,7 @@ export default function EditItemStatusForm({
           (initialValue.length === 1 && initialValue[0] === selectedValue)
         }
         isSubmitting={isPending}
-        handleClose={onClose}
+        onClose={onClose}
       />
     </form>
   );

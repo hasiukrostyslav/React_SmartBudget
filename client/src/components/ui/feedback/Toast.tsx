@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-import { TOAST_CONFIG } from '@/lib/constants/ui';
+import { TOAST_CONFIG } from '@/lib/constants/components';
 
 import Icon from '../icons/Icon';
 

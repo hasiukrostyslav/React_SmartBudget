@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import type { IconName } from '@/types/types';
 
-import { BUTTON_CONFIG } from '@/lib/constants/ui';
+import { BUTTON_CONFIG } from '@/lib/constants/components';
 
 import Icon from '../icons/Icon';
 

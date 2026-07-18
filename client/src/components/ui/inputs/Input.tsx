@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { INPUT_CONFIG } from '@/lib/constants/ui';
+import { INPUT_CONFIG } from '@/lib/constants/components';
 
 import InputButton from './InputButton';
 import InputError from './InputError';
@@ -32,7 +32,7 @@ interface InputProps {
     role: keyof typeof INPUT_CONFIG.button.roleIcon;
     onClick: () => void;
   };
-  rangeButtons?: { increaseValue: () => void; decreaseValue: () => void };
+  rangeButtons?: { onIncrease: () => void; onDecrease: () => void };
 }
 
 export default function Input({
@@ -113,8 +113,8 @@ export default function Input({
 
         {rangeButtons && (
           <InputRangeButtons
-            increaseValue={rangeButtons.increaseValue}
-            decreaseValue={rangeButtons.decreaseValue}
+            onIncrease={rangeButtons.onIncrease}
+            onDecrease={rangeButtons.onDecrease}
           />
         )}
       </div>

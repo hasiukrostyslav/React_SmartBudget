@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import type z from 'zod';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
-import { ForgotPasswordSchema } from '@/lib/schemas/schema';
+import { ForgotPasswordSchema } from '@/lib/schemas/auth.schema';
 
 import Button from '../ui/buttons/Button';
 import Input from '../ui/inputs/Input';

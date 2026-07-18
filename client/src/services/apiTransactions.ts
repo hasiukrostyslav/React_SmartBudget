@@ -2,13 +2,13 @@ import { AxiosError } from 'axios';
 import * as z from 'zod';
 
 import type {
-  TransactionCreateInput,
+  CreateTransactionData,
+  EditTransactionData,
   TransactionItem,
-  TransactionUpdate,
 } from '@/types/types';
 
 import type { Status, TransactionCategories } from '@/lib/constants/enums';
-import type { SearchParamsSchema } from '@/lib/schemas/schema';
+import { SearchParamsSchema } from '@/lib/schemas/transaction.schema';
 
 import { api } from './axios.config';
 
@@ -49,7 +49,7 @@ export async function getTransaction(id: string): Promise<TransactionItem> {
 }
 
 export async function createTransaction(
-  data: TransactionCreateInput,
+  data: CreateTransactionData,
 ): Promise<TransactionItem> {
   try {
     const res = await api.post('/dashboard/transactions', data);
@@ -59,9 +59,9 @@ export async function createTransaction(
   }
 }
 
-export async function updateTransaction(
+export async function editTransaction(
   id: string,
-  data: TransactionUpdate,
+  data: EditTransactionData,
 ): Promise<TransactionItem> {
   try {
     const res = await api.patch(`/dashboard/transactions/${id}`, data);

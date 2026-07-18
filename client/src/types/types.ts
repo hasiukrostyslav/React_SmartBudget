@@ -1,5 +1,3 @@
-import type z from 'zod';
-
 import type {
   Currency,
   Status,
@@ -7,24 +5,12 @@ import type {
   TransactionType,
 } from '@/lib/constants/enums';
 import { icons } from '@/lib/constants/icons';
-import type { SignInSchema, SignUpSchema } from '@/lib/schemas/schema';
 
-// Icon names
 export type IconName = (typeof icons)[number]['role'];
 
-// Auth input with icons types
-export interface InputIcons {
-  name: Extract<IconName, 'name'>;
-  email: Extract<IconName, 'email'>;
-  password: Extract<IconName, 'password'>;
-}
-
-export type LoginFormInputs = z.infer<typeof SignInSchema>;
-export type SignUpFormInputs = z.infer<typeof SignUpSchema>;
-
 export interface TransactionItem {
-  createdAt: string | Date;
-  updatedAt: string | Date;
+  createdAt: Date;
+  updatedAt: Date;
   userId: string;
   transactionId: string;
   transactionName: string;
@@ -37,11 +23,11 @@ export interface TransactionItem {
   status: Status;
 }
 
-export type TransactionCreateInput = Omit<
+export type CreateTransactionData = Omit<
   TransactionItem,
   'updatedAt' | 'userId' | 'transactionId'
 >;
-export type TransactionUpdate = Partial<
+export type EditTransactionData = Partial<
   Omit<TransactionItem, 'updatedAt' | 'userId' | 'transactionId'>
 >;
 

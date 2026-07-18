@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useNavigate } from 'react-router';
 
-import { ERROR_MESSAGES_CONFIG } from '@/lib/constants/ui';
+import { ERROR_MESSAGES_CONFIG } from '@/lib/constants/components';
 
 import Button from '../buttons/Button';
 import ButtonLink from '../buttons/ButtonLink';
@@ -23,7 +23,7 @@ export default function Error({ type, page = 'inner' }: ErrorProps) {
       )}
     >
       <img
-        className="h-[300px] w-[300px]"
+        className="h-75 w-75"
         alt="Error"
         src={`/error-${ERROR_MESSAGES_CONFIG[type].code}.png`}
         width={300}

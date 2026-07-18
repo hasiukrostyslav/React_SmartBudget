@@ -119,6 +119,19 @@ export function calcDeletedBalance(item: TransactionItem[]) {
   });
 }
 
+// Keep only the fields react-hook-form flagged as modified
+export function getDirtyValues<T extends object>(
+  values: T,
+  dirtyFields: Partial<Record<keyof T, unknown>>,
+): Partial<T> {
+  return (Object.keys(dirtyFields) as (keyof T)[])
+    .filter((key) => dirtyFields[key])
+    .reduce<Partial<T>>((acc, key) => {
+      acc[key] = values[key];
+      return acc;
+    }, {});
+}
+
 // Format amount
 export function getFormattedAmount(amount: number) {
   return new Intl.NumberFormat(DEFAULT_LOCALE, {

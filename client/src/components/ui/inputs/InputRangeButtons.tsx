@@ -3,25 +3,25 @@ import { clsx } from 'clsx';
 import InputButton from './InputButton';
 
 interface InputRangeButtonsProps {
-  increaseValue: () => void;
-  decreaseValue: () => void;
+  onIncrease: () => void;
+  onDecrease: () => void;
 }
 
 export default function InputRangeButtons({
-  increaseValue,
-  decreaseValue,
+  onIncrease,
+  onDecrease,
 }: InputRangeButtonsProps) {
   return (
     <div className={clsx('absolute top-0.5 right-1 flex flex-col gap-1')}>
       <InputButton
         role="increaseValue"
-        onClick={increaseValue}
+        onClick={onIncrease}
         inRange
         iconSize={12}
       />
       <InputButton
         role="decreaseValue"
-        onClick={decreaseValue}
+        onClick={onDecrease}
         inRange
         iconSize={12}
       />

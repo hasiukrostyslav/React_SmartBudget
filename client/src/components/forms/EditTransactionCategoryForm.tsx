@@ -3,10 +3,11 @@ import clsx from 'clsx';
 import type { IconName } from '@/types/types';
 
 import {
+  OperationType,
   TRANSACTION_CATEGORIES,
   type TransactionCategories,
 } from '@/lib/constants/enums';
-import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
+import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/transactions';
 import { useSearchInput } from '@/hooks/useSearchInput';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useTheme } from '@/hooks/useTheme';
@@ -59,7 +60,7 @@ export default function EditTransactionCategoryForm({
     });
 
     onClose();
-    toastSuccess('edit', 'Transaction');
+    toastSuccess(OperationType.EDIT, 'Transaction');
   };
 
   return (
@@ -70,7 +71,7 @@ export default function EditTransactionCategoryForm({
       <ModalHeader
         operationType="editCategory"
         itemType="transaction"
-        handleClose={onClose}
+        onClose={onClose}
       />
 
       <section className="px-6 py-5">
@@ -132,7 +133,7 @@ export default function EditTransactionCategoryForm({
       </section>
 
       <ModalFooter
-        operationType="edit"
+        operationType={OperationType.EDIT}
         itemType="transaction"
         disabled={
           isPending ||
@@ -140,7 +141,7 @@ export default function EditTransactionCategoryForm({
           (initialValue.length === 1 && initialValue[0] === selectedValue)
         }
         isSubmitting={isPending}
-        handleClose={onClose}
+        onClose={onClose}
       />
     </form>
   );
