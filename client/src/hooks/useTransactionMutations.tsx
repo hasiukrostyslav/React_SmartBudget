@@ -3,12 +3,13 @@ import {
   deleteAllTransactions,
   deleteTransaction,
   deleteTransactions,
+  editTransaction,
   updateTransactionsCategory,
   updateTransactionsStatus,
 } from '@/services/apiTransactions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { TransactionItem } from '@/types/types';
+import type { CreateTransactionData, EditTransactionData } from '@/types/types';
 
 import type { Status, TransactionCategories } from '@/lib/constants/enums';
 
@@ -23,7 +24,17 @@ export function useCreateTransaction() {
   const invalidate = useInvalidateTransactions();
 
   return useMutation({
-    mutationFn: (data: TransactionItem) => createTransaction(data),
+    mutationFn: (data: CreateTransactionData) => createTransaction(data),
+    onSuccess: invalidate,
+  });
+}
+
+export function useEditTransaction() {
+  const invalidate = useInvalidateTransactions();
+
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: EditTransactionData }) =>
+      editTransaction(id, data),
     onSuccess: invalidate,
   });
 }

@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 
 interface TransactionDateProps {
-  date: string | Date;
+  date: Date;
   withTime: boolean;
 }
 

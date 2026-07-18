@@ -2,7 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import type { TransactionItem } from '@/types/types';
+import type {
+  CreateTransactionData,
+  EditTransactionData,
+  TransactionItem,
+} from '@/types/types';
 
 import { DEFAULT_CURRENCY } from '@/lib/constants/constants';
 import {
@@ -18,8 +22,12 @@ import {
   TRANSACTION_TYPE_CONFIG,
 } from '@/lib/constants/transactions';
 import { TransactionSchema } from '@/lib/schemas/transaction.schema';
+import { getDirtyValues } from '@/lib/utils/utils';
 import { useToast } from '@/hooks/useToast';
-import { useCreateTransaction } from '@/hooks/useTransactionMutations';
+import {
+  useCreateTransaction,
+  useEditTransaction,
+} from '@/hooks/useTransactionMutations';
 
 import SegmentedControl from '../ui/controls/SegmentedControl';
 import Input from '../ui/inputs/Input';
@@ -43,13 +51,16 @@ export default function TransactionForm(props: TransactionFormProps) {
   const isEdit = props.mode === 'edit';
 
   const { toastSuccess, toastError } = useToast();
-  const { mutate: createTransaction, isPending } = useCreateTransaction();
+  const { mutate: createTransaction, isPending: isCreating } =
+    useCreateTransaction();
+  const { mutate: editTransaction, isPending: isEditing } =
+    useEditTransaction();
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { isDirty, isValid },
+    formState: { isDirty, isValid, dirtyFields },
   } = useForm({
     resolver: zodResolver(TransactionSchema),
     defaultValues: isEdit
@@ -60,7 +71,7 @@ export default function TransactionForm(props: TransactionFormProps) {
           currency: props.item.currency,
           status: props.item.status,
           transactionCategory: props.item.transactionCategory,
-          createdAt: props.item.updatedAt, // SHOULD BE change to updatedAt
+          createdAt: new Date(props.item.createdAt),
           paymentMethod: props.item.paymentMethod,
           description: props.item.description ?? '',
         }
@@ -73,13 +84,29 @@ export default function TransactionForm(props: TransactionFormProps) {
   });
 
   function onSubmit(data: FormData) {
-    createTransaction(data as TransactionItem, {
-      onSuccess: () => {
-        props.onClose();
-        toastSuccess(OperationType.CREATE, 'Transaction');
-      },
-      onError: () => toastError(OperationType.CREATE, 'Transaction'),
-    });
+    if (!isEdit) {
+      createTransaction(data as CreateTransactionData, {
+        onSuccess: () => {
+          props.onClose();
+          toastSuccess(OperationType.CREATE, 'Transaction');
+        },
+        onError: () => toastError(OperationType.CREATE, 'Transaction'),
+      });
+    } else {
+      editTransaction(
+        {
+          id: props.item.transactionId,
+          data: getDirtyValues(data, dirtyFields) as EditTransactionData,
+        },
+        {
+          onSuccess: () => {
+            props.onClose();
+            toastSuccess(OperationType.EDIT, 'Transaction');
+          },
+          onError: () => toastError(OperationType.EDIT, 'Transaction'),
+        },
+      );
+    }
   }
 
   return (
@@ -279,7 +306,7 @@ export default function TransactionForm(props: TransactionFormProps) {
       <ModalFooter
         operationType={isEdit ? OperationType.EDIT : OperationType.CREATE}
         itemType="transaction"
-        isSubmitting={isPending}
+        isSubmitting={isCreating || isEditing}
         onClose={props.onClose}
         disabled={isEdit ? !isDirty : !isValid}
       />

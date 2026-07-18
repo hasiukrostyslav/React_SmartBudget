@@ -27,7 +27,7 @@ export type CreateTransactionData = Omit<
   TransactionItem,
   'updatedAt' | 'userId' | 'transactionId'
 >;
-export type UpdateTransactionData = Partial<
+export type EditTransactionData = Partial<
   Omit<TransactionItem, 'updatedAt' | 'userId' | 'transactionId'>
 >;
 
