@@ -17,6 +17,7 @@ import { STATUS_CONFIG } from '@/lib/constants/transactions';
 
 interface EditItemStatusFormProps {
   onClose: () => void;
+  onSuccess?: () => void;
   selectedItems: {
     id: string;
     status: Status;
@@ -25,6 +26,7 @@ interface EditItemStatusFormProps {
 
 export default function EditItemStatusForm({
   onClose,
+  onSuccess,
   selectedItems,
 }: EditItemStatusFormProps) {
   const { selectedValue, handleSelect } = useSelectValue();
@@ -41,6 +43,7 @@ export default function EditItemStatusForm({
       status: selectedValue as Status,
     });
 
+    onSuccess?.();
     onClose();
     toastSuccess(OperationType.EDIT, 'Transaction');
   };

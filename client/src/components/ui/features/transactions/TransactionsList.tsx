@@ -66,6 +66,7 @@ export default function TransactionsList({
             selectedItems={data.filter((item) =>
               selectedIds.has(item.transactionId),
             )}
+            onSuccess={deselectAll}
           />
         </BulkToolbar>
       </div>

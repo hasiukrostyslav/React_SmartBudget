@@ -24,6 +24,7 @@ import ModalHeader from '../ui/modals/ModalHeader';
 
 interface EditTransactionCategoryFormProps {
   onClose: () => void;
+  onSuccess?: () => void;
   selectedItems: {
     id: string;
     category: TransactionCategories;
@@ -32,6 +33,7 @@ interface EditTransactionCategoryFormProps {
 
 export default function EditTransactionCategoryForm({
   onClose,
+  onSuccess,
   selectedItems,
 }: EditTransactionCategoryFormProps) {
   const { theme } = useTheme();
@@ -59,6 +61,7 @@ export default function EditTransactionCategoryForm({
       category: selectedValue as TransactionCategories,
     });
 
+    onSuccess?.();
     onClose();
     toastSuccess(OperationType.EDIT, 'Transaction');
   };
