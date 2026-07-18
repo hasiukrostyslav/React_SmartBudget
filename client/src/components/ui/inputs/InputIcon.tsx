@@ -2,9 +2,9 @@ import { clsx } from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { INPUT_CONFIG } from '@/lib/constants/ui';
 
 import Icon from '../icons/Icon';
+import { INPUT_CONFIG } from '@/lib/constants/components';
 
 interface InputIconProps {
   name: IconName;

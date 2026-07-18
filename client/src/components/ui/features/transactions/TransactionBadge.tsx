@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import type { IconName } from '@/types/types';
 
 import type { TransactionCategories } from '@/lib/constants/enums';
-import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
+import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/transactions';
 
 import Icon from '../../icons/Icon';
 

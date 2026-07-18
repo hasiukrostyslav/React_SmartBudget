@@ -2,6 +2,7 @@ import type { TransactionItem } from '@/types/types';
 
 import { useDeleteTransaction } from '@/hooks/useTransactionMutations';
 
+import CreateTransactionForm from '@/components/forms/CreateTransactionForm';
 import DeleteForm from '@/components/forms/DeleteForm';
 
 import ButtonIcon from '../../buttons/ButtonIcon';
@@ -26,12 +27,18 @@ export default function TransactionActionButtons({
           size={14}
           tooltipLabel="Duplicate transaction"
         />
-        <ButtonIcon
-          iconName="edit"
-          shape="square"
-          variant="ghost"
-          size={14}
-          tooltipLabel="Edit transaction"
+        <ModalTrigger
+          renderTrigger={(open) => (
+            <ButtonIcon
+              iconName="edit"
+              shape="square"
+              variant="ghost"
+              size={14}
+              onClick={open}
+              tooltipLabel="Edit transaction"
+            />
+          )}
+          renderContent={(close) => <CreateTransactionForm onClose={close} />}
         />
 
         <ModalTrigger

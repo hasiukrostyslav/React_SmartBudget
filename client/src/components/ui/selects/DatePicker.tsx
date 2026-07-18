@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { SELECT_CONFIG } from '@/lib/constants/ui';
+import { SELECT_CONFIG } from '@/lib/constants/components';
 import { useCalendar } from '@/hooks/useCalendar';
 import { useSelectDropdown } from '@/hooks/useSelectDropdown';
 
@@ -90,7 +90,11 @@ export default function DatePicker({
         />
       </SelectTrigger>
 
-      <PopoverPanel id={id} isContentExpanded={isContentExpanded} position="top">
+      <PopoverPanel
+        id={id}
+        isContentExpanded={isContentExpanded}
+        position="top"
+      >
         <Calendar
           onSelect={handleSelectDay}
           cursor={cursor}

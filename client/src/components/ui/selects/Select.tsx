@@ -1,12 +1,13 @@
 import type { SelectOption } from '@/types/types';
 
-import { SELECT_CONFIG } from '@/lib/constants/ui';
+
 import { useSelectDropdown } from '@/hooks/useSelectDropdown';
 
 import SelectContent from './SelectContent';
 import SelectTrigger from './SelectTrigger';
 import SelectValue from './SelectValue';
 import SelectWrapper from './SelectWrapper';
+import { SELECT_CONFIG } from '@/lib/constants/components';
 
 interface SelectProps {
   label: string;

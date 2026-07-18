@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { BUTTON_CONFIG } from '@/lib/constants/ui';
+import { BUTTON_CONFIG } from '@/lib/constants/components';
 
 interface ButtonProps {
   children: React.ReactNode;

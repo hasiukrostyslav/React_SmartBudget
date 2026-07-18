@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import type { IconName } from '@/types/types';
 
 import { STATUSES, type Status } from '@/lib/constants/enums';
-import { STATUS_CONFIG } from '@/lib/constants/ui';
+
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useToast } from '@/hooks/useToast';
 import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
@@ -13,6 +13,7 @@ import ModalFieldLabel from '../ui/modals/ModalFieldLabel';
 import ModalFieldWrapper from '../ui/modals/ModalFieldWrapper';
 import ModalFooter from '../ui/modals/ModalFooter';
 import ModalHeader from '../ui/modals/ModalHeader';
+import { STATUS_CONFIG } from '@/lib/constants/transactions';
 
 interface EditItemStatusFormProps {
   onClose: () => void;

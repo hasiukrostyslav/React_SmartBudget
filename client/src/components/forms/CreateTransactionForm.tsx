@@ -2,22 +2,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-import {
-  STATUSES,
-  TRANSACTION_CATEGORIES,
-} from '@/lib/constants/enums';
+import type { TransactionCreateInput } from '@/types/types';
+
+import { STATUSES, TRANSACTION_CATEGORIES } from '@/lib/constants/enums';
 import {
   CREATE_TRANSACTION_FIELDS,
   CURRENCY_CONFIG,
   STATUS_CONFIG,
   TRANSACTION_CATEGORIES_CONFIG,
   TRANSACTION_TYPE_CONFIG,
-} from '@/lib/constants/ui';
+} from '@/lib/constants/transactions';
 import { TransactionCreateSchema } from '@/lib/schemas/schema';
 import { useToast } from '@/hooks/useToast';
 import { useCreateTransaction } from '@/hooks/useTransactionMutations';
-
-import type { TransactionCreateInput } from '@/types/types';
 
 import SegmentedControl from '../ui/controls/SegmentedControl';
 import Input from '../ui/inputs/Input';

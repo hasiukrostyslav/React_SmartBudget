@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { INPUT_CONFIG } from '@/lib/constants/ui';
+import { INPUT_CONFIG } from '@/lib/constants/components';
 
 import InputButton from './InputButton';
 import InputError from './InputError';

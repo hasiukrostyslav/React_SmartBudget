@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 import type { IconName, ItemType } from '@/types/types';
 
-import { BUTTON_CONFIG, MODAL_CONFIG } from '@/lib/constants/ui';
+import { BUTTON_CONFIG, MODAL_CONFIG } from '@/lib/constants/components';
 
 import Button from '../buttons/Button';
 import Icon from '../icons/Icon';

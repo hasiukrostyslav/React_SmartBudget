@@ -6,7 +6,7 @@ import {
   TRANSACTION_CATEGORIES,
   type TransactionCategories,
 } from '@/lib/constants/enums';
-import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/ui';
+
 import { useSearchInput } from '@/hooks/useSearchInput';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useTheme } from '@/hooks/useTheme';
@@ -20,6 +20,7 @@ import ModalFieldLabel from '../ui/modals/ModalFieldLabel';
 import ModalFieldWrapper from '../ui/modals/ModalFieldWrapper';
 import ModalFooter from '../ui/modals/ModalFooter';
 import ModalHeader from '../ui/modals/ModalHeader';
+import { TRANSACTION_CATEGORIES_CONFIG } from '@/lib/constants/transactions';
 
 interface EditTransactionCategoryFormProps {
   onClose: () => void;

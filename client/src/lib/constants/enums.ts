@@ -45,3 +45,10 @@ export const TRANSACTION_CATEGORIES = [
   'water',
 ] as const;
 export type TransactionCategories = (typeof TRANSACTION_CATEGORIES)[number];
+
+export const OperationType = {
+  COPY: 'copy',
+  CREATE: 'create',
+  DELETE: 'delete',
+  EDIT: 'edit',
+} as const;

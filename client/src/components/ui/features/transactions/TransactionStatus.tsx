@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 
 import type { Status } from '@/lib/constants/enums';
-import { STATUS_CONFIG } from '@/lib/constants/ui';
+import { STATUS_CONFIG } from '@/lib/constants/transactions';
 
 export default function TransactionStatus({ status }: { status: Status }) {
   return (

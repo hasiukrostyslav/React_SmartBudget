@@ -90,8 +90,8 @@ import {
 export const icons = [
   { role: 'advertisement', name: 'megaphone', component: Megaphone },
   { role: 'appliance', name: 'washing-machine', component: WashingMachine },
-  { role: 'arrow-up', name: 'arrow-up', component: ArrowUp },
   { role: 'arrow-down', name: 'arrow-down', component: ArrowDown },
+  { role: 'arrow-up', name: 'arrow-up', component: ArrowUp },
   { role: 'arrow-left', name: 'arrow-left', component: ArrowLeft },
   {
     role: 'arrow-right-left',

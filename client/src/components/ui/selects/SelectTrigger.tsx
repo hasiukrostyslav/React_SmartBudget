@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 
 import type { IconName } from '@/types/types';
 
-import { SELECT_CONFIG } from '@/lib/constants/ui';
+import { SELECT_CONFIG } from '@/lib/constants/components';
 
 import Icon from '../icons/Icon';
 

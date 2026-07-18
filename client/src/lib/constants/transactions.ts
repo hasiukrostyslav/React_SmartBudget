@@ -1,99 +1,36 @@
-import type { IconName } from '@/types/types';
-
-// Navigation Links
-export const NAV_LINKS_CONFIG: {
-  type: 'main' | 'setting';
-  page: string;
-  icon: IconName;
-}[] = [
-  { type: 'main', page: 'dashboard', icon: 'dashboard' },
-  { type: 'main', page: 'transactions', icon: 'transfer' },
-  { type: 'main', page: 'payments', icon: 'payment' },
-  { type: 'main', page: 'cards', icon: 'card' },
-  { type: 'main', page: 'savings', icon: 'saving' },
-  { type: 'main', page: 'loans', icon: 'percent' },
-  { type: 'main', page: 'deposits', icon: 'income' },
-  { type: 'setting', page: 'profile', icon: 'user' },
-  { type: 'setting', page: 'settings', icon: 'settings' },
-] as const;
-
-export const transactionTypes: {
-  name: 'income' | 'expenses';
-  icon: IconName;
-}[] = [
-  { name: 'income', icon: 'income' },
-  { name: 'expenses', icon: 'loan' },
-] as const;
-
-export const currency = [
-  { local: 'eng', currency: 'UAH' },
-  { local: 'eng', currency: 'USD' },
-  { local: 'eng', currency: 'EUR' },
-  { local: 'eng', currency: 'PLN' },
-  { local: 'eng', currency: 'HUF' },
-  { local: 'eng', currency: 'GBP' },
-] as const;
-
 export const TRANSACTION_TYPE_CONFIG = [
   { option: 'Income', icon: 'arrow-up', color: 'text-green-500' },
   { option: 'Expenses', icon: 'arrow-down', color: 'text-red-500' },
 ] as const;
 
 export const CURRENCY_CONFIG = [
-  { currency: 'UAH', description: 'Ukrainian Hryvnia' },
-  { currency: 'USD', description: 'US Dollar' },
-  { currency: 'EUR', description: 'Euro' },
-  { currency: 'PLN', description: 'Polish Złoty' },
-  { currency: 'GBP', description: 'British Pound' },
-  { currency: 'HUF', description: 'Hungarian Forint' },
+  {
+    currency: 'UAH',
+    description: 'Ukrainian Hryvnia',
+  },
+  {
+    currency: 'USD',
+    description: 'US Dollar',
+  },
+  {
+    currency: 'EUR',
+    description: 'Euro',
+  },
+  {
+    currency: 'PLN',
+    description: 'Polish Złoty',
+  },
+  {
+    currency: 'GBP',
+    description: 'British Pound',
+  },
+  {
+    currency: 'HUF',
+    description: 'Hungarian Forint',
+  },
 ] as const;
 
-export const CREATE_TRANSACTION_FIELDS = {
-  TYPE: {
-    label: 'Type',
-    name: 'transactionType',
-  },
-  STATUS: {
-    label: 'Status',
-    name: 'status',
-    placeholder: 'Select Status',
-  },
-  NAME: {
-    label: 'Name',
-    name: 'transactionName',
-    placeholder: 'e.g. Grocery shopping',
-  },
-  AMOUNT: {
-    label: 'Amount',
-    name: 'amount',
-    placeholder: '0.00',
-  },
-  CURRENCY: {
-    label: 'Currency',
-    name: 'currency',
-  },
-  CATEGORY: {
-    label: 'Category',
-    name: 'transactionCategory',
-    placeholder: 'Search categories...',
-  },
-  DATE: {
-    label: 'Date & Time',
-    name: 'createdAt',
-  },
-  PAYMENT_METHOD: {
-    label: 'Payment method',
-    name: 'paymentMethod',
-    placeholder: 'Select Payment method',
-  },
-  DESCRIPTION: {
-    label: 'Description',
-    name: 'description',
-    placeholder: 'Add a note for context, receipt number, etc.',
-  },
-} as const;
-
-export const transactionSortOptions = [
+export const TRANSACTION_SORT_OPTIONS = [
   { name: 'Transaction Name', label: 'name' },
   { name: 'Category', label: 'category' },
   { name: 'Account', label: 'account' },
@@ -113,117 +50,6 @@ export const TRANSACTION_SORT_FIELD_MAP = {
   category: 'transactionCategory',
 } as const;
 
-export const ERROR_MESSAGES_CONFIG = {
-  auth: {
-    code: 401,
-    header: 'Access denied',
-    message:
-      "You don't have permission to view this page. Please log in and try again.",
-  },
-  route: {
-    code: 404,
-    header: 'Page not found',
-    message:
-      "The page you're looking for doesn't exist or may have been moved.",
-  },
-  server: {
-    code: 500,
-    header: 'Something went wrong',
-    message: "We're having trouble loading this page. Please try again later.",
-  },
-} as const;
-
-export const BUTTON_CONFIG = {
-  color: {
-    black: `border-slate-900 bg-slate-900 hover:border-slate-800
-    hover:bg-slate-800 dark:border-blue-600 dark:bg-blue-600
-    dark:hover:border-blue-500 dark:hover:bg-blue-500`,
-    blue: `border-blue-600 text-slate-100 bg-blue-600
-    hover:border-blue-700 hover:bg-blue-700
-    dark:bg-blue-800 dark:border-blue-800 dark:hover:bg-blue-900 dark:hover:border-blue-900`,
-    red: `border-red-600 bg-red-600 text-slate-100
-    hover:bg-red-700 hover:border-red-700
-    dark:bg-red-700 dark:border-red-700 dark:hover:bg-red-800 dark:hover:border-red-800`,
-    transparent: `text-slate-600 border-transparent dark:text-slate-400`,
-    outline: `border-slate-600 text-slate-600 dark:border-slate-400
-    hover:bg-slate-100 dark:text-slate-400
-    focus-visible:border-transparent dark:hover:bg-slate-800`,
-  },
-  size: {
-    xs: 'outline-round-sm px-3 py-1 text-sm',
-    sm: 'outline-round-sm px-3 py-1.5',
-    md: 'outline-round-sm px-3 py-2',
-    lg: 'outline-round-md px-3.5 py-2.5',
-  },
-} as const;
-
-export const MODAL_CONFIG = {
-  header: {
-    create: {
-      icon: 'plus',
-      iconColor: 'text-blue-500',
-      button:
-        'border border-blue-500 text-blue-500 bg-blue-100 dark:bg-blue-500/10',
-      iconBgColor: 'bg-blue-100 dark:bg-blue-500/20',
-      header: 'Add new',
-      infoText: 'Enter an income or expense record',
-    },
-    editStatus: {
-      icon: 'refresh',
-      iconColor: 'text-blue-500',
-      button:
-        'border border-blue-500 text-blue-500 bg-blue-100 dark:bg-blue-500/10 dark:border-blue-400 dark:text-blue-400',
-      iconBgColor: 'bg-blue-100 dark:bg-blue-500/20',
-      header: 'Change status',
-      infoText: 'Update what happened with this transaction',
-    },
-    editCategory: {
-      icon: 'tag',
-      iconColor: 'text-purple-500',
-      button:
-        'border border-purple-500 text-purple-500 bg-purple-100 dark:bg-purple-500/10 dark:border-purple-400 dark:text-purple-400',
-      iconBgColor: 'bg-purple-200 dark:bg-purple-500/20',
-      header: 'Change category',
-      infoText: 'Re-categorize what these transactions are for',
-    },
-    delete: {
-      icon: 'delete',
-      iconColor: 'text-red-500',
-      button:
-        'border border-red-500 text-red-500 bg-red-100 dark:bg-red-500/10 dark:border-red-400 dark:text-red-400',
-      iconBgColor: 'bg-red-200 dark:bg-red-500/10',
-      header: 'Delete',
-      infoText: 'This action cannot be undone',
-    },
-  },
-  footer: {
-    create: {
-      infoColor: 'text-slate-600',
-      infoIcon: 'info',
-      infoText: 'Fields marked * are required',
-      buttonIcon: 'plus',
-      buttonColor: 'blue',
-      buttonText: 'Create',
-    },
-    edit: {
-      infoColor: 'text-slate-500',
-      infoIcon: 'undo',
-      infoText: 'Editable from history',
-      buttonIcon: 'check',
-      buttonColor: 'blue',
-      buttonText: 'Save changes',
-    },
-    delete: {
-      infoColor: 'text-red-600',
-      infoIcon: 'error',
-      infoText: 'Cannot be undone',
-      buttonIcon: 'delete',
-      buttonColor: 'red',
-      buttonText: 'Delete',
-    },
-  },
-} as const;
-
 export const STATUS_CONFIG = {
   COMPLETED: {
     text: {
@@ -237,6 +63,7 @@ export const STATUS_CONFIG = {
       card: 'border-green-600 bg-green-50 dark:bg-green-600/10',
       icon: 'bg-green-200 text-green-600 dark:bg-green-500/20',
       radio: 'border-green-600',
+      text: 'text-green-600',
     },
   },
   PENDING: {
@@ -251,6 +78,7 @@ export const STATUS_CONFIG = {
       card: 'border-yellow-600 bg-yellow-50 dark:bg-yellow-600/10',
       icon: 'bg-yellow-200 text-yellow-600 dark:bg-yellow-500/20',
       radio: 'border-yellow-600',
+      text: 'text-yellow-600 dark:text-yellow-500',
     },
   },
   FAILED: {
@@ -265,6 +93,7 @@ export const STATUS_CONFIG = {
       card: 'border-red-600 bg-red-50 dark:bg-red-600/10',
       icon: 'bg-red-200 text-red-600 dark:bg-red-500/20',
       radio: 'border-red-600',
+      text: 'text-red-600',
     },
   },
   CANCELED: {
@@ -278,7 +107,8 @@ export const STATUS_CONFIG = {
       dark:bg-slate-500/10 dark:text-slate-400`,
       card: 'border-slate-600 bg-slate-50 dark:bg-slate-600/10',
       icon: 'bg-slate-200 text-slate-600 dark:bg-slate-500/20',
-      radio: 'border-slate-600',
+      radio: 'border-slate-500',
+      text: 'text-slate-500 ',
     },
   },
 } as const;
@@ -677,93 +507,47 @@ export const TRANSACTION_CATEGORIES_CONFIG = {
   },
 } as const;
 
-export const INPUT_CONFIG = {
-  padding: {
-    xs: 'py-1',
-    sm: 'py-1.5',
-    md: 'py-2',
-    lg: 'py-2.5',
+export const CREATE_TRANSACTION_FIELDS = {
+  TYPE: {
+    label: 'Type',
+    name: 'transactionType',
   },
-  border: {
-    default: 'border-slate-300 dark:border-slate-500',
-    error: 'border-red-300 dark:border-red-400',
-    disabled: 'border-slate-200 dark:border-slate-500',
+  STATUS: {
+    label: 'Status',
+    name: 'status',
+    placeholder: 'Select Status',
   },
-  icon: {
-    padding: {
-      xs: 'pl-8',
-      sm: 'pl-8',
-      md: 'pl-8',
-      lg: 'pl-10',
-    },
-    position: {
-      xs: 'bottom-2 left-2',
-      sm: 'bottom-2 left-2',
-      md: 'bottom-2.5 left-2',
-      lg: 'bottom-3.5 left-3',
-    },
+  NAME: {
+    label: 'Name',
+    name: 'transactionName',
+    placeholder: 'e.g. Grocery shopping',
   },
-  button: {
-    position: {
-      xs: 'bottom-2',
-      sm: 'bottom-2',
-      md: 'bottom-2.5',
-      lg: 'bottom-3.5',
-    },
-    roleIcon: {
-      clear: 'close',
-      showPassword: 'hide',
-      hidePassword: 'show',
-      increaseValue: 'chevron-up',
-      decreaseValue: 'chevron-down',
-    },
+  AMOUNT: {
+    label: 'Amount',
+    name: 'amount',
+    placeholder: '0.00',
   },
-} as const;
-
-export const SELECT_CONFIG = {
-  padding: { xs: 'py-1', sm: 'py-1.5', md: 'py-2', lg: 'py-2.5' },
-  variant: {
-    primary:
-      'border-slate-300 dark:border-slate-500 dark:bg-slate-800 text-slate-700',
-    secondary:
-      'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-500 dark:bg-slate-800',
+  CURRENCY: {
+    label: 'Currency',
+    name: 'currency',
   },
-} as const;
-
-// Toast Config
-export const TOAST_CONFIG = {
-  success: {
-    header: {
-      create: '{x} created',
-      edit: 'Changes saved',
-      delete: '{x} deleted',
-    },
-    description: {
-      create: '{x} added successfully.',
-      edit: '{x} updated successfully.',
-      delete: '{x} removed successfully.',
-    },
-    icon: 'check' as IconName,
-    style: {
-      icon: 'bg-green-200 text-green-600 dark:bg-green-500/20',
-      border: 'border-l-green-500 dark:border-l-green-400',
-    },
+  CATEGORY: {
+    label: 'Category',
+    name: 'transactionCategory',
+    placeholder: 'Search categories...',
   },
-  error: {
-    header: {
-      create: 'Failed to create {x}',
-      edit: 'Failed to save changes',
-      delete: 'Failed to delete {x}',
-    },
-    description: {
-      create: '{x} could not be created.',
-      edit: '{x} could not be updated.',
-      delete: '{x} could not be deleted.',
-    },
-    icon: 'close' as IconName,
-    style: {
-      icon: 'bg-red-200 text-red-600 dark:bg-red-500/20',
-      border: 'border-l-red-500 dark:border-l-red-400',
-    },
+  DATE: {
+    label: 'Date & Time',
+    name: 'createdAt',
+  },
+  PAYMENT_METHOD: {
+    label: 'Payment method',
+    name: 'paymentMethod',
+    placeholder: 'Select Payment method',
+  },
+  DESCRIPTION: {
+    label: 'Description',
+    name: 'description',
+    placeholder: 'Add a note for context, receipt number, etc.',
   },
 } as const;
