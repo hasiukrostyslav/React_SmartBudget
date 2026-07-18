@@ -1,6 +1,6 @@
 import type { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
 
-import CreateTransactionForm from '@/components/forms/CreateTransactionForm';
+import TransactionForm from '@/components/forms/TransactionForm';
 
 import Button from '../../buttons/Button';
 import Icon from '../../icons/Icon';
@@ -32,7 +32,9 @@ export default function TransactionsCTA({
             <span>{configCTA?.primaryLabel || 'New Transaction'}</span>
           </Button>
         )}
-        renderContent={(close) => <CreateTransactionForm onClose={close} />}
+        renderContent={(close) => (
+          <TransactionForm mode="create" onClose={close} />
+        )}
       />
 
       {configCTA &&
