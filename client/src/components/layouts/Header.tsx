@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 
-import SearchForm from '../forms/SearchForm';
 import DashboardHeading from '../ui/atomic/DashboardHeading';
 import Time from '../ui/atomic/Time';
 import UserPanel from '../ui/UserPanel';
@@ -15,11 +14,6 @@ export default function Header() {
     >
       <DashboardHeading />
       <Time />
-      <SearchForm
-        inputPadding="xs"
-        className="ml-auto"
-        placeholder="Search..."
-      />
       <UserPanel />
     </header>
   );
