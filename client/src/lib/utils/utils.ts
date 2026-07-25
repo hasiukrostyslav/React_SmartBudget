@@ -28,16 +28,18 @@ export function setBorderColor({
 export function createQueryString(
   searchParams: URLSearchParams,
   query: {
-    name: string;
+    param: string;
     value: string | number;
   }[],
 ) {
   const slugQuery = query.map((q) => ({ ...q, value: toSlug(q.value) }));
 
   const params = new URLSearchParams(searchParams.toString());
-  slugQuery.forEach((el) => params.set(el.name, el.value));
+  slugQuery.forEach((el) =>
+    el.value === '' ? params.delete(el.param) : params.set(el.param, el.value),
+  );
 
-  if (query.some((q) => q.name !== 'page')) params.set('page', '1');
+  if (query.find((q) => q.param !== 'page')) params.set('page', '1');
 
   return params.toString();
 }

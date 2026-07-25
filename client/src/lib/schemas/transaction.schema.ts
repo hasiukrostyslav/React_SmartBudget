@@ -39,12 +39,10 @@ export const CopyTransactionSchema = TransactionSchema.pick({
 export const SearchParamsSchema = z.object({
   limit: z.string().optional().default('10'),
   page: z.string().optional().default('1'),
-  categories: z.string().optional().default('all'),
-  types: z.string().optional().default('all'),
-  accounts: z.string().optional().default('all'),
   sort: z
     .enum(TRANSACTION_SORT_OPTIONS.map((opt) => opt.label))
     .optional()
     .default('date'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
+  search: z.string().optional().default(''),
 });

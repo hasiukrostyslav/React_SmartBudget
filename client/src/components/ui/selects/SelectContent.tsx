@@ -36,7 +36,9 @@ export default function SelectContent({
   onSelect,
 }: SelectContentProps) {
   const { theme } = useTheme();
-  const { searchQuery, role, onChange, onClear } = useSearchInput();
+  const { searchQuery, role, handleChange, handleClear } = useSearchInput({
+    isContentExpanded,
+  });
 
   const filteredOptions = options
     .toSorted((a, b) =>
@@ -70,9 +72,9 @@ export default function SelectContent({
             iconName="search"
             padding="sm"
             value={searchQuery}
-            onChange={onChange}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
-            trailingButton={{ role, onClick: onClear }}
+            trailingButton={{ role, onClick: handleClear }}
           />
         </div>
       )}
@@ -84,11 +86,7 @@ export default function SelectContent({
         )}
       >
         {withSearch && filteredOptions.length === 0 ? (
-          <EmptySearchResult
-            category="category"
-            query={searchQuery}
-            onClick={onClear}
-          />
+          <EmptySearchResult query={searchQuery} onClick={handleClear} />
         ) : (
           filteredOptions.map((option) => (
             <SelectItem
