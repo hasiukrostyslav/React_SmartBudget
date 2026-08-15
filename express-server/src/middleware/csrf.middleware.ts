@@ -8,7 +8,7 @@ export const CSRF_COOKIE_NAME = isProd
   : 'psifi.x-csrf-token';
 
 // Double-submit CSRF pattern: a signed token is stored in a cookie and must
-// also be sent in the request header/body. Mirrors the NestJS main.ts setup.
+// also be sent in the request header/body.
 export const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
   getSecret: () => process.env.CSRF_SECRET as string,
   getSessionIdentifier: () => 'global',

@@ -19,21 +19,17 @@ A full-stack personal finance application to help you take control of your money
 |---|---|
 | Frontend | React 19, React Router 7, TanStack Query 5, React Hook Form, Zod |
 | Styling | TailwindCSS 4, Motion, Lucide React, React Toastify |
-| NestJS API | NestJS 11, @nestjs/jwt, Zod, bcrypt, csrf-csrf, Helmet, pg |
-| Express API | Express 5, jsonwebtoken, Zod, bcrypt, csrf-csrf, Helmet, pg |
+| API | Express 5, jsonwebtoken, Zod, bcrypt, csrf-csrf, Helmet, pg |
 | Database | PostgreSQL |
-| Build | Vite 7 (client), tsc (servers) |
+| Build | Vite 7 (client), tsc (server) |
 
 ## Project Structure
 
 ```
 react_smart_budget/
 ├── client/           # React SPA (Vite)
-├── server/           # NestJS API — primary backend (port 3001)
-└── express-server/   # Express API — alternative backend (port 3002)
+└── express-server/   # Express API (port 3002)
 ```
-
-Both backends expose the same REST API. The client switches between them via a single environment variable.
 
 ## Getting Started
 
@@ -51,7 +47,7 @@ cd React_SmartBudget
 
 ### 2. Database
 
-Create a PostgreSQL database and run the schema migrations. Both servers connect via `DATABASE_URL`.
+Create a PostgreSQL database and run the schema migrations. The server connects via `DATABASE_URL`.
 
 ### 3. Client
 
@@ -65,8 +61,6 @@ npm run dev            # http://localhost:5173
 #### Client environment variables
 
 ```env
-VITE_API_SERVER=express          # 'express' | 'nest'
-VITE_API_NEST_URL=http://localhost:3001
 VITE_API_EXPRESS_URL=http://localhost:3002
 ```
 
@@ -80,40 +74,7 @@ VITE_API_EXPRESS_URL=http://localhost:3002
 | `npm run lint` | ESLint check |
 | `npm run format` | Prettier format |
 
-### 4. NestJS server
-
-```bash
-cd server
-npm install
-cp .env.example .env   # fill in the values
-npm run start:dev      # http://localhost:3001
-```
-
-#### NestJS environment variables
-
-```env
-NODE_ENV=development
-PORT=3001
-DATABASE_URL=postgresql://user:password@localhost:5432/smart_budget
-
-JWT_ACCESS_SECRET=<long-random-hex>
-JWT_REFRESH_SECRET=<long-random-hex>
-CSRF_SECRET=<long-random-hex>
-
-CLIENT_URL=https://your-frontend.vercel.app
-```
-
-#### NestJS scripts
-
-| Script | Description |
-|---|---|
-| `npm run start:dev` | Watch mode |
-| `npm run start:prod` | Run compiled build |
-| `npm run build` | Compile TypeScript |
-| `npm run test` | Jest unit tests |
-| `npm run test:e2e` | End-to-end tests |
-
-### 5. Express server
+### 4. Express server
 
 ```bash
 cd express-server
@@ -145,8 +106,6 @@ CLIENT_URL=https://your-frontend.vercel.app
 | `npm run start` | Run compiled build |
 
 ## API Reference
-
-Both backends expose identical routes.
 
 ### Auth — `/api/auth`
 
@@ -218,23 +177,6 @@ client/src/
 
 ## Server Architecture
 
-### NestJS (`server/`)
-
-```
-src/
-├── modules/
-│   ├── auth/             # Controller, Service, Guard, Schemas
-│   ├── users/            # Service, Module, Types
-│   └── dashboard/        # Controller, Module
-├── common/
-│   ├── pipes/            # ZodValidationPipe
-│   └── constants/        # saltRounds
-├── db/                   # Global PG pool module
-├── types/                # RefreshTokenPayload, Express augmentation
-├── app.module.ts
-└── main.ts               # Helmet, CORS, CSRF bootstrap
-```
-
 ### Express (`express-server/`)
 
 ```
@@ -244,7 +186,7 @@ src/
 │   ├── users/            # Service, Types
 │   └── dashboard/        # Router, Controller
 ├── middleware/
-│   ├── auth.middleware.ts     # JWT guard (replaces NestJS AuthGuard)
+│   ├── auth.middleware.ts     # JWT guard
 │   ├── csrf.middleware.ts     # doubleCsrf setup
 │   └── validate.middleware.ts # Zod validation factory
 ├── config/               # Cookie options, salt rounds

@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Apply CSRF protection globally except for signout — which only clears cookies
-// and therefore doesn't need a valid CSRF token (mirrors NestJS middleware exclusion).
+// and therefore doesn't need a valid CSRF token.
 app.use((req: Request, res: Response, next: NextFunction) => {
   if (req.path === '/api/auth/signout') return next();
   return doubleCsrfProtection(req, res, next);
