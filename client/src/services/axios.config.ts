@@ -29,14 +29,10 @@ function shouldSkipAuthRefresh(config: InternalAxiosRequestConfig): boolean {
   );
 }
 
-const serverType = import.meta.env.VITE_API_SERVER;
-const BASE_URL =
-  serverType === 'nest'
-    ? import.meta.env.VITE_API_NEST_URL
-    : import.meta.env.VITE_API_EXPRESS_URL;
+const BASE_URL = import.meta.env.VITE_API_EXPRESS_URL;
 
 if (!BASE_URL) {
-  throw new Error('❌ VITE_API_URL is missing');
+  throw new Error('❌ VITE_API_EXPRESS_URL is missing');
 }
 
 /** Token from last /csrf-token response; required when API is on another origin (cookie not in document.cookie). */
