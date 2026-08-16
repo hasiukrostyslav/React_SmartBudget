@@ -26,7 +26,7 @@ export function useSelectValue({
     // Write to the URL search params when a param key is provided
     if (param) {
       const newSearchString = createQueryString(searchParams, [
-        { name: param, value: option },
+        { param: param, value: option },
       ]);
 
       navigate(`${location.pathname}?${newSearchString}`, { replace: true });

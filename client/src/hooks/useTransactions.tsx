@@ -9,9 +9,9 @@ import { useSearchParams } from 'react-router';
 const ALLOWED_KEYS = [
   'limit',
   'page',
-  'categories',
-  'types',
-  'accounts',
+  'category',
+  'type',
+  'account',
   'sort',
   'order',
 ] as const satisfies readonly (keyof SearchParams)[];
