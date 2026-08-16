@@ -31,7 +31,8 @@ export const BUTTON_CONFIG = {
     red: `border-red-600 bg-red-600 text-slate-100
     hover:bg-red-700 hover:border-red-700
     dark:bg-red-700 dark:border-red-700 dark:hover:bg-red-800 dark:hover:border-red-800`,
-    transparent: `text-slate-600 border-transparent dark:text-slate-400`,
+    transparent: `text-slate-600 border-transparent dark:text-slate-400 
+    hover:text-slate-400 dark:hover:text-slate-500`,
     outline: `border-slate-600 text-slate-600 dark:border-slate-400
     hover:bg-slate-100 dark:text-slate-400
     focus-visible:border-transparent dark:hover:bg-slate-800`,

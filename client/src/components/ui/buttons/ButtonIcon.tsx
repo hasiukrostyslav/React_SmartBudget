@@ -9,7 +9,7 @@ interface ButtonIconProps {
   iconName: IconName;
   size: number;
   shape: 'round' | 'square';
-  variant: 'solid' | 'ghost' | 'outline';
+  variant: 'solid' | 'ghost' | 'outline' | 'primary';
   tooltipLabel?: string;
   tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
   type?: 'button' | 'submit';
@@ -21,6 +21,8 @@ interface ButtonIconProps {
 const style = {
   solid: 'bg-blue-200/45 text-slate-500 dark:bg-slate-600 dark:text-slate-400',
   ghost: 'hover:bg-slate-200 dark:hover:bg-slate-700',
+  primary:
+    'hover:bg-blue-200 dark:hover:bg-blue-900 text-blue-600 dark:text-blue-400',
   outline:
     'border border-slate-300 dark:border-slate-600 hover:border-slate-400',
 };

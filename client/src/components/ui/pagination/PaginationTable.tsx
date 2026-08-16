@@ -18,6 +18,8 @@ export default function PaginationTable({ totalCount }: PaginationTableProps) {
     nextPageQuery,
   } = usePagination(totalCount);
 
+  if (totalCount === 0) return null;
+
   return (
     <section className="flex items-center justify-between py-0.5">
       <PaginationFilter
