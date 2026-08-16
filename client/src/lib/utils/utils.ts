@@ -6,22 +6,12 @@ import {
   PAGINATION_RANGE,
 } from '../constants/constants';
 
-// Set border color of Input Component
-export function setBorderColor({
-  error,
-  disabled,
-}: {
-  error: string | undefined;
-  disabled: boolean | undefined;
-}) {
-  const styles = {
-    default: 'border-slate-300 dark:border-slate-400',
-    error: 'border-red-300 dark:border-red-400',
-    disabled: 'border-slate-200 dark:border-slate-500',
-  };
-  if (error) return styles.error;
-  if (disabled) return styles.disabled;
-  return styles.default;
+export function hasActiveFilters(
+  params: Record<string, unknown> | undefined,
+  filterKeys: readonly string[],
+) {
+  if (!params) return false;
+  return filterKeys.some((key) => Boolean(params[key]));
 }
 
 // Generate Search Params string
@@ -40,6 +30,8 @@ export function createQueryString(
   );
 
   if (query.find((q) => q.param !== 'page')) params.set('page', '1');
+
+  params.sort();
 
   return params.toString();
 }
