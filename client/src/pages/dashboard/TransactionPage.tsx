@@ -1,6 +1,9 @@
 import { AxiosError } from 'axios';
+import { useSearchParams } from 'react-router';
 
 import { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
+import { TRANSACTION_FILTERS } from '@/lib/constants/navigation';
+import { hasActiveFilters } from '@/lib/utils/utils';
 import { useTransactions } from '@/hooks/useTransactions';
 
 import TransactionsCTA from '@/components/ui/features/transactions/TransactionsCTA';
@@ -14,6 +17,10 @@ import PaginationTable from '@/components/ui/pagination/PaginationTable';
 export default function TransactionsPage() {
   const { transactions, transactionCount, isPending, isFetching, error } =
     useTransactions();
+  const [searchParams] = useSearchParams();
+  const params = Object.fromEntries(searchParams.entries());
+
+  const isFilterApplied = hasActiveFilters(params, TRANSACTION_FILTERS);
 
   if (error) {
     const status =
@@ -26,10 +33,10 @@ export default function TransactionsPage() {
   }
 
   return (
-    <section className="grid h-full grid-rows-[auto_1fr_auto] gap-4">
+    <section className="grid h-full min-h-0 grid-rows-[auto_1fr_auto] gap-4">
       <TransactionsToolbar />
 
-      <div className="relative">
+      <div className="relative min-h-0">
         {(isPending || isFetching) && (
           <Spinner
             title="Loading your transactions"
@@ -39,7 +46,11 @@ export default function TransactionsPage() {
 
         {!isPending &&
           (transactions.length < 1 ? (
-            <EmptyState config={EMPTY_STATE_TEXT.transactions}>
+            <EmptyState
+              config={EMPTY_STATE_TEXT.transactions}
+              isFilterApplied={isFilterApplied}
+              clearFiltersHref={'/dashboard/transactions'}
+            >
               <TransactionsCTA
                 buttonSize="sm"
                 iconSize={14}
