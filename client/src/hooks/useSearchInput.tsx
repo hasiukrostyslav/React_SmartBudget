@@ -14,19 +14,25 @@ export function useSearchInput({
   isContentExpanded,
   isUpdateSearchParam,
 }: useSearchInputProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [prevExpanded, setPrevExpanded] = useState(isContentExpanded);
   const [searchParams] = useSearchParams();
+  const [localSearchQuery, setLocalSearchQuery] = useState(
+    searchParams.get('search') ?? '',
+  );
+  const [prevExpanded, setPrevExpanded] = useState(isContentExpanded);
   const location = useLocation();
   const navigate = useNavigate();
 
+  const searchQuery = isUpdateSearchParam
+    ? (searchParams.get('search') ?? '')
+    : localSearchQuery;
+
   if (isContentExpanded !== prevExpanded) {
     setPrevExpanded(isContentExpanded);
-    if (isContentExpanded) setSearchQuery('');
+    if (isContentExpanded) setLocalSearchQuery('');
   }
 
   const handleClear = useCallback(() => {
-    setSearchQuery('');
+    setLocalSearchQuery('');
 
     if (isUpdateSearchParam) {
       const newSearchString = createQueryString(searchParams, [
@@ -39,7 +45,7 @@ export function useSearchInput({
   const role: keyof typeof INPUT_CONFIG.button.roleIcon = 'clear';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    setLocalSearchQuery(e.target.value);
 
     if (isUpdateSearchParam) {
       const newSearchString = createQueryString(searchParams, [
