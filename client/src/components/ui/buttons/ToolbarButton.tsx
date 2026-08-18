@@ -30,7 +30,7 @@ export default function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       className={clsx(
-        'outline-input flex items-center justify-center gap-1 rounded-md px-4 py-1',
+        'outline-input flex items-center justify-center gap-1 rounded-md px-4 py-1 whitespace-nowrap',
         modalCategory
           ? CONFIG[modalCategory].button
           : 'text-blue-600 dark:text-blue-400',
