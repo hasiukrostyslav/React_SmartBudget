@@ -16,7 +16,7 @@ export function useSearchInput({
 }: useSearchInputProps) {
   const [searchParams] = useSearchParams();
   const [localSearchQuery, setLocalSearchQuery] = useState(
-    searchParams.get('search') ?? '',
+    isUpdateSearchParam ? (searchParams.get('search') ?? '') : '',
   );
   const [prevExpanded, setPrevExpanded] = useState(isContentExpanded);
   const location = useLocation();
