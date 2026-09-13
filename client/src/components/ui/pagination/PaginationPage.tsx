@@ -36,7 +36,7 @@ export default function PaginationPage({
           <PaginationButton
             key={page}
             page={page}
-            href={`${location.pathname}?${createQueryString(searchParams, [{ name: 'page', value: page }])}`}
+            href={`${location.pathname}?${createQueryString(searchParams, [{ param: 'page', value: page }])}`}
             active={page === currentPage}
           />
         ) : (

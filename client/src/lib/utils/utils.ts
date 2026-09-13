@@ -6,52 +6,34 @@ import {
   PAGINATION_RANGE,
 } from '../constants/constants';
 
-// Set border color of Input Component
-export function setBorderColor({
-  error,
-  disabled,
-}: {
-  error: string | undefined;
-  disabled: boolean | undefined;
-}) {
-  const styles = {
-    default: 'border-slate-300 dark:border-slate-400',
-    error: 'border-red-300 dark:border-red-400',
-    disabled: 'border-slate-200 dark:border-slate-500',
-  };
-  if (error) return styles.error;
-  if (disabled) return styles.disabled;
-  return styles.default;
+export function hasActiveFilters(
+  params: Record<string, unknown> | undefined,
+  filterKeys: readonly string[],
+) {
+  if (!params) return false;
+  return filterKeys.some((key) => Boolean(params[key]));
 }
 
 // Generate Search Params string
 export function createQueryString(
   searchParams: URLSearchParams,
   query: {
-    name: string;
+    param: string;
     value: string | number;
   }[],
 ) {
-  const slugQuery = query.map((q) => ({ ...q, value: toSlug(q.value) }));
-
   const params = new URLSearchParams(searchParams.toString());
-  slugQuery.forEach((el) => params.set(el.name, el.value));
+  query.forEach((el) =>
+    el.value === ''
+      ? params.delete(el.param)
+      : params.set(el.param, String(el.value)),
+  );
 
-  if (query.some((q) => q.name !== 'page')) params.set('page', '1');
+  if (query.find((q) => q.param !== 'page')) params.set('page', '1');
+
+  params.sort();
 
   return params.toString();
-}
-
-// Convert Search Params value with ' ' to -
-export function toSlug(value: string | number) {
-  if (typeof value === 'number') return String(value);
-  return value.toLowerCase().replace(/\s+/g, '-');
-}
-
-// Convert Search Params value with - to ' '
-export function fromSlug(slug: string | number) {
-  if (typeof slug === 'number') return slug;
-  return slug.replace(/-/g, ' ');
 }
 
 // Select filter options for list size

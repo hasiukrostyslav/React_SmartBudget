@@ -26,7 +26,7 @@ export default function BulkToolbar({
     <SectionWrapper
       className={clsx(
         'flex items-center text-sm',
-        'absolute top-full right-1/5 translate-y-6',
+        'fixed bottom-10 left-1/2 z-50 -translate-x-1/2 shadow-lg',
         !isShown ? 'hidden' : '',
       )}
     >

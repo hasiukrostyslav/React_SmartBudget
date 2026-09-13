@@ -16,3 +16,14 @@ export const NAV_LINKS_CONFIG: {
   { type: 'setting', page: 'profile', icon: 'user' },
   { type: 'setting', page: 'settings', icon: 'settings' },
 ] as const;
+
+export const TRANSACTION_FILTERS = [
+  'search',
+  'category',
+  'account',
+  'date',
+  'amount',
+  'currency',
+  'status',
+  'type',
+] as const;

@@ -14,9 +14,9 @@ export function useSort() {
     const orderValue = sort === label && order === 'desc' ? 'asc' : 'desc';
 
     const newSearchString = createQueryString(searchParams, [
-      { name: 'sort', value: label },
+      { param: 'sort', value: label },
       {
-        name: 'order',
+        param: 'order',
         value: orderValue,
       },
     ]);

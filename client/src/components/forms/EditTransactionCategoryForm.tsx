@@ -38,7 +38,7 @@ export default function EditTransactionCategoryForm({
 }: EditTransactionCategoryFormProps) {
   const { theme } = useTheme();
   const { selectedValue, handleSelect } = useSelectValue();
-  const { searchQuery, role, onChange, onClear } = useSearchInput();
+  const { searchQuery, role, handleChange, handleClear } = useSearchInput({});
   const { mutateAsync: changeCategory, isPending } =
     useChangeTransactionCategory();
   const { toastSuccess } = useToast();
@@ -92,9 +92,9 @@ export default function EditTransactionCategoryForm({
             iconName="search"
             padding="md"
             value={searchQuery}
-            onChange={onChange}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
-            trailingButton={{ role, onClick: onClear }}
+            trailingButton={{ role, onClick: handleClear }}
           />
 
           <div
@@ -109,7 +109,7 @@ export default function EditTransactionCategoryForm({
               <EmptySearchResult
                 category="category"
                 query={searchQuery}
-                onClick={onClear}
+                onClick={handleClear}
               />
             ) : (
               filteredCategories.map((category) => {

@@ -1,29 +1,23 @@
-import SearchForm from '@/components/forms/SearchForm';
+import { useSearchInput } from '@/hooks/useSearchInput';
+
+import Input from '../../inputs/Input';
 
 export default function TransactionsFilters() {
-  return (
-    <>
-      <SearchForm inputPadding="sm" placeholder="Search Transaction..." />
+  const { searchQuery, role, handleChange, handleClear } = useSearchInput({
+    isUpdateSearchParam: true,
+  });
 
-      <div className="ml-2 flex items-center gap-2">
-        {/* <Select
-          label="categories"
-          param="categories"
-          options={TRANSACTION_CATEGORIES.map((el) => el.replace('_', ' '))}
-          width="lg"
-        />
-        <Select label="accounts" param="accounts" options={[]} />
-        <Select
-          label="types"
-          param="types"
-          options={TRANSACTION_TYPE_CONFIG.map((c) => c.option)}
-        />
-        <Select
-          label="currency"
-          param="currency"
-          options={CURRENCY.map((c) => c.currency)}
-        /> */}
-      </div>
-    </>
+  return (
+    <div>
+      <Input
+        name="search"
+        padding="sm"
+        placeholder="Search Transaction..."
+        iconName="search"
+        value={searchQuery}
+        onChange={handleChange}
+        trailingButton={{ role, onClick: handleClear }}
+      />
+    </div>
   );
 }

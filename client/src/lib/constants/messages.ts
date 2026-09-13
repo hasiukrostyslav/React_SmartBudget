@@ -47,6 +47,11 @@ export const EMPTY_STATE_TEXT = {
       primaryLabel: 'Add transaction',
       secondaryLabel: 'Import from CSV',
     },
+    noFilterResults: {
+      header: 'No transactions match your filters',
+      description:
+        'No transactions match your search or filters. Try different keywords, or clear filters to see all transactions.',
+    },
   },
   payments: {
     header: 'No payments yet',
@@ -56,6 +61,11 @@ export const EMPTY_STATE_TEXT = {
       primaryLabel: 'Add payment',
       secondaryLabel: 'Import from CSV',
     },
+    noFilterResults: {
+      header: 'No payments match your filters',
+      description:
+        'No payments match your search or filters. Try different keywords, or clear filters to see all payments.',
+    },
   },
   cards: {
     header: 'No cards added',
@@ -63,6 +73,11 @@ export const EMPTY_STATE_TEXT = {
       'Add your debit or credit cards to monitor balances and link transactions automatically.',
     cta: {
       primaryLabel: 'Add card',
+    },
+    noFilterResults: {
+      header: 'No cards match your filters',
+      description:
+        'No cards match your filters. Try clearing filters to see all your cards.',
     },
   },
   savings: {
@@ -72,6 +87,11 @@ export const EMPTY_STATE_TEXT = {
     cta: {
       primaryLabel: 'Create goal',
     },
+    noFilterResults: {
+      header: 'No savings match your filters',
+      description:
+        'No savings goals match your filters. Try clearing filters to see all your goals.',
+    },
   },
   loans: {
     header: 'No loans tracked',
@@ -79,6 +99,11 @@ export const EMPTY_STATE_TEXT = {
       'Add a loan to monitor your outstanding balance, interest, and repayment schedule.',
     cta: {
       primaryLabel: 'Add loan',
+    },
+    noFilterResults: {
+      header: 'No loans match your filters',
+      description:
+        'No loans match your filters. Try clearing filters to see all your loans.',
     },
   },
   deposits: {
@@ -88,6 +113,11 @@ export const EMPTY_STATE_TEXT = {
     cta: {
       primaryLabel: 'Add deposit',
     },
+    noFilterResults: {
+      header: 'No deposits match your filters',
+      description:
+        'No deposits match your filters. Try clearing filters to see all your deposits.',
+    },
   },
   dashboard: {
     header: 'Your dashboard is empty',
@@ -95,6 +125,11 @@ export const EMPTY_STATE_TEXT = {
       'Add a transaction, card, or savings goal to start seeing your financial overview here.',
     cta: {
       primaryLabel: 'Add transaction',
+    },
+    noFilterResults: {
+      header: 'No dashboard match your filters',
+      description:
+        'Nothing on your dashboard matches your filters. Try clearing filters to see everything.',
     },
   },
 } as const;
