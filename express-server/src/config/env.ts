@@ -12,6 +12,10 @@ const EnvSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().int().positive().default(3002),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+  // auto: honour ?sslmode= in the URL; otherwise off for a local host and on
+  // for anything remote. The explicit values exist for hosts the heuristic
+  // can't know about — a Docker Compose service name, a private network.
+  DATABASE_SSL: z.enum(['auto', 'require', 'disable']).default('auto'),
   // 32 hex chars is the floor for an HMAC secret worth having.
   JWT_ACCESS_SECRET: z
     .string()
@@ -25,25 +29,44 @@ const EnvSchema = z.object({
 
 const parsed = EnvSchema.safeParse(process.env);
 
-// Fail at boot with the variable name, rather than at request time with an
-// undefined secret that produces HMACs which silently never verify.
 if (!parsed.success) {
   const issues = parsed.error.issues
     .map((issue) => `  - ${issue.path.join('.')}: ${issue.message}`)
     .join('\n');
-  console.error(`Invalid environment configuration:\n${issues}`);
-  process.exit(1);
+  // Thrown rather than process.exit(): at boot an uncaught throw still exits 1
+  // with this message, and under test the runner reports it as a normal
+  // failure instead of dying before the first test.
+  throw new Error(`Invalid environment configuration:\n${issues}`);
 }
 
 export const env = parsed.data;
 
 export const isProd = env.NODE_ENV === 'production';
 
-// Local Postgres generally has no TLS; anything remote must present a
-// verifiable certificate. Previously hardcoded on, which made a local DB
-// unusable without editing source.
-const isLocalDatabase = /@(localhost|127\.0\.0\.1)[:/]/.test(env.DATABASE_URL);
+const LOCAL_HOSTS = new Set([
+  'localhost',
+  '127.0.0.1',
+  '[::1]',
+  'host.docker.internal',
+]);
 
-export const databaseSsl = isLocalDatabase
-  ? false
-  : { rejectUnauthorized: true };
+function resolveDatabaseSsl(): false | { rejectUnauthorized: true } {
+  if (env.DATABASE_SSL === 'require') return { rejectUnauthorized: true };
+  if (env.DATABASE_SSL === 'disable') return false;
+
+  let url: URL;
+  try {
+    url = new URL(env.DATABASE_URL);
+  } catch {
+    // Unparseable: fail toward the safe side and let pg report the real issue.
+    return { rejectUnauthorized: true };
+  }
+
+  const sslmode = url.searchParams.get('sslmode');
+  if (sslmode === 'disable') return false;
+  if (sslmode) return { rejectUnauthorized: true };
+
+  return LOCAL_HOSTS.has(url.hostname) ? false : { rejectUnauthorized: true };
+}
+
+export const databaseSsl = resolveDatabaseSsl();

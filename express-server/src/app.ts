@@ -8,9 +8,13 @@ import { env, isProd } from './config/env';
 import { query } from './db/index';
 import { doubleCsrfProtection } from './middleware/csrf.middleware';
 import { errorHandler } from './middleware/error.middleware';
-import { httpLogger } from './middleware/logger.middleware';
+import { httpLogger } from './middleware/httpLogger.middleware';
 import { notFoundHandler } from './middleware/notFound.middleware';
-import { apiLimiter, authLimiter } from './middleware/rateLimit.middleware';
+import {
+  apiLimiter,
+  authLimiter,
+  healthLimiter,
+} from './middleware/rateLimit.middleware';
 import authRouter from './modules/auth/auth.router';
 import dashboardRouter from './modules/dashboard/dashboard.router';
 import transactionsRouter from './modules/transactions/transactions.router';
@@ -26,19 +30,25 @@ if (isProd) app.set('trust proxy', 1);
 app.use(httpLogger);
 app.use(helmet());
 
+// The Vite dev origin is only meaningful outside production; leaving it in the
+// production allowlist would let a page on a user's own localhost make
+// credentialed requests to the live API.
+const allowedOrigins = [
+  ...(isProd ? [] : ['http://localhost:5173']),
+  ...(env.CLIENT_URL ? [env.CLIENT_URL] : []),
+];
+
 app.use(
   cors({
-    origin: ['http://localhost:5173', env.CLIENT_URL].filter(
-      (origin): origin is string => Boolean(origin),
-    ),
+    origin: allowedOrigins,
     credentials: true, // allow cookies on cross-origin requests from the SPA
   }),
 );
 
-// Liveness for orchestrators and uptime monitors. Before the limiter and CSRF
-// so a probe can never be throttled or rejected for lacking a token, and it
-// proves the database round-trip, not just that the process is up.
-app.get('/health', async (_req, res) => {
+// Liveness for orchestrators and uptime monitors. Before the API limiter and
+// CSRF so a probe is never rejected for lacking a token, but behind its own
+// limiter because it does a real database round-trip on a public path.
+app.get('/health', healthLimiter, async (_req, res) => {
   await query('SELECT 1;');
   res.json({ status: 'ok' });
 });

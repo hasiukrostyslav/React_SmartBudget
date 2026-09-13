@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { AppError } from '../lib/AppError';
-import { logger } from './logger.middleware';
+import { logger } from '../lib/logger';
 
 // Anything that isn't an AppError but still carries an HTTP status — http-errors
 // instances thrown by csrf-csrf are the main case.
@@ -47,20 +47,15 @@ export function errorHandler(
     return;
   }
 
-  const statusCode =
-    err instanceof AppError
-      ? err.statusCode
-      : (getForeignStatusCode(err) ?? 500);
+  const appError = err instanceof AppError ? err : undefined;
+
+  const statusCode = appError?.statusCode ?? getForeignStatusCode(err) ?? 500;
 
   // Only 4xx codes are part of the client contract (EBADCSRFTOKEN and friends).
   // Node system errors carry a `code` too — ECONNREFUSED, ETIMEDOUT — and those
   // describe our infrastructure, so they must never reach the client.
   const code =
-    statusCode >= 500
-      ? undefined
-      : err instanceof AppError
-        ? err.code
-        : getForeignCode(err);
+    statusCode >= 500 ? undefined : (appError?.code ?? getForeignCode(err));
 
   // 4xx messages are written for the client. 5xx messages are internal and may
   // carry query text, connection strings or library internals — never send them.
@@ -78,5 +73,8 @@ export function errorHandler(
   res.status(statusCode).json({
     message,
     ...(code ? { code } : {}),
+    ...(statusCode < 500 && appError?.errors
+      ? { errors: appError.errors }
+      : {}),
   });
 }

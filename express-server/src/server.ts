@@ -1,7 +1,7 @@
 import { app } from './app';
 import { env } from './config/env';
 import pool from './db/index';
-import { logger } from './middleware/logger.middleware';
+import { logger } from './lib/logger';
 
 // How long to let in-flight requests finish before killing the process.
 // Most platforms send SIGKILL ~30s after SIGTERM, so stay well inside that.

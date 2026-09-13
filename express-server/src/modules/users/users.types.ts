@@ -6,13 +6,17 @@ export interface NewUserDto {
   hashedPassword: string;
 }
 
+// Column names exactly as `SELECT *` returns them (snake_case — the table was
+// created by the Next/Prisma app with @map'd columns). name and password are
+// nullable in the schema: accounts created there through OAuth have neither,
+// and login must treat a null password as a mismatch, not a crash.
 export interface Users {
   id: string;
-  name: string;
+  name: string | null;
   email: string;
-  emailVerified: string | null;
+  email_verified: Date | null;
   image: string | null;
-  password: string;
-  createdAt: string;
-  updatedAt: string;
+  password: string | null;
+  created_at: Date;
+  updated_at: Date;
 }

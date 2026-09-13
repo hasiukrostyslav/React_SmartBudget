@@ -55,8 +55,9 @@ export interface TransactionDto {
   updatedAt: string;
 }
 
-// pg returns DECIMAL/NUMERIC columns as strings to avoid precision loss; the
-// API contract is `number`, so we coerce here.
+// amount is `double precision` in the schema, so pg already hands back a JS
+// number; Number() is a no-op guard against the column type ever changing to
+// NUMERIC, which pg returns as a string.
 export function mapTransactionRow(row: TransactionRow): TransactionDto {
   return {
     transactionId: row.transaction_id,

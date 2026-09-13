@@ -27,11 +27,25 @@ function run(err: unknown) {
 }
 
 describe('errorHandler', () => {
-  it('renders an AppError with its status, message and code', () => {
+  it('renders an AppError with its status and message', () => {
     const { status, body } = run(new AppError(404, 'Transaction not found'));
 
     expect(status).toBe(404);
     expect(body).toEqual({ message: 'Transaction not found' });
+  });
+
+  it('renders per-field errors on a validation AppError', () => {
+    const { status, body } = run(
+      new AppError(400, 'Validation failed', {
+        errors: { email: ['Invalid email format'] },
+      }),
+    );
+
+    expect(status).toBe(400);
+    expect(body).toEqual({
+      message: 'Validation failed',
+      errors: { email: ['Invalid email format'] },
+    });
   });
 
   it('passes through http-errors shapes such as the csrf failure', () => {
@@ -58,8 +72,7 @@ describe('errorHandler', () => {
     const { status, body, log } = run(err);
 
     expect(status).toBe(500);
-    expect(body).toMatchObject({ message: 'Internal server error' });
-    expect(body).not.toHaveProperty('code');
+    expect(body).toEqual({ message: 'Internal server error' });
     expect(JSON.stringify(body)).not.toContain('hunter2');
     expect(log.error).toHaveBeenCalledOnce();
   });

@@ -1,16 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodSchema } from 'zod';
 
-// Factory that returns an Express middleware validating req.body against a Zod schema.
+import { AppError } from '../lib/AppError';
+
+// Factory that returns an Express middleware validating req.body against a Zod
+// schema. Failures go through next() so they render, log and carry a request
+// id like every other error, rather than responding directly.
 export function validate(schema: ZodSchema) {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      const errors = result.error.flatten();
-      res
-        .status(400)
-        .json({ message: 'Validation failed', errors: errors.fieldErrors });
+      next(
+        new AppError(400, 'Validation failed', {
+          errors: result.error.flatten().fieldErrors,
+        }),
+      );
       return;
     }
 

@@ -2,17 +2,19 @@ import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 import { env } from '../config/env';
+import { AppError } from '../lib/AppError';
 
 // Extracts and verifies the JWT access token from the httpOnly cookie.
+// Failures go through next() so the error middleware renders and logs them.
 export function authMiddleware(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   const token = req.cookies['access_token'] as string | undefined;
 
   if (!token) {
-    res.status(401).json({ message: 'Access token is missing' });
+    next(new AppError(401, 'Access token is missing'));
     return;
   }
 
@@ -28,6 +30,6 @@ export function authMiddleware(
     req.user = { ...payload, id: payload.sub };
     next();
   } catch {
-    res.status(401).json({ message: 'Invalid or expired access token' });
+    next(new AppError(401, 'Invalid or expired access token'));
   }
 }

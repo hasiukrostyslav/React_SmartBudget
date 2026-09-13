@@ -1,11 +1,14 @@
 {
   "name": "express-server",
   "version": "1.0.0",
+  "private": true,
   "description": "",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "src/app.ts",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
     "build": "tsc",
@@ -18,8 +21,6 @@
   },
   "dependencies": {
     "@paralleldrive/cuid2": "^3.3.0",
-    "@types/bcrypt": "^6.0.0",
-    "@types/pg": "^8.20.0",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -32,16 +33,17 @@
     "pg": "^8.20.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
-    "zod": "^4.3.6",
-    "zod-validation-error": "^5.0.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.0",
+    "@types/pg": "^8.23.1",
     "@types/supertest": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^8.58.1",
     "@typescript-eslint/parser": "^8.58.1",

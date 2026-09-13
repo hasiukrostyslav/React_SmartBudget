@@ -12,11 +12,19 @@ function accessCookie() {
   const token = jwt.sign(
     { sub: 'user-1', email: 't@example.com' },
     env.JWT_ACCESS_SECRET,
-    {
-      expiresIn: '5m',
-    },
+    { expiresIn: '5m' },
   );
   return `access_token=${token}`;
+}
+
+// A CSRF token and the cookie it must be paired with.
+async function csrfPair() {
+  const res = await request(app).get('/api/auth/csrf-token');
+  const setCookie = (res.headers['set-cookie'] ?? []) as string[];
+  const cookie = setCookie
+    .find((c) => c.startsWith('psifi.x-csrf-token='))
+    ?.split(';')[0];
+  return { token: res.body.csrfToken as string, cookie: cookie ?? '' };
 }
 
 describe('app wiring', () => {
@@ -76,17 +84,40 @@ describe('app wiring', () => {
     expect(res.body.message).toMatch(/^Invalid query parameter "limit"/);
   });
 
+  it('returns per-field errors for an invalid body, through the error middleware', async () => {
+    const { token, cookie } = await csrfPair();
+    const res = await request(app)
+      .post('/api/transactions')
+      .set('Cookie', `${accessCookie()}; ${cookie}`)
+      .set('x-csrf-token', token)
+      .send({ amount: -1 });
+
+    expect(res.status).toBe(400);
+    expect(res.body.message).toBe('Validation failed');
+    expect(res.body.errors.transactionName).toBeDefined();
+    expect(res.body.errors.amount).toBeDefined();
+    expect(res.headers['x-request-id']).toBeDefined();
+  });
+
   it('sets a request id on every response', async () => {
     const res = await request(app).get('/api/does-not-exist');
 
     expect(res.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/);
   });
 
-  it('echoes an incoming request id so logs can be correlated across services', async () => {
+  it('echoes a well-formed incoming request id', async () => {
     const res = await request(app)
       .get('/api/does-not-exist')
       .set('X-Request-Id', 'trace-abc-123');
 
     expect(res.headers['x-request-id']).toBe('trace-abc-123');
+  });
+
+  it('replaces a malformed incoming request id rather than echoing it', async () => {
+    const res = await request(app)
+      .get('/api/does-not-exist')
+      .set('X-Request-Id', 'not ok: <script>' + 'x'.repeat(200));
+
+    expect(res.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/);
   });
 });

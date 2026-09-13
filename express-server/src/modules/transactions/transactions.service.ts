@@ -20,6 +20,11 @@ import {
 
 const PAGE_SIZE_DEFAULT = 10;
 
+// Every UPDATE sets this. The column has an INSERT default and no trigger, so
+// nothing else maintains it — before this, every edit left updated_at equal to
+// created_at. Uses the same UTC wall-clock convention as toUtcTimestamp.
+const SET_UPDATED_AT = `updated_at = (NOW() AT TIME ZONE 'UTC')`;
+
 // Format a Date as a UTC wall-clock string ("YYYY-MM-DD HH:mm:ss.SSS") for a
 // `timestamp without time zone` column, so the stored value is UTC and matches
 // Prisma/Next regardless of the server's local timezone.
@@ -146,7 +151,7 @@ export async function findTransactionById(
     `SELECT * FROM "transactions" WHERE transaction_id = $1 AND user_id = $2;`,
     [id, userId],
   );
-  const row = result.rows[0] as TransactionRow | undefined;
+  const row = result.rows[0];
   return row ? mapTransactionRow(row) : null;
 }
 
@@ -219,13 +224,13 @@ export async function updateTransactionById(
 
   values.push(id, userId);
   const result = await query<TransactionRow>(
-    `UPDATE "transactions" SET ${sets.join(', ')}
+    `UPDATE "transactions" SET ${sets.join(', ')}, ${SET_UPDATED_AT}
      WHERE transaction_id = $${values.length - 1} AND user_id = $${values.length}
      RETURNING *;`,
     values,
   );
 
-  const row = result.rows[0] as TransactionRow | undefined;
+  const row = result.rows[0];
   return row ? mapTransactionRow(row) : null;
 }
 
@@ -234,7 +239,7 @@ export async function updateTransactionsStatus(
   dto: BulkStatusDto,
 ): Promise<{ updated: number }> {
   const result = await query(
-    `UPDATE "transactions" SET status = $1
+    `UPDATE "transactions" SET status = $1, ${SET_UPDATED_AT}
      WHERE user_id = $2 AND transaction_id = ANY($3::text[]);`,
     [dto.status, userId, dto.transactionIds],
   );
@@ -246,7 +251,7 @@ export async function updateTransactionsCategory(
   dto: BulkCategoryDto,
 ): Promise<{ updated: number }> {
   const result = await query(
-    `UPDATE "transactions" SET transaction_category = $1
+    `UPDATE "transactions" SET transaction_category = $1, ${SET_UPDATED_AT}
      WHERE user_id = $2 AND transaction_id = ANY($3::text[]);`,
     [categoryToDb(dto.category), userId, dto.transactionIds],
   );

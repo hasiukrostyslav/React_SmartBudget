@@ -1,4 +1,5 @@
 import { isProd } from './env';
+import { ACCESS_TOKEN_TTL_SECONDS, REFRESH_TOKEN_TTL_SECONDS } from './tokens';
 
 // clearCookie only clears a cookie whose flags and path match the ones it was
 // set with. Sharing one base keeps the set/clear pairs from drifting apart —
@@ -21,10 +22,10 @@ export const REFRESH_TOKEN_CLEAR_OPTIONS = {
 
 export const ACCESS_TOKEN_COOKIE_OPTIONS = {
   ...ACCESS_TOKEN_CLEAR_OPTIONS,
-  maxAge: 15 * 60 * 1000,
+  maxAge: ACCESS_TOKEN_TTL_SECONDS * 1000,
 };
 
 export const REFRESH_TOKEN_COOKIE_OPTIONS = {
   ...REFRESH_TOKEN_CLEAR_OPTIONS,
-  maxAge: 7 * 24 * 60 * 60 * 1000,
+  maxAge: REFRESH_TOKEN_TTL_SECONDS * 1000,
 };

@@ -1,7 +1,7 @@
 import { Pool, types, type QueryResult, type QueryResultRow } from 'pg';
 
 import { databaseSsl, env } from '../config/env';
-import { logger } from '../middleware/logger.middleware';
+import { logger } from '../lib/logger';
 
 // `created_at` / `updated_at` are `timestamp without time zone` columns holding
 // UTC wall-clock values (the Prisma/Next convention). node-postgres otherwise
@@ -15,6 +15,11 @@ types.setTypeParser(1114, (value) =>
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
   ssl: databaseSsl,
+  // Fail a request that can't get a client rather than queueing it forever
+  // behind an exhausted pool — the default is to wait indefinitely.
+  connectionTimeoutMillis: 5_000,
+  // Cancel a runaway statement server-side so it can't hold a client open.
+  statement_timeout: 30_000,
 });
 
 // node-postgres emits `error` on the pool when the backend terminates an IDLE
