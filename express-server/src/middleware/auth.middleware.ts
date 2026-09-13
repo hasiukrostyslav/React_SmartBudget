@@ -1,8 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 // Extracts and verifies the JWT access token from the httpOnly cookie.
-export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+export function authMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const token = req.cookies['access_token'] as string | undefined;
 
   if (!token) {
@@ -11,7 +15,10 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET as string) as {
+    const payload = jwt.verify(
+      token,
+      process.env.JWT_ACCESS_SECRET as string,
+    ) as {
       sub: string;
       email: string;
       iat: number;

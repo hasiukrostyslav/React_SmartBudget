@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { createId } from '@paralleldrive/cuid2';
 import { SALT_ROUNDS } from '../../config/constants';
 import { SignInDto, SignUpDto } from './auth.schemas';
-import { findUserByEmail, findUserById, createUser } from '../users/users.service';
+import { findUserByEmail, createUser } from '../users/users.service';
 import { Users } from '../users/users.types';
 import { RefreshTokenPayload } from '../../types/types';
 
@@ -29,18 +29,28 @@ function serviceError(status: number, message: string): ServiceError {
 export function signTokens(userId: string, email: string): Tokens {
   const payload: JwtPayload = { sub: userId, email };
 
-  const access_token = jwt.sign(payload, process.env.JWT_ACCESS_SECRET as string, {
-    expiresIn: '15m',
-  });
+  const access_token = jwt.sign(
+    payload,
+    process.env.JWT_ACCESS_SECRET as string,
+    {
+      expiresIn: '15m',
+    },
+  );
 
-  const refresh_token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, {
-    expiresIn: '7d',
-  });
+  const refresh_token = jwt.sign(
+    payload,
+    process.env.JWT_REFRESH_SECRET as string,
+    {
+      expiresIn: '7d',
+    },
+  );
 
   return { access_token, refresh_token };
 }
 
-export async function login(dto: SignInDto): Promise<{ tokens: Tokens; user: Users }> {
+export async function login(
+  dto: SignInDto,
+): Promise<{ tokens: Tokens; user: Users }> {
   const user = await findUserByEmail(dto.email);
 
   if (!user) throw serviceError(401, 'Invalid email or password!');
@@ -52,10 +62,13 @@ export async function login(dto: SignInDto): Promise<{ tokens: Tokens; user: Use
   return { tokens: signTokens(user.id, user.email), user };
 }
 
-export async function signup(dto: SignUpDto): Promise<{ tokens: Tokens; user: Users }> {
+export async function signup(
+  dto: SignUpDto,
+): Promise<{ tokens: Tokens; user: Users }> {
   const existing = await findUserByEmail(dto.email);
 
-  if (existing) throw serviceError(401, 'An account with this email already exists.');
+  if (existing)
+    throw serviceError(401, 'An account with this email already exists.');
 
   const hashedPassword = await bcrypt.hash(dto.password, SALT_ROUNDS);
 
@@ -70,7 +83,9 @@ export async function signup(dto: SignUpDto): Promise<{ tokens: Tokens; user: Us
   return login({ email: dto.email, password: dto.password });
 }
 
-export async function refreshAccessToken(refreshToken: string): Promise<string> {
+export async function refreshAccessToken(
+  refreshToken: string,
+): Promise<string> {
   try {
     const payload = jwt.verify(
       refreshToken,

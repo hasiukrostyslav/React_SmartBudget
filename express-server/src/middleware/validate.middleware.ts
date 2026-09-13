@@ -8,7 +8,9 @@ export function validate(schema: ZodSchema) {
 
     if (!result.success) {
       const errors = result.error.flatten();
-      res.status(400).json({ message: 'Validation failed', errors: errors.fieldErrors });
+      res
+        .status(400)
+        .json({ message: 'Validation failed', errors: errors.fieldErrors });
       return;
     }
 

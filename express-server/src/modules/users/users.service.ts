@@ -4,7 +4,9 @@ import { Users } from './users.types';
 
 export async function findUserByEmail(email: string): Promise<Users | null> {
   try {
-    const result = await query('SELECT * FROM "users" WHERE email = $1;', [email]);
+    const result = await query('SELECT * FROM "users" WHERE email = $1;', [
+      email,
+    ]);
     return result.rows[0] || null;
   } catch (error: unknown) {
     if (error instanceof Error) console.error('DB error:', error.message);
@@ -22,7 +24,12 @@ export async function findUserById(id: string): Promise<Users | null> {
   }
 }
 
-export async function createUser({ id, email, hashedPassword, name }: NewUserDto): Promise<Users | null> {
+export async function createUser({
+  id,
+  email,
+  hashedPassword,
+  name,
+}: NewUserDto): Promise<Users | null> {
   try {
     const result = await query(
       `INSERT INTO "users" (id, email, password, name) VALUES ($1, $2, $3, $4) RETURNING *;`,

@@ -257,10 +257,9 @@ export async function deleteTransactionsMany(
 export async function deleteAllTransactions(
   userId: string,
 ): Promise<{ deleted: number }> {
-  const result = await query(
-    `DELETE FROM "transactions" WHERE user_id = $1;`,
-    [userId],
-  );
+  const result = await query(`DELETE FROM "transactions" WHERE user_id = $1;`, [
+    userId,
+  ]);
   return { deleted: result.rowCount ?? 0 };
 }
 

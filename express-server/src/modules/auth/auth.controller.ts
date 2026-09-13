@@ -1,18 +1,34 @@
 import { Request, Response } from 'express';
 import { login, signup, refreshAccessToken } from './auth.service';
 import { findUserById } from '../users/users.service';
-import { generateCsrfToken, CSRF_COOKIE_NAME } from '../../middleware/csrf.middleware';
-import { ACCESS_TOKEN_COOKIE_OPTIONS, REFRESH_TOKEN_COOKIE_OPTIONS } from '../../config/constants';
+import {
+  generateCsrfToken,
+  CSRF_COOKIE_NAME,
+} from '../../middleware/csrf.middleware';
+import {
+  ACCESS_TOKEN_COOKIE_OPTIONS,
+  REFRESH_TOKEN_COOKIE_OPTIONS,
+} from '../../config/constants';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-function setAuthCookies(res: Response, access_token: string, refresh_token: string) {
+function setAuthCookies(
+  res: Response,
+  access_token: string,
+  refresh_token: string,
+) {
   res.cookie('access_token', access_token, ACCESS_TOKEN_COOKIE_OPTIONS);
   res.cookie('refresh_token', refresh_token, REFRESH_TOKEN_COOKIE_OPTIONS);
 }
 
-function handleError(res: Response, err: any) {
-  res.status(err?.status ?? 500).json({ message: err?.message ?? 'Internal server error' });
+function handleError(res: Response, err: unknown) {
+  const { status, message } = (err ?? {}) as {
+    status?: number;
+    message?: string;
+  };
+  res
+    .status(status ?? 500)
+    .json({ message: message ?? 'Internal server error' });
 }
 
 // POST /api/auth/login
@@ -59,7 +75,12 @@ export async function refreshController(req: Request, res: Response) {
 export function signoutController(req: Request, res: Response) {
   const sameSite = isProd ? ('none' as const) : ('lax' as const);
 
-  res.clearCookie('access_token', { secure: isProd, httpOnly: true, sameSite, path: '/' });
+  res.clearCookie('access_token', {
+    secure: isProd,
+    httpOnly: true,
+    sameSite,
+    path: '/',
+  });
   res.clearCookie('refresh_token', {
     secure: isProd,
     httpOnly: true,

@@ -8,4 +8,3 @@ export interface Users {
   createdAt: string;
   updatedAt: string;
 }
-
