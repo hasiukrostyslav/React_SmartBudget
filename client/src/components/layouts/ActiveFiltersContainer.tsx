@@ -28,7 +28,6 @@ export default function ActiveFiltersContainer() {
         ACTIVE
       </h4>
       <div className="relative min-w-0">
-        {/* Hidden layer: all chips on one row, used only to measure widths. */}
         <div
           ref={measureRef}
           aria-hidden

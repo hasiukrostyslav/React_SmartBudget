@@ -22,11 +22,11 @@ export function createQueryString(
     value: string | number;
   }[],
 ) {
-  const slugQuery = query.map((q) => ({ ...q, value: toSlug(q.value) }));
-
   const params = new URLSearchParams(searchParams.toString());
-  slugQuery.forEach((el) =>
-    el.value === '' ? params.delete(el.param) : params.set(el.param, el.value),
+  query.forEach((el) =>
+    el.value === ''
+      ? params.delete(el.param)
+      : params.set(el.param, String(el.value)),
   );
 
   if (query.find((q) => q.param !== 'page')) params.set('page', '1');
@@ -34,18 +34,6 @@ export function createQueryString(
   params.sort();
 
   return params.toString();
-}
-
-// Convert Search Params value with ' ' to -
-export function toSlug(value: string | number) {
-  if (typeof value === 'number') return String(value);
-  return value.toLowerCase().replace(/\s+/g, '-');
-}
-
-// Convert Search Params value with - to ' '
-export function fromSlug(slug: string | number) {
-  if (typeof slug === 'number') return slug;
-  return slug.replace(/-/g, ' ');
 }
 
 // Select filter options for list size
