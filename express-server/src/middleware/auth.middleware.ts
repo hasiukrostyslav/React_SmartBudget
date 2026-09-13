@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
+import { env } from '../config/env';
+
 // Extracts and verifies the JWT access token from the httpOnly cookie.
 export function authMiddleware(
   req: Request,
@@ -15,10 +17,7 @@ export function authMiddleware(
   }
 
   try {
-    const payload = jwt.verify(
-      token,
-      process.env.JWT_ACCESS_SECRET as string,
-    ) as {
+    const payload = jwt.verify(token, env.JWT_ACCESS_SECRET) as {
       sub: string;
       email: string;
       iat: number;

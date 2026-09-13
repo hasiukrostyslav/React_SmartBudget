@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-const isProd = process.env.NODE_ENV === 'production';
+import { isProd } from '../config/env';
 
 // Errors reach here in three shapes today:
 //   - http-errors instances (thrown by csrf-csrf)      -> { statusCode, code }
@@ -55,7 +55,11 @@ export function errorHandler(
   }
 
   const statusCode = getStatusCode(err);
-  const code = getErrorCode(err);
+
+  // Only 4xx codes are part of the client contract (EBADCSRFTOKEN and friends).
+  // Node system errors carry a `code` too — ECONNREFUSED, ETIMEDOUT — and those
+  // describe our infrastructure, so they must never reach the client.
+  const code = statusCode < 500 ? getErrorCode(err) : undefined;
 
   // 4xx messages are written for the client. 5xx messages are internal and may
   // carry query text, connection strings or library internals — never send them.

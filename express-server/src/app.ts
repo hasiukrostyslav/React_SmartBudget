@@ -1,19 +1,15 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-// These must load AFTER dotenv: both read process.env at module-init time
-// (CSRF_SECRET, NODE_ENV) and would capture undefined if hoisted above it.
-import { doubleCsrfProtection } from './middleware/csrf.middleware';
-import { errorHandler } from './middleware/error.middleware';
-import express, { Application, Request, Response, NextFunction } from 'express';
-import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express, { Application, NextFunction, Request, Response } from 'express';
+import helmet from 'helmet';
+
+// config/env loads dotenv itself, so no import here is order-sensitive.
+import { env, isProd } from './config/env';
+import { doubleCsrfProtection } from './middleware/csrf.middleware';
+import { errorHandler } from './middleware/error.middleware';
 import { apiLimiter, authLimiter } from './middleware/rateLimit.middleware';
 import authRouter from './modules/auth/auth.router';
 import dashboardRouter from './modules/dashboard/dashboard.router';
-
-const isProd = process.env.NODE_ENV === 'production';
 
 export const app: Application = express();
 
@@ -27,8 +23,8 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173', process.env.CLIENT_URL as string].filter(
-      Boolean,
+    origin: ['http://localhost:5173', env.CLIENT_URL].filter(
+      (origin): origin is string => Boolean(origin),
     ),
     credentials: true, // allow cookies on cross-origin requests from the SPA
   }),

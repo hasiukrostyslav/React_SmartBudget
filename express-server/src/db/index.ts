@@ -1,4 +1,6 @@
-import { Pool, types } from 'pg';
+import { Pool, types, type QueryResult, type QueryResultRow } from 'pg';
+
+import { databaseSsl, env } from '../config/env';
 
 // `created_at` / `updated_at` are `timestamp without time zone` columns holding
 // UTC wall-clock values (the Prisma/Next convention). node-postgres otherwise
@@ -10,8 +12,8 @@ types.setTypeParser(1114, (value) =>
 );
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: true },
+  connectionString: env.DATABASE_URL,
+  ssl: databaseSsl,
 });
 
 // node-postgres emits `error` on the pool when the backend terminates an IDLE
@@ -23,8 +25,13 @@ pool.on('error', (error) => {
   console.error('[db] idle client error:', error.message);
 });
 
-export const query = (text: string, params?: unknown[]) => {
-  return pool.query(text, params);
+// Generic so call sites name the row shape they expect instead of every row
+// entering the app untyped at the widest boundary in the codebase.
+export const query = <T extends QueryResultRow = QueryResultRow>(
+  text: string,
+  params?: unknown[],
+): Promise<QueryResult<T>> => {
+  return pool.query<T>(text, params);
 };
 
 export default pool;

@@ -17,9 +17,12 @@ export const SignUpSchema = z.object({
   password: passwordSchema,
 });
 
+// Sign-in checks presence only. Applying the signup complexity policy here
+// locked out any account whose password predates the policy, and advertised
+// the policy to unauthenticated callers.
 export const SignInSchema = z.object({
   email: z.string().trim().email('Invalid email format'),
-  password: passwordSchema,
+  password: z.string().min(1, 'Password is required'),
 });
 
 export const ForgotPasswordSchema = z.object({

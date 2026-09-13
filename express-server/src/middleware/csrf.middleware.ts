@@ -1,6 +1,6 @@
 import { doubleCsrf } from 'csrf-csrf';
 
-const isProd = process.env.NODE_ENV === 'production';
+import { env, isProd } from '../config/env';
 
 // __Host- prefix enforces Secure + no Domain in production (better security).
 export const CSRF_COOKIE_NAME = isProd
@@ -10,7 +10,7 @@ export const CSRF_COOKIE_NAME = isProd
 // Double-submit CSRF pattern: a signed token is stored in a cookie and must
 // also be sent in the request header/body.
 export const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
-  getSecret: () => process.env.CSRF_SECRET as string,
+  getSecret: () => env.CSRF_SECRET,
   getSessionIdentifier: () => 'global',
   cookieName: CSRF_COOKIE_NAME,
   cookieOptions: {

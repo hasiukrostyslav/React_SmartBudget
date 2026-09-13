@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { createId } from '@paralleldrive/cuid2';
 import { SALT_ROUNDS } from '../../config/constants';
+import { env } from '../../config/env';
 import { SignInDto, SignUpDto } from './auth.schemas';
 import { findUserByEmail, createUser } from '../users/users.service';
 import { Users } from '../users/users.types';
@@ -29,21 +30,13 @@ function serviceError(status: number, message: string): ServiceError {
 export function signTokens(userId: string, email: string): Tokens {
   const payload: JwtPayload = { sub: userId, email };
 
-  const access_token = jwt.sign(
-    payload,
-    process.env.JWT_ACCESS_SECRET as string,
-    {
-      expiresIn: '15m',
-    },
-  );
+  const access_token = jwt.sign(payload, env.JWT_ACCESS_SECRET, {
+    expiresIn: '15m',
+  });
 
-  const refresh_token = jwt.sign(
-    payload,
-    process.env.JWT_REFRESH_SECRET as string,
-    {
-      expiresIn: '7d',
-    },
-  );
+  const refresh_token = jwt.sign(payload, env.JWT_REFRESH_SECRET, {
+    expiresIn: '7d',
+  });
 
   return { access_token, refresh_token };
 }
@@ -68,7 +61,7 @@ export async function signup(
   const existing = await findUserByEmail(dto.email);
 
   if (existing)
-    throw serviceError(401, 'An account with this email already exists.');
+    throw serviceError(409, 'An account with this email already exists.');
 
   const hashedPassword = await bcrypt.hash(dto.password, SALT_ROUNDS);
 
@@ -86,23 +79,27 @@ export async function signup(
 export async function refreshAccessToken(
   refreshToken: string,
 ): Promise<string> {
+  let payload: RefreshTokenPayload;
+
   try {
-    const payload = jwt.verify(
+    payload = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET as string,
+      env.JWT_REFRESH_SECRET,
     ) as RefreshTokenPayload;
-
-    // Look up by email to match the original server behaviour
-    const user = await findUserByEmail(payload.email);
-
-    if (!user) throw new Error();
-
-    return jwt.sign(
-      { sub: payload.sub, email: payload.email },
-      process.env.JWT_ACCESS_SECRET as string,
-      { expiresIn: '15m' },
-    );
   } catch {
+    // Only a bad/expired signature lands here. Anything below is infrastructure
+    // and must surface as a 500 so the outage is visible in the logs.
     throw serviceError(401, 'Invalid or expired refresh token');
   }
+
+  // Look up by email to match the original server behaviour
+  const user = await findUserByEmail(payload.email);
+
+  if (!user) throw serviceError(401, 'Invalid or expired refresh token');
+
+  return jwt.sign(
+    { sub: payload.sub, email: payload.email },
+    env.JWT_ACCESS_SECRET,
+    { expiresIn: '15m' },
+  );
 }

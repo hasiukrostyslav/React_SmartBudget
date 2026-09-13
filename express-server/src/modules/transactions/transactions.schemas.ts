@@ -69,14 +69,51 @@ export const TransactionCreateSchema = z.object({
 
 export const TransactionUpdateSchema = TransactionCreateSchema.partial();
 
+// A filter arrives as a comma-separated list ("cafe,car"). Empty and the legacy
+// "all" sentinel both mean "no filter". Values are validated against the enum
+// rather than dropped, so a bad value is a 400 instead of silently unfiltered
+// results — which is how these params previously failed.
+function filterList<T extends readonly [string, ...string[]]>(values: T) {
+  return z
+    .string()
+    .optional()
+    .transform((value) =>
+      !value || value.trim() === '' || value.trim() === 'all'
+        ? []
+        : value
+            .split(',')
+            .map((entry) => entry.trim())
+            .filter(Boolean),
+    )
+    .pipe(z.array(z.enum(values)));
+}
+
+// payment_method is free text, so there is no enum to check it against.
+const freeTextList = z
+  .string()
+  .optional()
+  .transform((value) =>
+    !value || value.trim() === '' || value.trim() === 'all'
+      ? []
+      : value
+          .split(',')
+          .map((entry) => entry.trim())
+          .filter(Boolean),
+  );
+
 export const SearchParamsSchema = z.object({
-  limit: z.string().optional().default('10'),
-  page: z.string().optional().default('1'),
-  categories: z.string().optional().default('all'),
-  types: z.string().optional().default('all'),
-  accounts: z.string().optional().default('all'),
+  // Coerced and bounded here so the service never sees NaN, 0 or a page size
+  // large enough to be used as a denial-of-service lever.
+  limit: z.coerce.number().int().min(1).max(100).default(10),
+  page: z.coerce.number().int().min(1).default(1),
   sort: z.enum(sortLabels).optional().default('date'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
+  search: z.string().trim().optional().default(''),
+  category: filterList(TRANSACTION_CATEGORIES),
+  type: filterList(TRANSACTION_TYPES),
+  status: filterList(STATUSES),
+  currency: filterList(CURRENCIES),
+  account: freeTextList,
 });
 
 export const BulkStatusSchema = z.object({

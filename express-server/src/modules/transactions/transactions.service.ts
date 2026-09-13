@@ -1,15 +1,16 @@
 import { createId } from '@paralleldrive/cuid2';
 
 import { query } from '../../db/index';
-import type {
-  BulkCategoryDto,
-  BulkDeleteDto,
-  BulkStatusDto,
-  SearchParamsDto,
-  TransactionCategory,
-  TransactionCreateDto,
-  TransactionStatus,
-  TransactionUpdateDto,
+import {
+  TRANSACTION_CATEGORIES,
+  type BulkCategoryDto,
+  type BulkDeleteDto,
+  type BulkStatusDto,
+  type SearchParamsDto,
+  type TransactionCategory,
+  type TransactionCreateDto,
+  type TransactionStatus,
+  type TransactionUpdateDto,
 } from './transactions.schemas';
 import {
   categoryToDb,
@@ -46,6 +47,22 @@ const SORT_COLUMN: Record<string, string> = {
   category: 'transaction_category',
 };
 
+// The DB enum's declaration order puts the four @map'd spaced values at the
+// end, which is neither the alphabetical order users see nor the client's enum
+// order. Rank the categories once at module load and emit a CASE expression, so
+// the database can order and paginate them itself. This replaces a branch that
+// used to SELECT every row a user owned and sort it in memory.
+const CATEGORY_RANK_SQL = (() => {
+  const ranked = [...TRANSACTION_CATEGORIES].sort((a, b) =>
+    categoryHeader(a).localeCompare(categoryHeader(b)),
+  );
+  // Values come from the hardcoded enum, never from user input.
+  const whens = ranked
+    .map((cat, index) => `WHEN '${categoryToDb(cat)}' THEN ${index}`)
+    .join(' ');
+  return `CASE transaction_category::text ${whens} ELSE ${ranked.length} END`;
+})();
+
 function buildOrderBy(sortKey: string, order: 'asc' | 'desc') {
   const column = SORT_COLUMN[sortKey] ?? 'created_at';
   const direction = order === 'asc' ? 'ASC' : 'DESC';
@@ -55,63 +72,69 @@ function buildOrderBy(sortKey: string, order: 'asc' | 'desc') {
     // displayed balance impact (mirrors next/lib/db/transactions.ts).
     return `(CASE WHEN transaction_type = 'Expenses' THEN -amount ELSE amount END) ${direction}`;
   }
+  if (column === 'transaction_category') {
+    return `${CATEGORY_RANK_SQL} ${direction}`;
+  }
   return `"${column}" ${direction}`;
+}
+
+// --- P1-1 / P1-2: filters the API actually applies -------------------------
+
+// Builds the shared WHERE clause for both the page query and the count query,
+// so the reported total always matches the rows returned.
+function buildWhere(userId: string, params: SearchParamsDto) {
+  const clauses = ['user_id = $1'];
+  const values: unknown[] = [userId];
+
+  const addList = (column: string, list: string[]) => {
+    if (list.length === 0) return;
+    values.push(list);
+    // ::text on the column so enum-typed columns compare against a text array.
+    clauses.push(`${column}::text = ANY($${values.length}::text[])`);
+  };
+
+  if (params.search) {
+    // Bound parameter, so the term is never interpolated into SQL.
+    values.push(`%${params.search}%`);
+    const i = values.length;
+    clauses.push(`(transaction_name ILIKE $${i} OR description ILIKE $${i})`);
+  }
+
+  addList('transaction_category', params.category.map(categoryToDb));
+  addList('transaction_type', params.type);
+  addList('payment_method', params.account);
+  addList('status', params.status);
+  addList('currency', params.currency);
+
+  return { where: clauses.join(' AND '), values };
 }
 
 export async function findTransactionsByUserId(
   userId: string,
   params: SearchParamsDto,
 ): Promise<{ transactions: TransactionDto[]; transactionCount: number }> {
-  const limit = Math.max(1, Number(params.limit ?? PAGE_SIZE_DEFAULT));
-  const page = Math.max(1, Number(params.page ?? 1));
+  const limit = params.limit ?? PAGE_SIZE_DEFAULT;
+  const page = params.page ?? 1;
   const skip = limit * (page - 1);
-  const sortKey = params.sort ?? 'date';
-  const order = params.order ?? 'desc';
 
-  // Category sort matches next/lib/db/transactions.ts — alphabetical by the
-  // display header (TRANSACTION_CATEGORIES_CONFIG[cat].text.header) using
-  // localeCompare. Has to be done in JS because the DB enum's declaration
-  // order puts the four @map'd spaced values (currency exchange / mobile
-  // phone / personal care / pet care) at the end, which is neither the
-  // alphabetical order users see nor the enum-array order on the client.
-  if (sortKey === 'category') {
-    const all = await query(
-      `SELECT * FROM "transactions" WHERE user_id = $1;`,
-      [userId],
-    );
-    const rows = all.rows.map((row: TransactionRow) => mapTransactionRow(row));
-    rows.sort((a, b) => {
-      const labelA = categoryHeader(a.transactionCategory);
-      const labelB = categoryHeader(b.transactionCategory);
-      return order === 'asc'
-        ? labelA.localeCompare(labelB)
-        : labelB.localeCompare(labelA);
-    });
-    return {
-      transactions: rows.slice(skip, skip + limit),
-      transactionCount: rows.length,
-    };
-  }
-
-  const orderBy = buildOrderBy(sortKey, order);
+  const { where, values } = buildWhere(userId, params);
+  const orderBy = buildOrderBy(params.sort ?? 'date', params.order ?? 'desc');
 
   const listSql = `
     SELECT * FROM "transactions"
-    WHERE user_id = $1
+    WHERE ${where}
     ORDER BY ${orderBy}
-    LIMIT $2 OFFSET $3;
+    LIMIT $${values.length + 1} OFFSET $${values.length + 2};
   `;
-  const countSql = `SELECT COUNT(*)::int AS count FROM "transactions" WHERE user_id = $1;`;
+  const countSql = `SELECT COUNT(*)::int AS count FROM "transactions" WHERE ${where};`;
 
   const [listResult, countResult] = await Promise.all([
-    query(listSql, [userId, limit, skip]),
-    query(countSql, [userId]),
+    query<TransactionRow>(listSql, [...values, limit, skip]),
+    query<{ count: number }>(countSql, values),
   ]);
 
   return {
-    transactions: listResult.rows.map((row: TransactionRow) =>
-      mapTransactionRow(row),
-    ),
+    transactions: listResult.rows.map((row) => mapTransactionRow(row)),
     transactionCount: countResult.rows[0]?.count ?? 0,
   };
 }
@@ -120,7 +143,7 @@ export async function findTransactionById(
   id: string,
   userId: string,
 ): Promise<TransactionDto | null> {
-  const result = await query(
+  const result = await query<TransactionRow>(
     `SELECT * FROM "transactions" WHERE transaction_id = $1 AND user_id = $2;`,
     [id, userId],
   );
@@ -133,7 +156,7 @@ export async function createTransaction(
   dto: TransactionCreateDto,
 ): Promise<TransactionDto> {
   const transactionId = createId();
-  const result = await query(
+  const result = await query<TransactionRow>(
     `INSERT INTO "transactions" (
       transaction_id, user_id, transaction_name, transaction_category,
       payment_method, transaction_type, currency, amount, description, status,
@@ -196,7 +219,7 @@ export async function updateTransactionById(
   if (sets.length === 0) return findTransactionById(id, userId);
 
   values.push(id, userId);
-  const result = await query(
+  const result = await query<TransactionRow>(
     `UPDATE "transactions" SET ${sets.join(', ')}
      WHERE transaction_id = $${values.length - 1} AND user_id = $${values.length}
      RETURNING *;`,
