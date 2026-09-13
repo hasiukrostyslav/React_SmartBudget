@@ -55,9 +55,7 @@ export default function ActiveFilter(props: ActiveFilterProps) {
       >
         <p className="text-sm text-blue-600 dark:text-blue-400">
           {filter.key.at(0)?.toUpperCase() + filter.key.slice(1)} :{' '}
-          <span className="font-semibold">
-            {filter.value.replaceAll('-', ' ')}
-          </span>
+          <span className="font-semibold">{filter.value}</span>
         </p>
         <div>
           <ButtonIcon
