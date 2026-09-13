@@ -1,7 +1,5 @@
 import { isProd } from './env';
 
-export const SALT_ROUNDS = 10;
-
 // clearCookie only clears a cookie whose flags and path match the ones it was
 // set with. Sharing one base keeps the set/clear pairs from drifting apart —
 // the refresh cookie's unusual path made that a silent logout failure.

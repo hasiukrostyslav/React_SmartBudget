@@ -1,6 +1,5 @@
 import { query } from '../../db/index';
-import { NewUserDto } from '../auth/auth.schemas';
-import { Users } from './users.types';
+import { NewUserDto, Users } from './users.types';
 
 // These deliberately do NOT catch. A missing row is `null`; a failing query is
 // an exception. Collapsing both into `null` made a database outage look like

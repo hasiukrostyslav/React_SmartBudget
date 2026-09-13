@@ -1,42 +1,35 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { isProd } from '../config/env';
+import { AppError } from '../lib/AppError';
+import { logger } from './logger.middleware';
 
-// Errors reach here in three shapes today:
-//   - http-errors instances (thrown by csrf-csrf)      -> { statusCode, code }
-//   - service errors from auth.service.ts              -> { status }
-//   - anything unexpected (DB, bugs, library failures) -> no status at all
-// Normalise them here rather than making every caller agree first.
-function getStatusCode(err: unknown): number {
-  if (typeof err !== 'object' || err === null) return 500;
-
+// Anything that isn't an AppError but still carries an HTTP status — http-errors
+// instances thrown by csrf-csrf are the main case.
+function getForeignStatusCode(err: unknown): number | undefined {
+  if (typeof err !== 'object' || err === null) return undefined;
   const { statusCode, status } = err as {
     statusCode?: unknown;
     status?: unknown;
   };
   const candidate = typeof statusCode === 'number' ? statusCode : status;
-
   return typeof candidate === 'number' && candidate >= 400 && candidate <= 599
     ? candidate
-    : 500;
-}
-
-function getMessage(err: unknown): string | undefined {
-  if (typeof err !== 'object' || err === null) return undefined;
-
-  const { message } = err as { message?: unknown };
-
-  return typeof message === 'string' && message.length > 0
-    ? message
     : undefined;
 }
 
-function getErrorCode(err: unknown): string | undefined {
+function getForeignCode(err: unknown): string | undefined {
   if (typeof err !== 'object' || err === null) return undefined;
-
   const { code } = err as { code?: unknown };
-
   return typeof code === 'string' ? code : undefined;
+}
+
+function getMessage(err: unknown): string | undefined {
+  if (err instanceof Error && err.message) return err.message;
+  if (typeof err === 'object' && err !== null) {
+    const { message } = err as { message?: unknown };
+    if (typeof message === 'string' && message) return message;
+  }
+  return undefined;
 }
 
 // Terminal error handler — must be the LAST app.use() so every thrown error
@@ -44,7 +37,7 @@ function getErrorCode(err: unknown): string | undefined {
 // containing the stack trace and absolute filesystem paths.
 export function errorHandler(
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
@@ -54,12 +47,20 @@ export function errorHandler(
     return;
   }
 
-  const statusCode = getStatusCode(err);
+  const statusCode =
+    err instanceof AppError
+      ? err.statusCode
+      : (getForeignStatusCode(err) ?? 500);
 
   // Only 4xx codes are part of the client contract (EBADCSRFTOKEN and friends).
   // Node system errors carry a `code` too — ECONNREFUSED, ETIMEDOUT — and those
   // describe our infrastructure, so they must never reach the client.
-  const code = statusCode < 500 ? getErrorCode(err) : undefined;
+  const code =
+    statusCode >= 500
+      ? undefined
+      : err instanceof AppError
+        ? err.code
+        : getForeignCode(err);
 
   // 4xx messages are written for the client. 5xx messages are internal and may
   // carry query text, connection strings or library internals — never send them.
@@ -69,13 +70,13 @@ export function errorHandler(
       : 'Internal server error';
 
   if (statusCode >= 500) {
-    console.error('[unhandled error]', err);
+    // req.log carries the request id pino-http assigned, so the log line and
+    // the client's X-Request-Id header can be matched up.
+    (req.log ?? logger).error({ err }, 'unhandled error');
   }
 
   res.status(statusCode).json({
     message,
     ...(code ? { code } : {}),
-    // Development-only: the real cause, so a 500 is debuggable without the logs.
-    ...(isProd || statusCode < 500 ? {} : { detail: getMessage(err) }),
   });
 }

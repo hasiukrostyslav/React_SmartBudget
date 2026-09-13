@@ -9,7 +9,6 @@ import {
   type SearchParamsDto,
   type TransactionCategory,
   type TransactionCreateDto,
-  type TransactionStatus,
   type TransactionUpdateDto,
 } from './transactions.schemas';
 import {
@@ -285,7 +284,3 @@ export async function deleteAllTransactions(
   ]);
   return { deleted: result.rowCount ?? 0 };
 }
-
-// Re-exported so callers can pass single status/category values without
-// importing schemas separately.
-export type { TransactionStatus, TransactionCategory };

@@ -20,4 +20,9 @@ export const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
     secure: isProd,
   },
   ignoredMethods: ['GET'],
+  // Signout only clears cookies, so a forged request can at worst log the
+  // victim out. Declared here, with the rest of the CSRF policy, rather than
+  // as a path comparison in app wiring that fails open if the route moves.
+  skipCsrfProtection: (req) =>
+    req.method === 'POST' && req.originalUrl === '/api/auth/signout',
 });

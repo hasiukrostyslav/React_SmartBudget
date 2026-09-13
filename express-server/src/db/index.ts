@@ -1,6 +1,7 @@
 import { Pool, types, type QueryResult, type QueryResultRow } from 'pg';
 
 import { databaseSsl, env } from '../config/env';
+import { logger } from '../middleware/logger.middleware';
 
 // `created_at` / `updated_at` are `timestamp without time zone` columns holding
 // UTC wall-clock values (the Prisma/Next convention). node-postgres otherwise
@@ -22,7 +23,7 @@ const pool = new Pool({
 // process down without a single request being involved. The pool replaces the
 // dead client on its own, so logging is the correct response.
 pool.on('error', (error) => {
-  console.error('[db] idle client error:', error.message);
+  logger.error({ err: error }, 'idle database client error');
 });
 
 // Generic so call sites name the row shape they expect instead of every row

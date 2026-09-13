@@ -5,7 +5,7 @@ import {
   ACCESS_TOKEN_COOKIE_OPTIONS,
   REFRESH_TOKEN_CLEAR_OPTIONS,
   REFRESH_TOKEN_COOKIE_OPTIONS,
-} from '../../config/constants';
+} from '../../config/cookies';
 import { isProd } from '../../config/env';
 import {
   CSRF_COOKIE_NAME,
@@ -70,7 +70,7 @@ export async function refreshController(req: Request, res: Response) {
 }
 
 // POST /api/auth/signout — clears all auth and CSRF cookies (CSRF check bypassed in app.ts)
-export function signoutController(req: Request, res: Response) {
+export function signoutController(_req: Request, res: Response) {
   clearAuthCookies(res);
   res.json({ message: 'Logged out' });
 }

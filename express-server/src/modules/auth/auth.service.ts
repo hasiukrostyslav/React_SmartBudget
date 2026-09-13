@@ -1,31 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { createId } from '@paralleldrive/cuid2';
-import { SALT_ROUNDS } from '../../config/constants';
 import { env } from '../../config/env';
-import { SignInDto, SignUpDto } from './auth.schemas';
+import { AppError } from '../../lib/AppError';
 import { findUserByEmail, createUser } from '../users/users.service';
 import { Users } from '../users/users.types';
-import { RefreshTokenPayload } from '../../types/types';
+import { SignInDto, SignUpDto } from './auth.schemas';
+import { JwtPayload, RefreshTokenPayload, Tokens } from './auth.types';
 
-interface JwtPayload {
-  sub: string;
-  email: string;
-}
-
-interface Tokens {
-  access_token: string;
-  refresh_token: string;
-}
-
-interface ServiceError {
-  status: number;
-  message: string;
-}
-
-function serviceError(status: number, message: string): ServiceError {
-  return { status, message };
-}
+// bcrypt cost factor. Lives with the only code that hashes.
+const SALT_ROUNDS = 10;
 
 export function signTokens(userId: string, email: string): Tokens {
   const payload: JwtPayload = { sub: userId, email };
@@ -46,11 +30,11 @@ export async function login(
 ): Promise<{ tokens: Tokens; user: Users }> {
   const user = await findUserByEmail(dto.email);
 
-  if (!user) throw serviceError(401, 'Invalid email or password!');
+  if (!user) throw new AppError(401, 'Invalid email or password!');
 
   const passwordMatches = await bcrypt.compare(dto.password, user.password);
 
-  if (!passwordMatches) throw serviceError(401, 'Invalid email or password!');
+  if (!passwordMatches) throw new AppError(401, 'Invalid email or password!');
 
   return { tokens: signTokens(user.id, user.email), user };
 }
@@ -61,7 +45,7 @@ export async function signup(
   const existing = await findUserByEmail(dto.email);
 
   if (existing)
-    throw serviceError(409, 'An account with this email already exists.');
+    throw new AppError(409, 'An account with this email already exists.');
 
   const hashedPassword = await bcrypt.hash(dto.password, SALT_ROUNDS);
 
@@ -89,13 +73,13 @@ export async function refreshAccessToken(
   } catch {
     // Only a bad/expired signature lands here. Anything below is infrastructure
     // and must surface as a 500 so the outage is visible in the logs.
-    throw serviceError(401, 'Invalid or expired refresh token');
+    throw new AppError(401, 'Invalid or expired refresh token');
   }
 
   // Look up by email to match the original server behaviour
   const user = await findUserByEmail(payload.email);
 
-  if (!user) throw serviceError(401, 'Invalid or expired refresh token');
+  if (!user) throw new AppError(401, 'Invalid or expired refresh token');
 
   return jwt.sign(
     { sub: payload.sub, email: payload.email },

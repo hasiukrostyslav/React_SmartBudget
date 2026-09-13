@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 
+import { AppError } from '../../lib/AppError';
+import { requireUser } from '../../lib/requireUser';
+import { SearchParamsSchema } from './transactions.schemas';
 import {
   createTransaction,
   deleteAllTransactions,
@@ -11,144 +14,79 @@ import {
   updateTransactionsCategory,
   updateTransactionsStatus,
 } from './transactions.service';
-import { SearchParamsSchema } from './transactions.schemas';
 
-function getUserId(req: Request): string | null {
-  return req.user?.id ?? req.user?.sub ?? null;
-}
-
-function unauthorized(res: Response) {
-  res.status(401).json({ message: 'Unauthorized. Please sign in!' });
-}
-
-function handleError(res: Response, label: string, error: unknown) {
-  console.error(`[${label}]`, error);
-  res.status(500).json({ message: 'Internal server error' });
-}
+// No try/catch: Express 5 forwards a rejected promise to the error middleware,
+// which is where status codes and logging are decided.
 
 export async function listTransactions(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  // Validate (and apply defaults to) query params — mirrors next/SearchParamsSchema
   const parsed = SearchParamsSchema.safeParse(req.query);
   if (!parsed.success) {
-    res.status(400).json({ message: 'Invalid query parameters' });
-    return;
+    const [issue] = parsed.error.issues;
+    throw new AppError(
+      400,
+      `Invalid query parameter "${issue.path.join('.')}": ${issue.message}`,
+    );
   }
 
-  try {
-    const data = await findTransactionsByUserId(userId, parsed.data);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'listTransactions', error);
-  }
+  res.json(await findTransactionsByUserId(userId, parsed.data));
 }
 
 export async function getOneTransaction(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await findTransactionById(req.params.id as string, userId);
-    if (!data) {
-      res.status(404).json({ message: 'Transaction not found' });
-      return;
-    }
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'getOneTransaction', error);
-  }
+  const data = await findTransactionById(req.params.id as string, userId);
+  if (!data) throw new AppError(404, 'Transaction not found');
+
+  res.json(data);
 }
 
 export async function postTransaction(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await createTransaction(userId, req.body);
-    res.status(201).json(data);
-  } catch (error) {
-    handleError(res, 'postTransaction', error);
-  }
+  res.status(201).json(await createTransaction(userId, req.body));
 }
 
 export async function patchTransaction(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await updateTransactionById(
-      req.params.id as string,
-      userId,
-      req.body,
-    );
-    if (!data) {
-      res.status(404).json({ message: 'Transaction not found' });
-      return;
-    }
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'patchTransaction', error);
-  }
+  const data = await updateTransactionById(
+    req.params.id as string,
+    userId,
+    req.body,
+  );
+  if (!data) throw new AppError(404, 'Transaction not found');
+
+  res.json(data);
 }
 
 export async function patchTransactionsStatus(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await updateTransactionsStatus(userId, req.body);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'patchTransactionsStatus', error);
-  }
+  res.json(await updateTransactionsStatus(userId, req.body));
 }
 
 export async function patchTransactionsCategory(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await updateTransactionsCategory(userId, req.body);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'patchTransactionsCategory', error);
-  }
+  res.json(await updateTransactionsCategory(userId, req.body));
 }
 
 export async function deleteOneTransaction(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await deleteTransactionById(req.params.id as string, userId);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'deleteOneTransaction', error);
-  }
+  res.json(await deleteTransactionById(req.params.id as string, userId));
 }
 
 export async function deleteManyTransactions(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await deleteTransactionsMany(userId, req.body);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'deleteManyTransactions', error);
-  }
+  res.json(await deleteTransactionsMany(userId, req.body));
 }
 
 export async function deleteAllTransactionsCtl(req: Request, res: Response) {
-  const userId = getUserId(req);
-  if (!userId) return unauthorized(res);
+  const { id: userId } = requireUser(req);
 
-  try {
-    const data = await deleteAllTransactions(userId);
-    res.json(data);
-  } catch (error) {
-    handleError(res, 'deleteAllTransactionsCtl', error);
-  }
+  res.json(await deleteAllTransactions(userId));
 }
