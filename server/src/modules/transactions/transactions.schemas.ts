@@ -51,7 +51,7 @@ const sortLabels = [
   'status',
 ] as const;
 
-export const TransactionCreateSchema = z.object({
+export const TransactionFieldSchema = z.object({
   transactionName: z.string().trim().min(1, 'Transaction name is required.'),
   transactionCategory: z.enum(TRANSACTION_CATEGORIES, {
     message: 'Category is required.',
@@ -60,14 +60,19 @@ export const TransactionCreateSchema = z.object({
     error: 'Transaction type is required.',
   }),
   paymentMethod: z.string().min(1, 'Payment method is required.'),
-  currency: z.enum(CURRENCIES).default('UAH'),
+  currency: z.enum(CURRENCIES),
   amount: z.number().positive('Amount must be a positive number.'),
   description: z.string().optional(),
-  status: z.enum(STATUSES).default('COMPLETED'),
+  status: z.enum(STATUSES),
   createdAt: z.coerce.date().optional(),
 });
 
-export const TransactionUpdateSchema = TransactionCreateSchema.partial();
+export const TransactionCreateSchema = TransactionFieldSchema.extend({
+  currency: z.enum(CURRENCIES).default('UAH'),
+  status: z.enum(STATUSES).default('COMPLETED'),
+});
+
+export const TransactionUpdateSchema = TransactionFieldSchema.partial();
 
 // A filter arrives as a comma-separated list ("cafe,car"). Empty and the legacy
 // "all" sentinel both mean "no filter". Values are validated against the enum
