@@ -44,13 +44,16 @@ export default function EditTransactionCategoryForm({
   const { toastSuccess } = useToast();
 
   const initialValue = [...new Set(selectedItems.map((el) => el.category))];
-  const filteredCategories = TRANSACTION_CATEGORIES.filter((el) =>
-    searchQuery.length === 0
-      ? el
-      : el.replaceAll('_', ' ').includes(searchQuery.trimStart()) ||
-        TRANSACTION_CATEGORIES_CONFIG[el].text.description
-          .toLowerCase()
-          .includes(searchQuery.trimStart()),
+  // Category keys and the lowercased descriptions are compared against a
+  // lowercased query, so "Pet" and "CAFE" match like "pet" and "cafe" do.
+  const query = searchQuery.trim().toLowerCase();
+  const filteredCategories = TRANSACTION_CATEGORIES.filter(
+    (el) =>
+      query.length === 0 ||
+      el.replaceAll('_', ' ').includes(query) ||
+      TRANSACTION_CATEGORIES_CONFIG[el].text.description
+        .toLowerCase()
+        .includes(query),
   ).toSorted();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
