@@ -121,3 +121,20 @@ describe('app wiring', () => {
     expect(res.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/);
   });
 });
+
+describe('CORS', () => {
+  it('lets the SPA read rate-limit and request-id headers cross-origin', async () => {
+    const res = await request(app)
+      .get('/api/does-not-exist')
+      .set('Origin', 'http://localhost:5173');
+
+    expect(res.headers['access-control-allow-origin']).toBe(
+      'http://localhost:5173',
+    );
+    const exposed = String(
+      res.headers['access-control-expose-headers'],
+    ).toLowerCase();
+    expect(exposed).toContain('ratelimit-reset');
+    expect(exposed).toContain('x-request-id');
+  });
+});

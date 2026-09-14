@@ -41,6 +41,20 @@ function isFieldErrors(value: unknown): value is FieldErrors {
   );
 }
 
+// Builds a 429 message from RateLimit-Reset, the seconds until the limit
+// resets. The browser can read that header cross-origin only because the
+// API lists it in Access-Control-Expose-Headers.
+function rateLimitMessage(headers: unknown, fallback: string): string {
+  const seconds = Number(
+    (headers as Record<string, unknown> | undefined)?.['ratelimit-reset'],
+  );
+  if (!Number.isFinite(seconds) || seconds <= 0) return fallback;
+
+  const count = seconds < 60 ? Math.ceil(seconds) : Math.ceil(seconds / 60);
+  const unit = seconds < 60 ? 'second' : 'minute';
+  return `Too many requests. Please try again in ${count} ${unit}${count === 1 ? '' : 's'}.`;
+}
+
 export function toApiError(error: unknown): ApiError {
   if (error instanceof ApiError) return error;
 
@@ -65,6 +79,14 @@ export function toApiError(error: unknown): ApiError {
         : FALLBACK_MESSAGE;
     const code = typeof data?.code === 'string' ? data.code : undefined;
     const fieldErrors = isFieldErrors(data?.errors) ? data.errors : undefined;
+
+    if (error.response.status === 429) {
+      return new ApiError(
+        rateLimitMessage(error.response.headers, message),
+        429,
+        code,
+      );
+    }
 
     return new ApiError(message, error.response.status, code, fieldErrors);
   }
