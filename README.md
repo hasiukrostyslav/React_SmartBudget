@@ -72,6 +72,7 @@ VITE_API_EXPRESS_URL=http://localhost:3002
 | `npm run build` | Type-check + production build |
 | `npm run preview` | Preview production build |
 | `npm run lint` | ESLint check |
+| `npm test` | Run the tests once (`npm run test:watch` to watch) |
 | `npm run format` | Prettier format |
 
 ### 4. Express server
