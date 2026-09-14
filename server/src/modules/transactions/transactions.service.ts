@@ -203,6 +203,7 @@ export async function updateTransactionById(
     amount: 'amount',
     description: 'description',
     status: 'status',
+    createdAt: 'created_at',
   };
 
   const sets: string[] = [];
@@ -212,11 +213,16 @@ export async function updateTransactionById(
     if (value === undefined) continue;
     const column = columnByField[field];
     if (!column) continue;
-    values.push(
-      field === 'transactionCategory'
-        ? categoryToDb(value as TransactionCategory)
-        : value,
-    );
+    let columnValue = value;
+    if (field === 'transactionCategory') {
+      columnValue = categoryToDb(value as TransactionCategory);
+    }
+    // Same UTC wall-clock convention as createTransaction: a raw Date would be
+    // serialised in the process's local timezone and shift the stored time.
+    if (field === 'createdAt') {
+      columnValue = toUtcTimestamp(value as Date);
+    }
+    values.push(columnValue);
     sets.push(`"${column}" = $${values.length}`);
   }
 

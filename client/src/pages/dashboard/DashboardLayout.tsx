@@ -4,6 +4,8 @@ import { Outlet } from 'react-router';
 import Footer from '@/components/layouts/Footer';
 import Header from '@/components/layouts/Header';
 import Sidebar from '@/components/layouts/Sidebar';
+import RouteErrorBoundary from '@/components/routes/RouteErrorBoundary';
+import ErrorState from '@/components/ui/feedback/Error';
 
 export default function DashboardLayout() {
   return (
@@ -12,7 +14,10 @@ export default function DashboardLayout() {
         <Sidebar />
         <Header />
         <section className="relative min-h-0 overflow-y-auto bg-slate-50 px-6 py-4 dark:bg-slate-900">
-          <Outlet />
+          {/* A crashing page keeps the sidebar and header usable */}
+          <RouteErrorBoundary fallback={<ErrorState type="server" />}>
+            <Outlet />
+          </RouteErrorBoundary>
         </section>
         <Footer />
       </TooltipProvider>
