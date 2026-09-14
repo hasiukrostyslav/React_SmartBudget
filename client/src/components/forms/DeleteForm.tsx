@@ -25,11 +25,18 @@ export default function DeleteForm({
   onClose,
   onSubmit,
 }: DeleteFormProps) {
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
 
   const handleDelete = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    await onSubmit();
+    // mutateAsync rejects on failure. Catching keeps the dialog open with an
+    // error toast instead of leaking an unhandled rejection.
+    try {
+      await onSubmit();
+    } catch {
+      toastError(OperationType.DELETE, 'Transaction');
+      return;
+    }
     onClose();
     toastSuccess(OperationType.DELETE, 'Transaction');
   };

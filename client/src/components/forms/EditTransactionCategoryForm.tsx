@@ -41,7 +41,7 @@ export default function EditTransactionCategoryForm({
   const { searchQuery, role, handleChange, handleClear } = useSearchInput({});
   const { mutateAsync: changeCategory, isPending } =
     useChangeTransactionCategory();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
 
   const initialValue = [...new Set(selectedItems.map((el) => el.category))];
   // Category keys and the lowercased descriptions are compared against a
@@ -59,10 +59,17 @@ export default function EditTransactionCategoryForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await changeCategory({
-      ids: selectedItems.map((el) => el.id),
-      category: selectedValue as TransactionCategories,
-    });
+    // mutateAsync rejects on failure. Catching keeps the dialog open with an
+    // error toast instead of leaking an unhandled rejection.
+    try {
+      await changeCategory({
+        ids: selectedItems.map((el) => el.id),
+        category: selectedValue as TransactionCategories,
+      });
+    } catch {
+      toastError(OperationType.EDIT, 'Transaction');
+      return;
+    }
 
     onSuccess?.();
     onClose();
