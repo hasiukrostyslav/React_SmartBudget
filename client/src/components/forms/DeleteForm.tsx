@@ -26,6 +26,8 @@ export default function DeleteForm({
   onSubmit,
 }: DeleteFormProps) {
   const { toastSuccess, toastError } = useToast();
+  // Names what was deleted in the toast, e.g. "Transaction deleted".
+  const entity = itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
   const handleDelete = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -34,11 +36,11 @@ export default function DeleteForm({
     try {
       await onSubmit();
     } catch {
-      toastError(OperationType.DELETE, 'Transaction');
+      toastError(OperationType.DELETE, entity);
       return;
     }
     onClose();
-    toastSuccess(OperationType.DELETE, 'Transaction');
+    toastSuccess(OperationType.DELETE, entity);
   };
 
   const balance = calcDeletedBalance(items);
