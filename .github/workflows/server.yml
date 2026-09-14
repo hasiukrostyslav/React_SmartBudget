@@ -3,16 +3,16 @@ name: server
 on:
   push:
     branches: [main]
-    paths: ['express-server/**', '.github/workflows/server.yml']
+    paths: ['server/**', '.github/workflows/server.yml']
   pull_request:
-    paths: ['express-server/**', '.github/workflows/server.yml']
+    paths: ['server/**', '.github/workflows/server.yml']
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: express-server
+        working-directory: server
 
     services:
       postgres:
@@ -37,9 +37,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: express-server/.nvmrc
+          node-version-file: server/.nvmrc
           cache: npm
-          cache-dependency-path: express-server/package-lock.json
+          cache-dependency-path: server/package-lock.json
 
       - run: npm ci
       - run: npm run lint
