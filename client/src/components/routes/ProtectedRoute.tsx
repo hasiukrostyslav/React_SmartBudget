@@ -2,16 +2,25 @@ import { Navigate } from 'react-router';
 
 import { useAuth } from '@/hooks/useAuth';
 
+import Spinner from '@/components/ui/feedback/Spinner';
+
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { session, isFetching } = useAuth();
+  const { session, isFetching, error } = useAuth();
 
   if (session) return children;
 
-  if (!isFetching) return <Navigate to="/auth/login" replace />;
+  // The check settled without a session, or the check itself failed: either
+  // way the dashboard can't be shown.
+  if (error || !isFetching) return <Navigate to="/auth/login" replace />;
 
-  return null;
+  // Still checking. Show progress rather than a blank page.
+  return (
+    <div className="relative h-screen">
+      <Spinner title="Checking your session" />
+    </div>
+  );
 }
