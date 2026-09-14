@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useSearchParams } from 'react-router';
 
@@ -8,9 +7,15 @@ export function useCheckbox(ids: string[]) {
 
   const [searchParams] = useSearchParams();
   const searchKey = searchParams.toString();
+  const [prevSearchKey, setPrevSearchKey] = useState(searchKey);
 
-  // reset selection when the filter/query changes
-  useEffect(() => setSelectedIds(new Set()), [searchKey]);
+  // A new filter, sort or page shows different rows, so drop the selection.
+  // Adjusted during render rather than in an effect, so the stale selection
+  // is never painted.
+  if (searchKey !== prevSearchKey) {
+    setPrevSearchKey(searchKey);
+    setSelectedIds(new Set());
+  }
 
   const isAllSelected = ids.length > 0 && ids.length === selectedIds.size;
 
