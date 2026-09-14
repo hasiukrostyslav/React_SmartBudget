@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { ApiError } from '@/services/apiError';
 import { useSearchParams } from 'react-router';
 
 import { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
@@ -23,8 +23,7 @@ export default function TransactionsPage() {
   const isFilterApplied = hasActiveFilters(params, TRANSACTION_FILTERS);
 
   if (error) {
-    const status =
-      error instanceof AxiosError ? (error.response?.status ?? 500) : 500;
+    const status = error instanceof ApiError ? error.status : 500;
     return (
       <Error
         type={status === 401 ? 'auth' : status === 404 ? 'route' : 'server'}
