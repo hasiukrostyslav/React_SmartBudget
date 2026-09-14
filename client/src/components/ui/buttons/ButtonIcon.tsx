@@ -5,18 +5,25 @@ import type { IconName } from '@/types/types';
 import Tooltip from '../atomic/Tooltip';
 import Icon from '../icons/Icon';
 
-interface ButtonIconProps {
+interface ButtonIconBaseProps {
   iconName: IconName;
   size: number;
   shape: 'round' | 'square';
   variant: 'solid' | 'ghost' | 'outline' | 'primary';
-  tooltipLabel?: string;
   tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
   type?: 'button' | 'submit';
   className?: string;
   iconClassName?: string;
   onClick?: () => void;
 }
+
+// An icon-only button has no text, so it needs an accessible name: the tooltip
+// text when there is one, otherwise an explicit label. The type requires one.
+type ButtonIconProps = ButtonIconBaseProps &
+  (
+    | { tooltipLabel: string; label?: never }
+    | { tooltipLabel?: never; label: string }
+  );
 
 const style = {
   solid: 'bg-blue-200/45 text-slate-500 dark:bg-slate-600 dark:text-slate-400',
@@ -33,6 +40,7 @@ export default function ButtonIcon({
   shape,
   variant,
   tooltipLabel,
+  label,
   tooltipSide,
   type = 'button',
   className,
@@ -43,6 +51,7 @@ export default function ButtonIcon({
     <Tooltip label={tooltipLabel} side={tooltipSide}>
       <button
         type={type}
+        aria-label={tooltipLabel ?? label}
         onClick={onClick}
         className={clsx(
           'outline-input p-1.5',

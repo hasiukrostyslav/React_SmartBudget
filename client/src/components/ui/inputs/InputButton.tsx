@@ -1,9 +1,17 @@
 import { clsx } from 'clsx';
 
-
+import { INPUT_CONFIG } from '@/lib/constants/components';
 
 import Icon from '../icons/Icon';
-import { INPUT_CONFIG } from '@/lib/constants/components';
+
+// Icon-only, so each role gets a spoken name.
+const ROLE_LABEL: Record<keyof typeof INPUT_CONFIG.button.roleIcon, string> = {
+  clear: 'Clear',
+  showPassword: 'Show password',
+  hidePassword: 'Hide password',
+  increaseValue: 'Increase value',
+  decreaseValue: 'Decrease value',
+};
 
 interface InputButtonProps {
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -23,6 +31,7 @@ export default function InputButton({
   return (
     <button
       type="button"
+      aria-label={ROLE_LABEL[role]}
       className={clsx(
         'outline-round-sm',
         inRange ? '' : 'absolute right-3',
