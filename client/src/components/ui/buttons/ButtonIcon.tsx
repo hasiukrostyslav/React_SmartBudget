@@ -14,6 +14,7 @@ interface ButtonIconBaseProps {
   type?: 'button' | 'submit';
   className?: string;
   iconClassName?: string;
+  disabled?: boolean;
   onClick?: () => void;
 }
 
@@ -45,6 +46,7 @@ export default function ButtonIcon({
   type = 'button',
   className,
   iconClassName,
+  disabled,
   onClick,
 }: ButtonIconProps) {
   return (
@@ -52,9 +54,10 @@ export default function ButtonIcon({
       <button
         type={type}
         aria-label={tooltipLabel ?? label}
+        disabled={disabled}
         onClick={onClick}
         className={clsx(
-          'outline-input p-1.5',
+          'outline-input p-1.5 disabled:cursor-not-allowed disabled:opacity-50',
           style[variant],
           shape === 'round' ? 'rounded-full' : 'rounded-md',
           className,

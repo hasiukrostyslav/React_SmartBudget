@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router';
+
 import { useAuth } from '@/hooks/useAuth';
 
 import SignOutForm from '../forms/SignOutForm';
@@ -5,6 +7,7 @@ import ButtonIcon from './buttons/ButtonIcon';
 
 export default function UserPanel() {
   const { session } = useAuth();
+  const navigate = useNavigate();
   const userName = session?.user?.name;
 
   return (
@@ -13,14 +16,18 @@ export default function UserPanel() {
         <ButtonIcon
           size={16}
           iconName="chat"
-          label="Chat"
+          // Placeholder until chat exists: disabled so it doesn't pose as a
+          // working control.
+          label="Chat (coming soon)"
+          disabled
           shape="round"
           variant="solid"
         />
         <ButtonIcon
           size={16}
           iconName="message"
-          label="Messages"
+          label="Messages (coming soon)"
+          disabled
           shape="round"
           variant="solid"
         />
@@ -31,6 +38,7 @@ export default function UserPanel() {
           size={16}
           iconName="user"
           label="Profile"
+          onClick={() => navigate('/profile')}
           shape="round"
           variant="outline"
         />
