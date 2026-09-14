@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { Outlet } from 'react-router';
 
 export default function AuthLayout() {
@@ -11,7 +13,9 @@ export default function AuthLayout() {
           sizes="(max-width: 768px) 50vw, (max-width: 1200px) 70vw, 100vw"
         />
       </figure>
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </main>
   );
 }

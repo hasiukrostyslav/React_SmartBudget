@@ -1,3 +1,5 @@
+import { lazy } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Route, Routes } from 'react-router';
@@ -9,21 +11,28 @@ import RedirectRoute from './components/routes/RedirectRoute';
 import RouteErrorBoundary from './components/routes/RouteErrorBoundary';
 import { ThemeProvider } from './context';
 import AuthLayout from './pages/auth/AuthLayout';
-import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
-import LoginPage from './pages/auth/LoginPage';
-import SignUpPage from './pages/auth/SignUpPage';
-import CardsPage from './pages/dashboard/CardsPage';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
-import DashboardPage from './pages/dashboard/DashboardPage';
-import DepositsPage from './pages/dashboard/DepositsPage';
-import LoansPage from './pages/dashboard/LoansPage';
-import PaymentsPage from './pages/dashboard/PaymentsPage';
-import ProfilePage from './pages/dashboard/ProfilePage';
-import SavingsPage from './pages/dashboard/SavingsPage';
-import SettingsPage from './pages/dashboard/SettingsPage';
-import TransactionsPage from './pages/dashboard/TransactionPage';
 import ErrorPage from './pages/ErrorPage';
 import NotFound from './pages/NotFound';
+
+// Pages load on demand: the login screen doesn't ship the dashboard, and
+// each dashboard page downloads only when it is first visited.
+const ForgotPasswordPage = lazy(
+  () => import('./pages/auth/ForgotPasswordPage'),
+);
+const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
+const SignUpPage = lazy(() => import('./pages/auth/SignUpPage'));
+const CardsPage = lazy(() => import('./pages/dashboard/CardsPage'));
+const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
+const DepositsPage = lazy(() => import('./pages/dashboard/DepositsPage'));
+const LoansPage = lazy(() => import('./pages/dashboard/LoansPage'));
+const PaymentsPage = lazy(() => import('./pages/dashboard/PaymentsPage'));
+const ProfilePage = lazy(() => import('./pages/dashboard/ProfilePage'));
+const SavingsPage = lazy(() => import('./pages/dashboard/SavingsPage'));
+const SettingsPage = lazy(() => import('./pages/dashboard/SettingsPage'));
+const TransactionsPage = lazy(
+  () => import('./pages/dashboard/TransactionPage'),
+);
 
 const queryClient = new QueryClient();
 
