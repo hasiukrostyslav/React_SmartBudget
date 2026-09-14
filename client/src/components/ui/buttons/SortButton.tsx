@@ -18,7 +18,14 @@ export default function SortButton({
   onClick,
 }: SortButtonProps) {
   return (
-    <div className="text-xs">
+    // Rendered in the transactions table header, so it is a column header.
+    <div
+      role="columnheader"
+      aria-sort={
+        isActive ? (order === 'asc' ? 'ascending' : 'descending') : undefined
+      }
+      className="text-xs"
+    >
       <button
         onClick={() => onClick(label)}
         type="button"
