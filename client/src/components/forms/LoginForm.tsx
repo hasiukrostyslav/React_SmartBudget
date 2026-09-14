@@ -4,6 +4,7 @@ import type { z } from 'zod';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignInSchema } from '@/lib/schemas/auth.schema';
+import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useLogin } from '@/hooks/useLogin';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 
@@ -22,10 +23,15 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({ resolver: zodResolver(SignInSchema) });
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => login(data);
+  const onSubmit: SubmitHandler<FormInputs> = (data) =>
+    login(data, {
+      onError: (error) =>
+        applyServerFieldErrors(error, setError, ['email', 'password']),
+    });
 
   return (
     <form

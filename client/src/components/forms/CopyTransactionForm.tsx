@@ -11,6 +11,7 @@ import {
   CURRENCY_CONFIG,
 } from '@/lib/constants/transactions';
 import { CopyTransactionSchema } from '@/lib/schemas/transaction.schema';
+import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useToast } from '@/hooks/useToast';
 import { useCreateTransaction } from '@/hooks/useTransactionMutations';
 
@@ -47,7 +48,8 @@ export default function CopyTransactionForm({
     register,
     handleSubmit,
     control,
-    formState: { isValid },
+    setError,
+    formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(CopyTransactionSchema),
     defaultValues: {
@@ -73,7 +75,11 @@ export default function CopyTransactionForm({
           onClose();
           toastSuccess(OperationType.CREATE, 'Transaction');
         },
-        onError: () => toastError(OperationType.CREATE, 'Transaction'),
+        onError: (error) => {
+          if (!applyServerFieldErrors(error, setError, ['amount'])) {
+            toastError(OperationType.CREATE, 'Transaction');
+          }
+        },
       },
     );
   }
@@ -170,6 +176,7 @@ export default function CopyTransactionForm({
               <div className="flex-2">
                 <Input
                   {...register(CREATE_TRANSACTION_FIELDS.AMOUNT.name)}
+                  error={errors.amount?.message}
                   padding="md"
                   type="number"
                   step="any"

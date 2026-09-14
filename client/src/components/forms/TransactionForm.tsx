@@ -22,6 +22,7 @@ import {
   TRANSACTION_TYPE_CONFIG,
 } from '@/lib/constants/transactions';
 import { TransactionSchema } from '@/lib/schemas/transaction.schema';
+import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { getDirtyValues } from '@/lib/utils/utils';
 import { useToast } from '@/hooks/useToast';
 import {
@@ -42,6 +43,10 @@ import Select from '../ui/selects/Select';
 
 type FormData = z.infer<typeof TransactionSchema>;
 
+// Fields that render an inline error. A server error on any other field
+// falls back to the toast.
+const INLINE_FIELDS = ['transactionName', 'amount'] as const;
+
 type TransactionFormProps = { onClose: () => void } & (
   | { mode: 'create' }
   | { mode: 'edit'; item: TransactionItem }
@@ -60,7 +65,8 @@ export default function TransactionForm(props: TransactionFormProps) {
     register,
     handleSubmit,
     control,
-    formState: { isDirty, isValid, dirtyFields },
+    setError,
+    formState: { errors, isDirty, isValid, dirtyFields },
   } = useForm({
     resolver: zodResolver(TransactionSchema),
     defaultValues: isEdit
@@ -90,7 +96,11 @@ export default function TransactionForm(props: TransactionFormProps) {
           props.onClose();
           toastSuccess(OperationType.CREATE, 'Transaction');
         },
-        onError: () => toastError(OperationType.CREATE, 'Transaction'),
+        onError: (error) => {
+          if (!applyServerFieldErrors(error, setError, INLINE_FIELDS)) {
+            toastError(OperationType.CREATE, 'Transaction');
+          }
+        },
       });
     } else {
       editTransaction(
@@ -103,7 +113,11 @@ export default function TransactionForm(props: TransactionFormProps) {
             props.onClose();
             toastSuccess(OperationType.EDIT, 'Transaction');
           },
-          onError: () => toastError(OperationType.EDIT, 'Transaction'),
+          onError: (error) => {
+            if (!applyServerFieldErrors(error, setError, INLINE_FIELDS)) {
+              toastError(OperationType.EDIT, 'Transaction');
+            }
+          },
         },
       );
     }
@@ -144,6 +158,7 @@ export default function TransactionForm(props: TransactionFormProps) {
             <ModalFieldLabel label={CREATE_TRANSACTION_FIELDS.NAME.label} />
             <Input
               {...register(CREATE_TRANSACTION_FIELDS.NAME.name)}
+              error={errors.transactionName?.message}
               padding="md"
               placeholder={CREATE_TRANSACTION_FIELDS.NAME.placeholder}
             />
@@ -157,6 +172,7 @@ export default function TransactionForm(props: TransactionFormProps) {
               <div className="flex-2">
                 <Input
                   {...register(CREATE_TRANSACTION_FIELDS.AMOUNT.name)}
+                  error={errors.amount?.message}
                   padding="md"
                   type="number"
                   step="any"
