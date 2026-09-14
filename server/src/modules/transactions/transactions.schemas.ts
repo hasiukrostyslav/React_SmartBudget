@@ -62,7 +62,7 @@ export const TransactionFieldSchema = z.object({
   paymentMethod: z.string().min(1, 'Payment method is required.'),
   currency: z.enum(CURRENCIES),
   amount: z.number().positive('Amount must be a positive number.'),
-  description: z.string().optional(),
+  description: z.string().nullish(),
   status: z.enum(STATUSES),
   createdAt: z.coerce.date().optional(),
 });
