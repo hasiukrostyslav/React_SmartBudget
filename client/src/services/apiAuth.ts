@@ -1,8 +1,8 @@
-import { AxiosError } from 'axios';
 import type { z } from 'zod';
 
 import { SignInSchema, SignUpSchema } from '@/lib/schemas/auth.schema';
 
+import { toApiError } from './apiError';
 import { api, resetCsrfToken } from './axios.config';
 
 type LoginFormInputs = z.infer<typeof SignInSchema>;
@@ -17,11 +17,7 @@ export async function login({ email, password }: LoginFormInputs) {
 
     return res.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
-    }
-
-    throw new Error('Internal server error!');
+    throw toApiError(error);
   }
 }
 
@@ -35,11 +31,7 @@ export async function signUp({ name, email, password }: SignUpFormInputs) {
 
     return res.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
-    }
-
-    throw new Error('Internal server error!');
+    throw toApiError(error);
   }
 }
 
@@ -49,11 +41,7 @@ export async function getSession() {
 
     return res.data;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
-    }
-
-    throw new Error('Internal server error!');
+    throw toApiError(error);
   }
 }
 
@@ -62,10 +50,6 @@ export async function signOut() {
     await api.post('/auth/signout');
     resetCsrfToken();
   } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
-    }
-
-    throw new Error('Internal server error!');
+    throw toApiError(error);
   }
 }

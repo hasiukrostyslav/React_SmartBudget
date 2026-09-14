@@ -2,6 +2,8 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
 import { getCsrfCookie } from '@/lib/utils/cookie';
 
+import { toApiError } from './apiError';
+
 type RetryableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
 
 /** Single in-flight refresh so concurrent 401s share one POST /auth/refresh. */
@@ -54,11 +56,7 @@ async function getCsrfToken() {
     }
     return token ?? null;
   } catch (error) {
-    if (error instanceof AxiosError) {
-      throw new Error(error.response?.data.message);
-    }
-
-    throw new Error('Internal server error!');
+    throw toApiError(error);
   }
 }
 

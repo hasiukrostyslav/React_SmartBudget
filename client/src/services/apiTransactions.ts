@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import * as z from 'zod';
 
 import type {
@@ -10,6 +9,7 @@ import type {
 import type { Status, TransactionCategories } from '@/lib/constants/enums';
 import { SearchParamsSchema } from '@/lib/schemas/transaction.schema';
 
+import { toApiError } from './apiError';
 import { api } from './axios.config';
 
 export type SearchParams = z.infer<typeof SearchParamsSchema>;
@@ -20,12 +20,7 @@ export interface TransactionsResponse {
 }
 
 function unwrap(err: unknown): never {
-  if (err instanceof AxiosError) {
-    throw new Error(
-      err.response?.data?.message ?? err.message ?? 'Internal server error!',
-    );
-  }
-  throw new Error('Internal server error!');
+  throw toApiError(err);
 }
 
 export async function getTransactions(
