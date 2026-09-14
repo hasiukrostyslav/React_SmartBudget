@@ -17,7 +17,27 @@ export function useSelectDropdown(onSelect?: (value: string | number) => void) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Close by click Escape
+  // Escape inside an open dropdown closes only the dropdown. The listener sits
+  // on the select itself, below any <dialog>, so it runs before the dialog's
+  // own Escape handler and can stop the key there. On document it ran last,
+  // after the dialog had already closed and thrown away its form.
+  useEffect(() => {
+    const select = selectRef.current;
+    if (!isContentExpanded || !select) return;
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key !== 'Escape') return;
+      e.preventDefault(); // also suppresses the native dialog "cancel"
+      e.stopPropagation();
+      setIsContentExpanded(false);
+      select?.querySelector<HTMLButtonElement>('button')?.focus();
+    }
+
+    select.addEventListener('keydown', handleKeyDown);
+    return () => select.removeEventListener('keydown', handleKeyDown);
+  }, [isContentExpanded]);
+
+  // Escape with focus elsewhere on the page still closes an open dropdown.
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') setIsContentExpanded(false);
