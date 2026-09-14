@@ -9,10 +9,12 @@ import {
 import { TRANSACTION_SORT_OPTIONS } from '../constants/transactions';
 
 export const TransactionSchema = z.object({
+  // Trim before checking length: "   " must fail here, as it does on the
+  // server, instead of passing and coming back as a 400.
   transactionName: z
     .string()
-    .min(1, { message: 'Transaction name is required.' })
-    .trim(),
+    .trim()
+    .min(1, { message: 'Transaction name is required.' }),
   transactionCategory: z.enum(TRANSACTION_CATEGORIES, {
     message: 'Category is required.',
   }),
