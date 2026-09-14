@@ -57,7 +57,7 @@ export default function ButtonIcon({
         disabled={disabled}
         onClick={onClick}
         className={clsx(
-          'outline-input p-1.5 disabled:cursor-not-allowed disabled:opacity-50',
+          'outline-input p-1.5 disabled:opacity-50',
           style[variant],
           shape === 'round' ? 'rounded-full' : 'rounded-md',
           className,
