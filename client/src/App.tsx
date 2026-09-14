@@ -10,6 +10,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import RedirectRoute from './components/routes/RedirectRoute';
 import RouteErrorBoundary from './components/routes/RouteErrorBoundary';
 import { ThemeProvider } from './context';
+import { shouldRetryQuery } from './lib/utils/queryRetry';
 import AuthLayout from './pages/auth/AuthLayout';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
 import ErrorPage from './pages/ErrorPage';
@@ -34,7 +35,15 @@ const TransactionsPage = lazy(
   () => import('./pages/dashboard/TransactionPage'),
 );
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: shouldRetryQuery,
+      // Data this fresh is reused on mount and window focus, not refetched.
+      staleTime: 30_000,
+    },
+  },
+});
 
 export default function App() {
   return (

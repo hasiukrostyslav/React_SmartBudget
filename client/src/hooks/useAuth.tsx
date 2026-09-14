@@ -6,7 +6,14 @@ export function useAuth() {
     data: session,
     error,
     isFetching,
-  } = useQuery({ queryKey: ['session'], queryFn: getSession, retry: false });
+  } = useQuery({
+    queryKey: ['session'],
+    queryFn: getSession,
+    retry: false,
+    // Sign-in and sign-out invalidate or remove this query explicitly, so it
+    // doesn't need re-checking on every mount and window focus.
+    staleTime: 5 * 60 * 1000,
+  });
 
   return { session, isFetching, error };
 }
