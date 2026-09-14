@@ -40,7 +40,7 @@ export default function Error({ type, page = 'inner' }: ErrorProps) {
       </figcaption>
       {page === 'outer' && (
         <div className="flex gap-4">
-          <ButtonLink iconName="utility" color="blue" href="/">
+          <ButtonLink iconName="utility" color="blue" href="/dashboard">
             Back to Home
           </ButtonLink>
           <Button size="lg" color="outline" onClick={() => navigate(-1)}>

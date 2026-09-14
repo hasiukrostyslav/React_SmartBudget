@@ -7,7 +7,7 @@ import Logo from '@/components/ui/logos/Logo';
 export default function NotFound() {
   return (
     <section className="relative flex h-screen items-center justify-center">
-      <Link to="/">
+      <Link to="/dashboard">
         <Logo type="lg" className="absolute top-2.5 left-6.5 h-10" />
       </Link>
       <Error type="route" page="outer" />
