@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { TransactionItem } from '@/types/types';
+import type { CreateTransactionData, TransactionItem } from '@/types/types';
 
 import { OperationType } from '@/lib/constants/enums';
 import {
@@ -69,7 +69,7 @@ export default function CopyTransactionForm({
         transactionCategory: sourceTransaction.transactionCategory,
         paymentMethod: sourceTransaction.paymentMethod,
         status: sourceTransaction.status,
-      } as TransactionItem,
+      } as CreateTransactionData,
       {
         onSuccess: () => {
           onClose();
