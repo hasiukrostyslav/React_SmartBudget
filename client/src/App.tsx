@@ -85,7 +85,7 @@ export default function App() {
                 <Route path="deposits" element={<DepositsPage />} />
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="settings" element={<SettingsPage />} />
-                <Route path="/" element={<RedirectRoute />} />
+                <Route index element={<RedirectRoute />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
