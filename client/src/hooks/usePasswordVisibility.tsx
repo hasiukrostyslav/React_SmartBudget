@@ -4,12 +4,13 @@ import { INPUT_CONFIG } from '@/lib/constants/components';
 
 export function usePasswordVisibility() {
   const [isVisible, setIsVisible] = useState(false);
-  const [buttonRole, setButtonRole] =
-    useState<keyof typeof INPUT_CONFIG.button.roleIcon>('showPassword');
 
-  const toggleVisibility = () => {
-    setIsVisible((prev) => !prev);
-    setButtonRole(isVisible ? 'showPassword' : 'hidePassword');
-  };
+  // Derived, not stored: the button always offers the opposite of what's shown.
+  const buttonRole: keyof typeof INPUT_CONFIG.button.roleIcon = isVisible
+    ? 'hidePassword'
+    : 'showPassword';
+
+  const toggleVisibility = () => setIsVisible((visible) => !visible);
+
   return { buttonRole, toggleVisibility, isVisible };
 }

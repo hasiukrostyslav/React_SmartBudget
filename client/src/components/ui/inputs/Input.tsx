@@ -79,13 +79,7 @@ export default function Input({
           autoComplete="off"
           value={value}
           onChange={onChange}
-          type={
-            name === 'password' && trailingButton?.role === 'showPassword'
-              ? 'password'
-              : type === 'number'
-                ? 'number'
-                : 'text'
-          }
+          type={type}
           min={0}
           step={step}
           className={clsx(

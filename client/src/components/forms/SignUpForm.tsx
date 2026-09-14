@@ -17,7 +17,7 @@ type FormInputs = z.infer<typeof SignUpSchema>;
 
 export default function SignUpForm() {
   const { signUp, isPending, error } = useSignUp();
-  const { buttonRole, toggleVisibility } = usePasswordVisibility();
+  const { buttonRole, isVisible, toggleVisibility } = usePasswordVisibility();
 
   const {
     register,
@@ -61,6 +61,7 @@ export default function SignUpForm() {
         error={errors.password?.message}
         disabled={isPending}
         iconName="password"
+        type={isVisible ? 'text' : 'password'}
         trailingButton={{
           role: buttonRole,
           onClick: toggleVisibility,
