@@ -24,7 +24,6 @@ export default function ForgotPasswordForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      autoComplete="off"
       className="flex w-full flex-col gap-3"
     >
       <Input
@@ -33,6 +32,7 @@ export default function ForgotPasswordForm() {
         placeholder={INPUT_PLACEHOLDER.email}
         error={errors.email?.message}
         iconName="email"
+        autoComplete="email"
       />
 
       <Button size="lg" color="black" type="submit">

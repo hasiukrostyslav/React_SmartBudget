@@ -35,7 +35,6 @@ export default function SignUpForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      autoComplete="off"
       className="mt-6 flex w-full flex-col gap-2"
     >
       <Input
@@ -45,6 +44,7 @@ export default function SignUpForm() {
         error={errors.name?.message}
         disabled={isPending}
         iconName="name"
+        autoComplete="name"
       />
       <Input
         label="Email address"
@@ -53,6 +53,7 @@ export default function SignUpForm() {
         error={errors.email?.message}
         disabled={isPending}
         iconName="email"
+        autoComplete="email"
       />
       <Input
         label="Password"
@@ -61,6 +62,7 @@ export default function SignUpForm() {
         error={errors.password?.message}
         disabled={isPending}
         iconName="password"
+        autoComplete="new-password"
         type={isVisible ? 'text' : 'password'}
         trailingButton={{
           role: buttonRole,

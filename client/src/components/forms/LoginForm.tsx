@@ -36,7 +36,6 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      autoComplete="off"
       className="mt-6 flex w-full flex-col gap-2"
     >
       <Input
@@ -46,6 +45,7 @@ export default function LoginForm() {
         disabled={isPending}
         error={errors.email?.message}
         iconName="email"
+        autoComplete="email"
       />
       <Input
         label="Password"
@@ -54,6 +54,7 @@ export default function LoginForm() {
         disabled={isPending}
         error={errors.password?.message}
         iconName="password"
+        autoComplete="current-password"
         type={isVisible ? 'text' : 'password'}
         trailingButton={{
           role: buttonRole,

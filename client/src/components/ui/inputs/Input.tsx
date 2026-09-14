@@ -22,6 +22,9 @@ interface InputProps {
   iconName?: IconName;
   groupPosition?: 'start' | 'end';
   type?: 'text' | 'number' | 'password';
+  // Off by default. Credential fields pass email, current-password etc. so
+  // password managers can fill them.
+  autoComplete?: string;
   step?: number | 'any';
   ref?: React.Ref<HTMLInputElement>;
   padding?: keyof typeof INPUT_CONFIG.padding;
@@ -45,6 +48,7 @@ export default function Input({
   iconName,
   groupPosition,
   type = 'text',
+  autoComplete = 'off',
   step,
   ref,
   padding = 'lg',
@@ -76,7 +80,7 @@ export default function Input({
           name={name}
           disabled={disabled}
           placeholder={placeholder}
-          autoComplete="off"
+          autoComplete={autoComplete}
           value={value}
           onChange={onChange}
           type={type}
