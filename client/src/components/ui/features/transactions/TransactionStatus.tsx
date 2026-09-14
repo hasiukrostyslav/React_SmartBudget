@@ -17,7 +17,7 @@ export default function TransactionStatus({ status }: { status: Status }) {
           STATUS_CONFIG[status].style.radio,
         )}
       ></span>
-      <h4>{status.at(0) + status.slice(1).toLowerCase()}</h4>
+      <span>{status.at(0) + status.slice(1).toLowerCase()}</span>
     </div>
   );
 }
