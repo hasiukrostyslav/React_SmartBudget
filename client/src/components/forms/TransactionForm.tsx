@@ -275,7 +275,6 @@ export default function TransactionForm(props: TransactionFormProps) {
                   label={CREATE_TRANSACTION_FIELDS.DATE.label}
                   selectedValue={field.value}
                   onSelect={field.onChange}
-                  showSelectedOption
                   padding="md"
                 />
               )}
