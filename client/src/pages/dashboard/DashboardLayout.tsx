@@ -7,7 +7,7 @@ import Footer from '@/components/layouts/Footer';
 import Header from '@/components/layouts/Header';
 import Sidebar from '@/components/layouts/Sidebar';
 import RouteErrorBoundary from '@/components/routes/RouteErrorBoundary';
-import ErrorState from '@/components/ui/feedback/Error';
+import ErrorState from '@/components/ui/feedback/ErrorState';
 import Spinner from '@/components/ui/feedback/Spinner';
 
 export default function DashboardLayout() {

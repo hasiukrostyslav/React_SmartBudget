@@ -77,11 +77,6 @@ export function getPaginationPattern(
   }
 }
 
-// For testing purpose
-export function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 // Calculate sum of deleted balance
 export function calcDeletedBalance(item: TransactionItem[]) {
   const grouped = Object.entries(

@@ -1,9 +1,9 @@
 import { createContext } from 'react';
 
-interface themeContextType {
+interface ThemeContextValue {
   theme: 'light' | 'dark';
   setLightTheme: () => void;
   setDarkTheme: () => void;
 }
 
-export const ThemeContext = createContext<themeContextType | null>(null);
+export const ThemeContext = createContext<ThemeContextValue | null>(null);

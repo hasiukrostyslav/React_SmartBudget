@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 
 import ThemeButton from '@/components/ui/buttons/ThemeButton';
-import ErrorState from '@/components/ui/feedback/Error';
+import ErrorState from '@/components/ui/feedback/ErrorState';
 import Logo from '@/components/ui/logos/Logo';
 
 // Full-page fallback for a crash outside the dashboard content area.

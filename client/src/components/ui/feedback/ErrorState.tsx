@@ -12,7 +12,7 @@ interface ErrorProps {
   page?: 'inner' | 'outer';
 }
 
-export default function Error({ type, page = 'inner' }: ErrorProps) {
+export default function ErrorState({ type, page = 'inner' }: ErrorProps) {
   const navigate = useNavigate();
 
   return (

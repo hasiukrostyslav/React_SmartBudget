@@ -10,7 +10,7 @@ import TransactionsCTA from '@/components/ui/features/transactions/TransactionsC
 import TransactionsList from '@/components/ui/features/transactions/TransactionsList';
 import TransactionsToolbar from '@/components/ui/features/transactions/TransactionsToolbar';
 import EmptyState from '@/components/ui/feedback/EmptyState';
-import Error from '@/components/ui/feedback/Error';
+import ErrorState from '@/components/ui/feedback/ErrorState';
 import Spinner from '@/components/ui/feedback/Spinner';
 import PaginationTable from '@/components/ui/pagination/PaginationTable';
 
@@ -25,7 +25,7 @@ export default function TransactionsPage() {
   if (error) {
     const status = error instanceof ApiError ? error.status : 500;
     return (
-      <Error
+      <ErrorState
         type={status === 401 ? 'auth' : status === 404 ? 'route' : 'server'}
       />
     );
