@@ -35,7 +35,7 @@ react_smart_budget/
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22+ (the server requires 22; the client build, Vite 7, needs 20.19+ or 22.12+)
 - PostgreSQL 15+
 
 ### 1. Clone the repository
