@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 
+import GuestRoute from './components/routes/GuestRoute';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import RedirectRoute from './components/routes/RedirectRoute';
 import { ThemeProvider } from './context';
@@ -30,20 +31,28 @@ export default function App() {
       <ThemeProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="auth" element={<AuthLayout />}>
+            <Route
+              path="auth"
+              element={
+                <GuestRoute>
+                  <AuthLayout />
+                </GuestRoute>
+              }
+            >
+              <Route index element={<RedirectRoute />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="signup" element={<SignUpPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
             </Route>
             <Route
-              path="dashboard"
+              path="/"
               element={
                 <ProtectedRoute>
                   <DashboardLayout />
                 </ProtectedRoute>
               }
             >
-              <Route index element={<DashboardPage />} />
+              <Route path="dashboard" element={<DashboardPage />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="payments" element={<PaymentsPage />} />
               <Route path="cards" element={<CardsPage />} />
@@ -52,8 +61,8 @@ export default function App() {
               <Route path="deposits" element={<DepositsPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="/" element={<RedirectRoute />} />
             </Route>
-            <Route path="/" element={<RedirectRoute />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

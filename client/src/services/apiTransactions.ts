@@ -32,7 +32,7 @@ export async function getTransactions(
   params?: Partial<SearchParams>,
 ): Promise<TransactionsResponse> {
   try {
-    const res = await api.get('/dashboard/transactions', { params });
+    const res = await api.get('/transactions', { params });
     return res.data;
   } catch (error) {
     unwrap(error);
@@ -41,7 +41,7 @@ export async function getTransactions(
 
 export async function getTransaction(id: string): Promise<TransactionItem> {
   try {
-    const res = await api.get(`/dashboard/transactions/${id}`);
+    const res = await api.get(`/transactions/${id}`);
     return res.data;
   } catch (error) {
     unwrap(error);
@@ -52,7 +52,7 @@ export async function createTransaction(
   data: CreateTransactionData,
 ): Promise<TransactionItem> {
   try {
-    const res = await api.post('/dashboard/transactions', data);
+    const res = await api.post('/transactions', data);
     return res.data;
   } catch (error) {
     unwrap(error);
@@ -64,7 +64,7 @@ export async function editTransaction(
   data: EditTransactionData,
 ): Promise<TransactionItem> {
   try {
-    const res = await api.patch(`/dashboard/transactions/${id}`, data);
+    const res = await api.patch(`/transactions/${id}`, data);
     return res.data;
   } catch (error) {
     unwrap(error);
@@ -76,7 +76,7 @@ export async function updateTransactionsStatus(
   status: Status,
 ): Promise<{ updated: number }> {
   try {
-    const res = await api.patch('/dashboard/transactions/status', {
+    const res = await api.patch('/transactions/status', {
       transactionIds,
       status,
     });
@@ -91,7 +91,7 @@ export async function updateTransactionsCategory(
   category: TransactionCategories,
 ): Promise<{ updated: number }> {
   try {
-    const res = await api.patch('/dashboard/transactions/category', {
+    const res = await api.patch('/transactions/category', {
       transactionIds,
       category,
     });
@@ -105,7 +105,7 @@ export async function deleteTransaction(
   id: string,
 ): Promise<{ deleted: number }> {
   try {
-    const res = await api.delete(`/dashboard/transactions/${id}`);
+    const res = await api.delete(`/transactions/${id}`);
     return res.data;
   } catch (error) {
     unwrap(error);
@@ -116,7 +116,7 @@ export async function deleteTransactions(
   transactionIds: string[],
 ): Promise<{ deleted: number }> {
   try {
-    const res = await api.delete('/dashboard/transactions', {
+    const res = await api.delete('/transactions', {
       data: { transactionIds },
     });
     return res.data;
@@ -127,7 +127,7 @@ export async function deleteTransactions(
 
 export async function deleteAllTransactions(): Promise<{ deleted: number }> {
   try {
-    const res = await api.delete('/dashboard/transactions/all');
+    const res = await api.delete('/transactions/all');
     return res.data;
   } catch (error) {
     unwrap(error);

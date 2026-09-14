@@ -28,7 +28,7 @@ A full-stack personal finance application to help you take control of your money
 ```
 react_smart_budget/
 ├── client/           # React SPA (Vite)
-└── express-server/   # Express API (port 3002)
+└── server/           # Express API (port 3002)
 ```
 
 ## Getting Started
@@ -77,7 +77,7 @@ VITE_API_EXPRESS_URL=http://localhost:3002
 ### 4. Express server
 
 ```bash
-cd express-server
+cd server
 npm install
 cp .env.example .env   # fill in the values
 npm run dev            # http://localhost:3002
@@ -177,7 +177,7 @@ client/src/
 
 ## Server Architecture
 
-### Express (`express-server/`)
+### Express (`server/`)
 
 ```
 src/

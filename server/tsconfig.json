@@ -1,0 +1,31 @@
+{
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts"],
+  // Load `include` into ts-node so the ambient src/types/express.d.ts (which
+  // nothing imports) is part of the program; otherwise `req.user` doesn't exist
+  // under ts-node even though tsc is fine. ts-node-dev ignores this setting —
+  // its CLI parser forces files=false — so the dev script also passes --files.
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",
+    "sourceMap": true,
+    "removeComments": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "incremental": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
