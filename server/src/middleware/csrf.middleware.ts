@@ -7,6 +7,18 @@ export const CSRF_COOKIE_NAME = isProd
   ? '__Host-psifi.x-csrf-token'
   : 'psifi.x-csrf-token';
 
+// An anonymous per-browser id that CSRF tokens are bound to. Before this every
+// token was bound to the constant 'global', so a valid token and cookie pair
+// worked for any browser. HttpOnly: only the server ever reads it.
+export const CSRF_SESSION_COOKIE_NAME = isProd ? '__Host-csrf-sid' : 'csrf-sid';
+
+export const CSRF_SESSION_COOKIE_OPTIONS = {
+  sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
+  path: '/',
+  httpOnly: true,
+  secure: isProd,
+};
+
 // Exported so signout clears the cookie with the exact flags it was set with;
 // clearCookie silently does nothing if they differ.
 export const CSRF_COOKIE_OPTIONS = {
@@ -20,7 +32,10 @@ export const CSRF_COOKIE_OPTIONS = {
 // also be sent in the request header/body.
 export const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
   getSecret: () => env.CSRF_SECRET,
-  getSessionIdentifier: () => 'global',
+  // Tokens are only issued together with an id (see csrfTokenController), so a
+  // request without one gets '' and matches no token.
+  getSessionIdentifier: (req) =>
+    (req.cookies?.[CSRF_SESSION_COOKIE_NAME] as string | undefined) ?? '',
   cookieName: CSRF_COOKIE_NAME,
   cookieOptions: CSRF_COOKIE_OPTIONS,
   ignoredMethods: ['GET'],

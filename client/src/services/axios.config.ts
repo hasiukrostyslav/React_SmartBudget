@@ -4,7 +4,10 @@ import { getCsrfCookie } from '@/lib/utils/cookie';
 
 import { toApiError } from './apiError';
 
-type RetryableRequest = InternalAxiosRequestConfig & { _retry?: boolean };
+type RetryableRequest = InternalAxiosRequestConfig & {
+  _retry?: boolean;
+  _csrfRetry?: boolean;
+};
 
 /** Single in-flight refresh so concurrent 401s share one POST /auth/refresh. */
 let refreshAccessTokenPromise: Promise<void> | null = null;
@@ -87,6 +90,21 @@ api.interceptors.response.use(
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableRequest | undefined;
     const status = error.response?.status;
+
+    // A CSRF token cached before the server re-bound or rotated it is rejected
+    // with EBADCSRFTOKEN. Fetch a fresh token and retry the request once.
+    const code = (error.response?.data as { code?: unknown } | undefined)?.code;
+    if (
+      status === 403 &&
+      code === 'EBADCSRFTOKEN' &&
+      originalRequest &&
+      !originalRequest._csrfRetry
+    ) {
+      originalRequest._csrfRetry = true;
+      resetCsrfToken();
+      await getCsrfToken();
+      return api(originalRequest);
+    }
 
     if (
       status !== 401 ||
