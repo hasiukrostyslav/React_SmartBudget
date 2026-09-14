@@ -39,6 +39,18 @@ describe('Input', () => {
     expect(message.textContent).toContain('Amount is required.');
   });
 
+  it('sets min=0 on number inputs only', () => {
+    render(
+      <>
+        <Input name="amount" label="Amount" type="number" />
+        <Input name="name" label="Name" />
+      </>,
+    );
+
+    expect(screen.getByLabelText('Amount').getAttribute('min')).toBe('0');
+    expect(screen.getByLabelText('Name').hasAttribute('min')).toBe(false);
+  });
+
   it('marks nothing invalid without an error', () => {
     render(<Input name="amount" label="Amount" />);
 

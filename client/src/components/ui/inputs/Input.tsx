@@ -84,7 +84,8 @@ export default function Input({
           value={value}
           onChange={onChange}
           type={type}
-          min={0}
+          // min only applies to number inputs; on text it's ignored noise.
+          min={type === 'number' ? 0 : undefined}
           step={step}
           className={clsx(
             'outline-input w-full text-sm tracking-wider',
