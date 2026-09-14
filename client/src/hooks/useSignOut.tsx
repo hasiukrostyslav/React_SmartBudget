@@ -13,9 +13,11 @@ export function useSignOut() {
   } = useMutation({
     mutationFn: signOutAPI,
     onSuccess: () => {
-      // Remove cached session immediately so ProtectedRoute can't render
-      // stale authenticated state if the user navigates back via browser history
-      queryClient.removeQueries({ queryKey: ['session'] });
+      // Drop everything, not just the session: cached transactions belong to
+      // this user, and the next person to sign in on this tab must not see
+      // them. Removing the session also stops ProtectedRoute rendering stale
+      // authenticated state if the user navigates back through history.
+      queryClient.clear();
       navigate('/auth/login');
     },
   });

@@ -13,6 +13,10 @@ export function useSignUp() {
   } = useMutation({
     mutationFn: signUpAPI,
     onSuccess: () => {
+      // A new account starts with nothing cached from whoever used this tab.
+      queryClient.removeQueries({
+        predicate: (query) => query.queryKey[0] !== 'session',
+      });
       queryClient.invalidateQueries({ queryKey: ['session'] });
       navigate('/dashboard');
     },
