@@ -4,7 +4,7 @@ import { Outlet } from 'react-router';
 
 export default function AuthLayout() {
   return (
-    <main className="flex h-screen w-screen">
+    <main className="flex h-dvh w-screen">
       <figure className="relative w-7/12">
         <img
           className="h-full"

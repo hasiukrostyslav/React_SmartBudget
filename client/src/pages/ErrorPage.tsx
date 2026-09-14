@@ -7,7 +7,7 @@ import Logo from '@/components/ui/logos/Logo';
 // Full-page fallback for a crash outside the dashboard content area.
 export default function ErrorPage() {
   return (
-    <section className="relative flex h-screen items-center justify-center">
+    <section className="relative flex h-dvh items-center justify-center">
       <Link to="/dashboard">
         <Logo type="lg" className="absolute top-2.5 left-6.5 h-10" />
       </Link>

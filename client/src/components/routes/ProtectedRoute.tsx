@@ -19,7 +19,7 @@ export default function ProtectedRoute({
 
   // Still checking. Show progress rather than a blank page.
   return (
-    <div className="relative h-screen">
+    <div className="relative h-dvh">
       <Spinner title="Checking your session" />
     </div>
   );
