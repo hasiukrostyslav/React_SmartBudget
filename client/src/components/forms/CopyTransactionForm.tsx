@@ -10,7 +10,10 @@ import {
   CREATE_TRANSACTION_FIELDS,
   CURRENCY_CONFIG,
 } from '@/lib/constants/transactions';
-import { CopyTransactionSchema } from '@/lib/schemas/transaction.schema';
+import {
+  CopyTransactionSchema,
+  DESCRIPTION_MAX_LENGTH,
+} from '@/lib/schemas/transaction.schema';
 import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useToast } from '@/hooks/useToast';
 import { useCreateTransaction } from '@/hooks/useTransactionMutations';
@@ -219,6 +222,7 @@ export default function CopyTransactionForm({
           />
           <TextArea
             {...register(CREATE_TRANSACTION_FIELDS.DESCRIPTION.name)}
+            maxLength={DESCRIPTION_MAX_LENGTH}
             placeholder={CREATE_TRANSACTION_FIELDS.DESCRIPTION.placeholder}
           />
         </ModalFieldWrapper>

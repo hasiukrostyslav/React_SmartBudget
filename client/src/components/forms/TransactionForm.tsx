@@ -21,7 +21,10 @@ import {
   TRANSACTION_CATEGORIES_CONFIG,
   TRANSACTION_TYPE_CONFIG,
 } from '@/lib/constants/transactions';
-import { TransactionSchema } from '@/lib/schemas/transaction.schema';
+import {
+  DESCRIPTION_MAX_LENGTH,
+  TransactionSchema,
+} from '@/lib/schemas/transaction.schema';
 import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { getDirtyValues } from '@/lib/utils/utils';
 import { useToast } from '@/hooks/useToast';
@@ -314,6 +317,7 @@ export default function TransactionForm(props: TransactionFormProps) {
           />
           <TextArea
             {...register(CREATE_TRANSACTION_FIELDS.DESCRIPTION.name)}
+            maxLength={DESCRIPTION_MAX_LENGTH}
             placeholder={CREATE_TRANSACTION_FIELDS.DESCRIPTION.placeholder}
           />
         </ModalFieldWrapper>

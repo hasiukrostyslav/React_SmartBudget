@@ -51,18 +51,44 @@ const sortLabels = [
   'status',
 ] as const;
 
+// Upper bounds on free text. The JSON body limit caps a whole request, not a
+// field, so a single 100 kB name used to be accepted and stored. The client
+// schemas mirror these.
+const MAX_NAME = 100;
+const MAX_PAYMENT_METHOD = 50;
+const MAX_DESCRIPTION = 500;
+const MAX_SEARCH = 100;
+// Bulk actions act on a selection from one page, and a page holds at most 100.
+const MAX_BULK_IDS = 100;
+
 export const TransactionFieldSchema = z.object({
-  transactionName: z.string().trim().min(1, 'Transaction name is required.'),
+  transactionName: z
+    .string()
+    .trim()
+    .min(1, 'Transaction name is required.')
+    .max(MAX_NAME, `Transaction name must be at most ${MAX_NAME} characters.`),
   transactionCategory: z.enum(TRANSACTION_CATEGORIES, {
     message: 'Category is required.',
   }),
   transactionType: z.enum(TRANSACTION_TYPES, {
     error: 'Transaction type is required.',
   }),
-  paymentMethod: z.string().min(1, 'Payment method is required.'),
+  paymentMethod: z
+    .string()
+    .min(1, 'Payment method is required.')
+    .max(
+      MAX_PAYMENT_METHOD,
+      `Payment method must be at most ${MAX_PAYMENT_METHOD} characters.`,
+    ),
   currency: z.enum(CURRENCIES),
   amount: z.number().positive('Amount must be a positive number.'),
-  description: z.string().nullish(),
+  description: z
+    .string()
+    .max(
+      MAX_DESCRIPTION,
+      `Description must be at most ${MAX_DESCRIPTION} characters.`,
+    )
+    .nullish(),
   status: z.enum(STATUSES),
   createdAt: z.coerce.date().optional(),
 });
@@ -113,7 +139,14 @@ export const SearchParamsSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   sort: z.enum(sortLabels).optional().default('date'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
-  search: z.string().trim().optional().default(''),
+  // Capped rather than rejected: a pasted long term still searches instead of
+  // failing the whole page with a 400.
+  search: z
+    .string()
+    .trim()
+    .optional()
+    .default('')
+    .transform((value) => value.slice(0, MAX_SEARCH)),
   category: filterList(TRANSACTION_CATEGORIES),
   type: filterList(TRANSACTION_TYPES),
   status: filterList(STATUSES),
@@ -122,17 +155,17 @@ export const SearchParamsSchema = z.object({
 });
 
 export const BulkStatusSchema = z.object({
-  transactionIds: z.array(z.string()).min(1),
+  transactionIds: z.array(z.string()).min(1).max(MAX_BULK_IDS),
   status: z.enum(STATUSES),
 });
 
 export const BulkCategorySchema = z.object({
-  transactionIds: z.array(z.string()).min(1),
+  transactionIds: z.array(z.string()).min(1).max(MAX_BULK_IDS),
   category: z.enum(TRANSACTION_CATEGORIES),
 });
 
 export const BulkDeleteSchema = z.object({
-  transactionIds: z.array(z.string()).min(1),
+  transactionIds: z.array(z.string()).min(1).max(MAX_BULK_IDS),
 });
 
 export type TransactionCreateDto = z.infer<typeof TransactionCreateSchema>;

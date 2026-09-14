@@ -31,6 +31,7 @@ import { env } from '../../config/env';
 import {
   createTransaction,
   updateTransactionById,
+  updateTransactionsStatus,
 } from './transactions.service';
 
 function accessCookie() {
@@ -72,6 +73,7 @@ describe('transaction routes: what validation passes to the service', () => {
   beforeEach(() => {
     vi.mocked(createTransaction).mockClear();
     vi.mocked(updateTransactionById).mockClear();
+    vi.mocked(updateTransactionsStatus).mockClear();
   });
 
   it('POST fills currency and status defaults and accepts an empty note', async () => {
@@ -120,5 +122,45 @@ describe('transaction routes: what validation passes to the service', () => {
     expect(res.status).toBe(400);
     expect(res.body.errors.amount).toBeDefined();
     expect(updateTransactionById).not.toHaveBeenCalled();
+  });
+
+  it('accepts free text up to its limit (S-P3-1)', async () => {
+    const res = await send('post', '/api/transactions', {
+      ...validTransaction,
+      transactionName: 'n'.repeat(100),
+      paymentMethod: 'p'.repeat(50),
+      description: 'd'.repeat(500),
+    });
+
+    expect(res.status).toBe(201);
+  });
+
+  it('rejects free text over its limit before reaching the service (S-P3-1)', async () => {
+    const res = await send('post', '/api/transactions', {
+      ...validTransaction,
+      transactionName: 'n'.repeat(101),
+      paymentMethod: 'p'.repeat(51),
+      description: 'd'.repeat(501),
+    });
+
+    expect(res.status).toBe(400);
+    expect(Object.keys(res.body.errors).sort()).toEqual([
+      'description',
+      'paymentMethod',
+      'transactionName',
+    ]);
+    expect(createTransaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects a bulk update of more than 100 ids (S-P3-1)', async () => {
+    const transactionIds = Array.from({ length: 101 }, (_, i) => `t-${i}`);
+    const res = await send('patch', '/api/transactions/status', {
+      transactionIds,
+      status: 'COMPLETED',
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors.transactionIds).toBeDefined();
+    expect(updateTransactionsStatus).not.toHaveBeenCalled();
   });
 });

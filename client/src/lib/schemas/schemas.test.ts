@@ -43,6 +43,26 @@ describe('TransactionSchema', () => {
     ]);
   });
 
+  it('mirrors the API limits on free text', () => {
+    const over = TransactionSchema.safeParse({
+      ...transaction,
+      transactionName: 'n'.repeat(101),
+      paymentMethod: 'p'.repeat(51),
+      description: 'd'.repeat(501),
+    });
+    const atLimit = TransactionSchema.safeParse({
+      ...transaction,
+      transactionName: 'n'.repeat(100),
+      paymentMethod: 'p'.repeat(50),
+      description: 'd'.repeat(500),
+    });
+
+    expect(
+      over.error?.issues.map((issue) => String(issue.path[0])).sort(),
+    ).toEqual(['description', 'paymentMethod', 'transactionName']);
+    expect(atLimit.success).toBe(true);
+  });
+
   it('rejects an amount that is not positive', () => {
     const result = TransactionSchema.safeParse({ ...transaction, amount: '0' });
 
@@ -61,6 +81,18 @@ describe('auth schemas', () => {
     });
 
     expect(result.success).toBe(true);
+  });
+
+  it('mirrors the API limits on name and email', () => {
+    const result = SignUpSchema.safeParse({
+      name: 'n'.repeat(101),
+      email: `${'a'.repeat(243)}@example.com`,
+      password: 'Passw0rd!',
+    });
+
+    expect(
+      result.error?.issues.map((issue) => String(issue.path[0])).sort(),
+    ).toEqual(['email', 'name']);
   });
 
   it('still applies the password policy on sign-up', () => {
