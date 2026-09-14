@@ -49,7 +49,7 @@ export default function TransactionsPage() {
             <EmptyState
               config={EMPTY_STATE_TEXT.transactions}
               isFilterApplied={isFilterApplied}
-              clearFiltersHref={'/dashboard/transactions'}
+              clearFiltersHref="/transactions"
             >
               <TransactionsCTA
                 buttonSize="sm"
