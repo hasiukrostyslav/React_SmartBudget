@@ -26,9 +26,19 @@ const EnvSchema = z
       .min(32, 'JWT_REFRESH_SECRET must be >= 32 chars'),
     CSRF_SECRET: z.string().min(32, 'CSRF_SECRET must be >= 32 chars'),
     // Platforms often define a variable but leave it blank; treat that as unset.
+    // Reduced to its origin because CORS compares it byte-for-byte with the
+    // browser's Origin header (lowercase host, no path or trailing slash): a
+    // pasted "https://App.example.com/" would otherwise block every request
+    // while the server looks healthy.
     CLIENT_URL: z.preprocess(
       (value) => (value === '' ? undefined : value),
-      z.url('CLIENT_URL must be a valid URL').optional(),
+      z
+        .url({
+          protocol: /^https?$/,
+          error: 'CLIENT_URL must be an http(s) URL',
+        })
+        .transform((value) => new URL(value).origin)
+        .optional(),
     ),
   })
   .superRefine((value, ctx) => {

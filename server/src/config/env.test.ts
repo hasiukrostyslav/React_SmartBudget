@@ -32,6 +32,28 @@ describe('env CLIENT_URL', () => {
     expect(env.CLIENT_URL).toBe('https://app.example.com');
   });
 
+  it.each([
+    ['https://app.example.com/', 'https://app.example.com'],
+    ['https://App.Example.com', 'https://app.example.com'],
+    ['https://app.example.com:443/dashboard', 'https://app.example.com'],
+  ])(
+    'reduces CLIENT_URL %s to the origin a browser sends',
+    async (input, origin) => {
+      const { env } = await loadEnv({
+        NODE_ENV: 'production',
+        CLIENT_URL: input,
+      });
+
+      expect(env.CLIENT_URL).toBe(origin);
+    },
+  );
+
+  it('rejects a CLIENT_URL that is not http(s)', async () => {
+    await expect(
+      loadEnv({ NODE_ENV: 'test', CLIENT_URL: 'ftp://app.example.com' }),
+    ).rejects.toThrow('CLIENT_URL must be an http(s) URL');
+  });
+
   it('allows a missing CLIENT_URL outside production', async () => {
     const { env } = await loadEnv({ NODE_ENV: 'test', CLIENT_URL: '' });
 
