@@ -43,11 +43,29 @@ if (!BASE_URL) {
 /** Token from last /csrf-token response; required when API is on another origin (cookie not in document.cookie). */
 let cachedCsrfToken: string | null = null;
 
+/**
+ * One in-flight token fetch shared by every caller. Each fetch made without a
+ * csrf-sid cookie mints a new sid, and the browser keeps only the last one, so
+ * parallel fetches left some requests holding a token bound to a sid that was
+ * already replaced.
+ */
+let csrfTokenPromise: Promise<string | null> | null = null;
+
+/** Methods the server doesn't CSRF-check: its csrf-csrf `ignoredMethods`. */
+const SAFE_METHODS = new Set(['get']);
+
 export function resetCsrfToken() {
   cachedCsrfToken = null;
 }
 
-async function getCsrfToken() {
+function getCsrfToken() {
+  csrfTokenPromise ??= fetchCsrfToken().finally(() => {
+    csrfTokenPromise = null;
+  });
+  return csrfTokenPromise;
+}
+
+async function fetchCsrfToken() {
   try {
     const { data } = await axios.get<{ success: boolean; csrfToken: string }>(
       `${BASE_URL}/api/auth/csrf-token`,
@@ -70,7 +88,14 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    let csrfToken = cachedCsrfToken ?? getCsrfCookie();
+    // Reads aren't checked, so they don't wait for a token. This saves a round
+    // trip before the first query of every page load.
+    if (SAFE_METHODS.has((config.method ?? 'get').toLowerCase())) {
+      return config;
+    }
+
+    let csrfToken: string | null | undefined =
+      cachedCsrfToken ?? getCsrfCookie();
 
     if (!csrfToken) {
       csrfToken = await getCsrfToken();
@@ -102,7 +127,14 @@ api.interceptors.response.use(
     ) {
       originalRequest._csrfRetry = true;
       resetCsrfToken();
-      await getCsrfToken();
+      try {
+        // Concurrent rejections share this fetch, so every retry carries a
+        // token for the same csrf-sid.
+        await getCsrfToken();
+      } catch {
+        // Report the request's own 403, not the token fetch's failure.
+        return Promise.reject(error);
+      }
       return api(originalRequest);
     }
 
