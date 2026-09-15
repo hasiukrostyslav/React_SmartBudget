@@ -35,7 +35,7 @@ react_smart_budget/
 
 ### Prerequisites
 
-- Node.js 22.13+ or 24+ (the server requires 22; the client's test tools, Vitest 5 and jsdom 29, need 22.13+ on the 22 line)
+- Node.js 22.13+, 24, or 26+ (the server requires 22; the client's test tools, Vitest 5 and jsdom 29, support only these lines)
 - PostgreSQL 15+
 
 ### 1. Clone the repository
