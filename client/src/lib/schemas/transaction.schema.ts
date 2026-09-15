@@ -8,24 +8,43 @@ import {
 } from '../constants/enums';
 import { TRANSACTION_SORT_OPTIONS } from '../constants/transactions';
 
+// The API's limits, mirrored so an over-long value fails here with a message
+// instead of coming back as a 400.
+export const TRANSACTION_NAME_MAX_LENGTH = 100;
+export const PAYMENT_METHOD_MAX_LENGTH = 50;
+export const DESCRIPTION_MAX_LENGTH = 500;
+
 export const TransactionSchema = z.object({
+  // Trim before checking length: "   " must fail here, as it does on the
+  // server, instead of passing and coming back as a 400.
   transactionName: z
     .string()
+    .trim()
     .min(1, { message: 'Transaction name is required.' })
-    .trim(),
+    .max(TRANSACTION_NAME_MAX_LENGTH, {
+      message: `Transaction name must be at most ${TRANSACTION_NAME_MAX_LENGTH} characters.`,
+    }),
   transactionCategory: z.enum(TRANSACTION_CATEGORIES, {
     message: 'Category is required.',
   }),
   transactionType: z.enum(TRANSACTION_TYPES, {
     error: 'Transaction type is required.',
   }),
-  paymentMethod: z.string().min(1, { message: 'Payment method is required.' }),
+  paymentMethod: z
+    .string()
+    .min(1, { message: 'Payment method is required.' })
+    .max(PAYMENT_METHOD_MAX_LENGTH, {
+      message: `Payment method must be at most ${PAYMENT_METHOD_MAX_LENGTH} characters.`,
+    }),
   currency: z.enum(CURRENCIES).default('UAH'),
   amount: z.coerce
     .number()
     .positive({ message: 'Amount must be a positive number.' }),
   description: z
     .string()
+    .max(DESCRIPTION_MAX_LENGTH, {
+      message: `Description must be at most ${DESCRIPTION_MAX_LENGTH} characters.`,
+    })
     .nullish()
     .transform((v) => v?.trim() || null)
     .optional(),

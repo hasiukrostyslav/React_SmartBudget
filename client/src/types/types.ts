@@ -9,8 +9,9 @@ import { icons } from '@/lib/constants/icons';
 export type IconName = (typeof icons)[number]['role'];
 
 export interface TransactionItem {
-  createdAt: Date;
-  updatedAt: Date;
+  // ISO 8601 strings: JSON has no date type, so this is what the API sends.
+  createdAt: string;
+  updatedAt: string;
   userId: string;
   transactionId: string;
   transactionName: string;
@@ -23,13 +24,12 @@ export interface TransactionItem {
   status: Status;
 }
 
+// Request payloads. Forms hold a Date, which axios serialises to ISO.
 export type CreateTransactionData = Omit<
   TransactionItem,
-  'updatedAt' | 'userId' | 'transactionId'
->;
-export type EditTransactionData = Partial<
-  Omit<TransactionItem, 'updatedAt' | 'userId' | 'transactionId'>
->;
+  'createdAt' | 'updatedAt' | 'userId' | 'transactionId'
+> & { createdAt: Date };
+export type EditTransactionData = Partial<CreateTransactionData>;
 
 export type ItemType =
   | 'transaction'

@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { ApiError } from '@/services/apiError';
 import { useSearchParams } from 'react-router';
 
 import { EMPTY_STATE_TEXT } from '@/lib/constants/messages';
@@ -10,7 +10,7 @@ import TransactionsCTA from '@/components/ui/features/transactions/TransactionsC
 import TransactionsList from '@/components/ui/features/transactions/TransactionsList';
 import TransactionsToolbar from '@/components/ui/features/transactions/TransactionsToolbar';
 import EmptyState from '@/components/ui/feedback/EmptyState';
-import Error from '@/components/ui/feedback/Error';
+import ErrorState from '@/components/ui/feedback/ErrorState';
 import Spinner from '@/components/ui/feedback/Spinner';
 import PaginationTable from '@/components/ui/pagination/PaginationTable';
 
@@ -23,10 +23,9 @@ export default function TransactionsPage() {
   const isFilterApplied = hasActiveFilters(params, TRANSACTION_FILTERS);
 
   if (error) {
-    const status =
-      error instanceof AxiosError ? (error.response?.status ?? 500) : 500;
+    const status = error instanceof ApiError ? error.status : 500;
     return (
-      <Error
+      <ErrorState
         type={status === 401 ? 'auth' : status === 404 ? 'route' : 'server'}
       />
     );
@@ -49,7 +48,7 @@ export default function TransactionsPage() {
             <EmptyState
               config={EMPTY_STATE_TEXT.transactions}
               isFilterApplied={isFilterApplied}
-              clearFiltersHref={'/dashboard/transactions'}
+              clearFiltersHref="/transactions"
             >
               <TransactionsCTA
                 buttonSize="sm"

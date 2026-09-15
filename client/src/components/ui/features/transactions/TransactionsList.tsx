@@ -30,6 +30,8 @@ export default function TransactionsList({
   return (
     <SectionWrapper className="flex h-full min-h-0 flex-col overflow-hidden">
       <div
+        role="table"
+        aria-label="Transactions"
         className={clsx(
           'relative grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] gap-x-4',
           'grid-cols-[auto_1fr_1fr_1fr_auto_minmax(6rem,auto)_1fr_auto_auto]',
@@ -40,6 +42,7 @@ export default function TransactionsList({
           onToggleSelectAll={toggleSelectAll}
         />
         <div
+          role="rowgroup"
           className={clsx(
             'col-span-full grid auto-rows-min grid-cols-subgrid',
             'scrollbar overflow-x-hidden overflow-y-auto',
@@ -55,21 +58,27 @@ export default function TransactionsList({
             />
           ))}
         </div>
-        <BulkToolbar
-          selectedNumber={selectedIds.size}
-          isShown={selectedIds.size > 0}
-          isAllSelected={isAllSelected}
-          onSelectAll={selectAll}
-          onDeselectAll={deselectAll}
-        >
-          <TransactionBulkActionButtons
-            selectedItems={data.filter((item) =>
-              selectedIds.has(item.transactionId),
-            )}
-            onSuccess={deselectAll}
-          />
-        </BulkToolbar>
       </div>
+      {/* Outside role="table": a table may only own rows. The toolbar is
+          position: fixed, so where it sits in the DOM doesn't move it. */}
+      <BulkToolbar
+        selectedNumber={selectedIds.size}
+        isShown={selectedIds.size > 0}
+        isAllSelected={isAllSelected}
+        onSelectAll={selectAll}
+        onDeselectAll={deselectAll}
+      >
+        <TransactionBulkActionButtons
+          selectedItems={data.filter((item) =>
+            selectedIds.has(item.transactionId),
+          )}
+          onSuccess={deselectAll}
+        />
+      </BulkToolbar>
+      {/* The toolbar appears silently; this tells screen readers it did. */}
+      <p role="status" className="sr-only">
+        {selectedIds.size > 0 ? `${selectedIds.size} selected` : ''}
+      </p>
     </SectionWrapper>
   );
 }

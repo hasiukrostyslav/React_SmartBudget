@@ -3,6 +3,7 @@ import clsx from 'clsx';
 interface TextAreaProps {
   name: string;
   placeholder?: string;
+  maxLength?: number;
   ref?: React.Ref<HTMLTextAreaElement>;
 }
 

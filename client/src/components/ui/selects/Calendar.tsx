@@ -31,6 +31,7 @@ export default function Calendar({
           shape="square"
           variant="outline"
           className="outline-input"
+          label="Previous month"
           onClick={onPrevMonth}
         />
         <p className="font-bold">{format(cursor, 'LLLL yyyy')}</p>
@@ -39,6 +40,7 @@ export default function Calendar({
           size={16}
           shape="square"
           variant="outline"
+          label="Next month"
           onClick={onNextMonth}
         />
       </div>

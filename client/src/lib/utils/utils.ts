@@ -77,28 +77,19 @@ export function getPaginationPattern(
   }
 }
 
-// For testing purpose
-export function wait(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+// Net balance change per currency if these transactions are deleted, in the
+// order each currency first appears. A Map instead of Object.groupBy: that is
+// ES2024, missing before Safari 17.4, and the build doesn't polyfill it.
+export function calcDeletedBalance(items: TransactionItem[]) {
+  const totals = new Map<string, number>();
 
-// Calculate sum of deleted balance
-export function calcDeletedBalance(item: TransactionItem[]) {
-  const grouped = Object.entries(
-    Object.groupBy(item, ({ currency }) => currency),
-  );
+  for (const item of items) {
+    const signed =
+      item.transactionType === 'Income' ? item.amount : -item.amount;
+    totals.set(item.currency, (totals.get(item.currency) ?? 0) + signed);
+  }
 
-  return grouped.map(([currency, entries]) => {
-    return {
-      currency,
-      total: (entries ?? []).reduce(
-        (sum, item) =>
-          sum +
-          (item.transactionType === 'Income' ? item.amount : -item.amount),
-        0,
-      ),
-    };
-  });
+  return [...totals].map(([currency, total]) => ({ currency, total }));
 }
 
 // Keep only the fields react-hook-form flagged as modified

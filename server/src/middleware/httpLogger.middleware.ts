@@ -26,6 +26,13 @@ export const httpLogger = pinoHttp({
     if (res.statusCode >= 400) return 'warn';
     return 'info';
   },
+  // One line per request carries what's needed to trace it. The default
+  // serializers logged every request and response header, the client IP and
+  // port: noise at volume, and personal data kept on every line.
+  serializers: {
+    req: (req) => ({ id: req.id, method: req.method, url: req.url }),
+    res: (res) => ({ statusCode: res.statusCode }),
+  },
   // Liveness probes fire every few seconds; they'd drown the real traffic.
   autoLogging: { ignore: (req) => req.url === '/health' },
 });

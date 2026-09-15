@@ -61,6 +61,7 @@ export default function BulkToolbar({
         size={14}
         shape="square"
         variant="ghost"
+        label="Clear selection"
         onClick={onDeselectAll}
       />
     </SectionWrapper>

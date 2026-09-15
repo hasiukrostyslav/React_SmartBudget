@@ -1,16 +1,12 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from 'react';
 
 export default function Time() {
-  const [date, setDate] = useState<Date | null>(null);
+  const [date, setDate] = useState(() => new Date());
 
   useEffect(() => {
-    setDate(new Date());
     const interval = setInterval(() => setDate(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
-
-  if (!date) return null;
 
   const formatDate = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',

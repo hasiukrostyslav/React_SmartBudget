@@ -17,14 +17,13 @@ function accessCookie() {
   return `access_token=${token}`;
 }
 
-// A CSRF token and the cookie it must be paired with.
+// A CSRF token and every cookie it is bound to: the token cookie and the
+// anonymous csrf-sid it was issued for.
 async function csrfPair() {
   const res = await request(app).get('/api/auth/csrf-token');
   const setCookie = (res.headers['set-cookie'] ?? []) as string[];
-  const cookie = setCookie
-    .find((c) => c.startsWith('psifi.x-csrf-token='))
-    ?.split(';')[0];
-  return { token: res.body.csrfToken as string, cookie: cookie ?? '' };
+  const cookie = setCookie.map((c) => c.split(';')[0]).join('; ');
+  return { token: res.body.csrfToken as string, cookie };
 }
 
 describe('app wiring', () => {
@@ -51,6 +50,28 @@ describe('app wiring', () => {
       code: 'EBADCSRFTOKEN',
     });
     expect(res.text).not.toContain('node_modules');
+  });
+
+  it('rejects a CSRF token presented with another browser id', async () => {
+    const first = await csrfPair();
+    const second = await csrfPair();
+    const tokenCookie = first.cookie
+      .split('; ')
+      .find((c) => c.startsWith('psifi.x-csrf-token='));
+    const otherSid = second.cookie
+      .split('; ')
+      .find((c) => c.startsWith('csrf-sid='));
+    expect(tokenCookie).toBeDefined();
+    expect(otherSid).toBeDefined();
+
+    const res = await request(app)
+      .post('/api/transactions')
+      .set('Cookie', `${accessCookie()}; ${tokenCookie}; ${otherSid}`)
+      .set('x-csrf-token', first.token)
+      .send({});
+
+    expect(res.status).toBe(403);
+    expect(res.body.code).toBe('EBADCSRFTOKEN');
   });
 
   it('exempts signout from CSRF via the csrf config, not a path string', async () => {
@@ -119,5 +140,22 @@ describe('app wiring', () => {
       .set('X-Request-Id', 'not ok: <script>' + 'x'.repeat(200));
 
     expect(res.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/);
+  });
+});
+
+describe('CORS', () => {
+  it('lets the SPA read rate-limit and request-id headers cross-origin', async () => {
+    const res = await request(app)
+      .get('/api/does-not-exist')
+      .set('Origin', 'http://localhost:5173');
+
+    expect(res.headers['access-control-allow-origin']).toBe(
+      'http://localhost:5173',
+    );
+    const exposed = String(
+      res.headers['access-control-expose-headers'],
+    ).toLowerCase();
+    expect(exposed).toContain('ratelimit-reset');
+    expect(exposed).toContain('x-request-id');
   });
 });

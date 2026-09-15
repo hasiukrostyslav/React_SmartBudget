@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+// Upper bounds on stored free text. 254 is the longest valid email address.
+const MAX_NAME = 100;
+const MAX_EMAIL = 254;
+
 const passwordSchema = z
   .string()
   .trim()
@@ -12,8 +16,16 @@ const passwordSchema = z
   );
 
 export const SignUpSchema = z.object({
-  name: z.string().trim().min(2, 'Name must be at least 2 characters'),
-  email: z.string().trim().email('Invalid email format'),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(MAX_NAME, `Name must be at most ${MAX_NAME} characters`),
+  email: z
+    .string()
+    .trim()
+    .max(MAX_EMAIL, `Email must be at most ${MAX_EMAIL} characters`)
+    .email('Invalid email format'),
   password: passwordSchema,
 });
 
@@ -21,12 +33,20 @@ export const SignUpSchema = z.object({
 // locked out any account whose password predates the policy, and advertised
 // the policy to unauthenticated callers.
 export const SignInSchema = z.object({
-  email: z.string().trim().email('Invalid email format'),
+  email: z
+    .string()
+    .trim()
+    .max(MAX_EMAIL, `Email must be at most ${MAX_EMAIL} characters`)
+    .email('Invalid email format'),
   password: z.string().min(1, 'Password is required'),
 });
 
 export const ForgotPasswordSchema = z.object({
-  email: z.string().trim().email('Invalid email format'),
+  email: z
+    .string()
+    .trim()
+    .max(MAX_EMAIL, `Email must be at most ${MAX_EMAIL} characters`)
+    .email('Invalid email format'),
 });
 
 export type SignUpDto = z.infer<typeof SignUpSchema>;

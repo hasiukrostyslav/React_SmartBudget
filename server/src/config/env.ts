@@ -6,26 +6,53 @@ import { z } from 'zod';
 // needs env imports `env`, which guarantees dotenv has already run.
 dotenv.config();
 
-const EnvSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'test', 'production'])
-    .default('development'),
-  PORT: z.coerce.number().int().positive().default(3002),
-  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  // auto: honour ?sslmode= in the URL; otherwise off for a local host and on
-  // for anything remote. The explicit values exist for hosts the heuristic
-  // can't know about — a Docker Compose service name, a private network.
-  DATABASE_SSL: z.enum(['auto', 'require', 'disable']).default('auto'),
-  // 32 hex chars is the floor for an HMAC secret worth having.
-  JWT_ACCESS_SECRET: z
-    .string()
-    .min(32, 'JWT_ACCESS_SECRET must be >= 32 chars'),
-  JWT_REFRESH_SECRET: z
-    .string()
-    .min(32, 'JWT_REFRESH_SECRET must be >= 32 chars'),
-  CSRF_SECRET: z.string().min(32, 'CSRF_SECRET must be >= 32 chars'),
-  CLIENT_URL: z.url('CLIENT_URL must be a valid URL').optional(),
-});
+const EnvSchema = z
+  .object({
+    NODE_ENV: z
+      .enum(['development', 'test', 'production'])
+      .default('development'),
+    PORT: z.coerce.number().int().positive().default(3002),
+    DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+    // auto: honour ?sslmode= in the URL; otherwise off for a local host and on
+    // for anything remote. The explicit values exist for hosts the heuristic
+    // can't know about — a Docker Compose service name, a private network.
+    DATABASE_SSL: z.enum(['auto', 'require', 'disable']).default('auto'),
+    // 32 hex chars is the floor for an HMAC secret worth having.
+    JWT_ACCESS_SECRET: z
+      .string()
+      .min(32, 'JWT_ACCESS_SECRET must be >= 32 chars'),
+    JWT_REFRESH_SECRET: z
+      .string()
+      .min(32, 'JWT_REFRESH_SECRET must be >= 32 chars'),
+    CSRF_SECRET: z.string().min(32, 'CSRF_SECRET must be >= 32 chars'),
+    // Platforms often define a variable but leave it blank; treat that as unset.
+    // Reduced to its origin because CORS compares it byte-for-byte with the
+    // browser's Origin header (lowercase host, no path or trailing slash): a
+    // pasted "https://App.example.com/" would otherwise block every request
+    // while the server looks healthy.
+    CLIENT_URL: z.preprocess(
+      (value) => (value === '' ? undefined : value),
+      z
+        .url({
+          protocol: /^https?$/,
+          error: 'CLIENT_URL must be an http(s) URL',
+        })
+        .transform((value) => new URL(value).origin)
+        .optional(),
+    ),
+  })
+  .superRefine((value, ctx) => {
+    // Production drops the dev origin from the CORS allowlist, so without
+    // CLIENT_URL the allowlist is empty: the server boots and /health is green,
+    // but every browser request is rejected. Fail at boot instead.
+    if (value.NODE_ENV === 'production' && !value.CLIENT_URL) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['CLIENT_URL'],
+        message: 'CLIENT_URL is required in production',
+      });
+    }
+  });
 
 const parsed = EnvSchema.safeParse(process.env);
 

@@ -22,6 +22,9 @@ interface InputProps {
   iconName?: IconName;
   groupPosition?: 'start' | 'end';
   type?: 'text' | 'number' | 'password';
+  // Off by default. Credential fields pass email, current-password etc. so
+  // password managers can fill them.
+  autoComplete?: string;
   step?: number | 'any';
   ref?: React.Ref<HTMLInputElement>;
   padding?: keyof typeof INPUT_CONFIG.padding;
@@ -45,6 +48,7 @@ export default function Input({
   iconName,
   groupPosition,
   type = 'text',
+  autoComplete = 'off',
   step,
   ref,
   padding = 'lg',
@@ -54,14 +58,14 @@ export default function Input({
   ...props
 }: InputProps) {
   const id = useId();
+  const inputId = `${name}-${id}`;
+  const errorId = `${inputId}-error`;
 
   const borderColor = INPUT_CONFIG.border;
 
   return (
     <div className={clsx('relative', error ? 'mb-4.5' : '')}>
-      {label && (
-        <InputLabel label={label} htmlFor={`${name}-${id}`} margin={padding} />
-      )}
+      {label && <InputLabel label={label} htmlFor={inputId} margin={padding} />}
 
       <div className="relative">
         {iconName && <InputIcon name={iconName} padding={padding} />}
@@ -69,21 +73,19 @@ export default function Input({
         <input
           {...props}
           ref={ref}
-          id={`${name}-${id}`}
+          id={inputId}
+          // Ties the visible error to the field, so it is read with the input.
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
           name={name}
           disabled={disabled}
           placeholder={placeholder}
-          autoComplete="off"
+          autoComplete={autoComplete}
           value={value}
           onChange={onChange}
-          type={
-            name === 'password' && trailingButton?.role === 'showPassword'
-              ? 'password'
-              : type === 'number'
-                ? 'number'
-                : 'text'
-          }
-          min={0}
+          type={type}
+          // min only applies to number inputs; on text it's ignored noise.
+          min={type === 'number' ? 0 : undefined}
           step={step}
           className={clsx(
             'outline-input w-full text-sm tracking-wider',
@@ -119,7 +121,7 @@ export default function Input({
         )}
       </div>
 
-      {error && <InputError message={error} />}
+      {error && <InputError id={errorId} message={error} />}
     </div>
   );
 }

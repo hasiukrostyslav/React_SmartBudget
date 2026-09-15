@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import type { IconName } from '@/types/types';
 
 import { OperationType, STATUSES, type Status } from '@/lib/constants/enums';
-
+import { STATUS_CONFIG } from '@/lib/constants/transactions';
 import { useSelectValue } from '@/hooks/useSelectValue';
 import { useToast } from '@/hooks/useToast';
 import { useChangeTransactionStatus } from '@/hooks/useTransactionMutations';
@@ -13,7 +13,6 @@ import ModalFieldLabel from '../ui/modals/ModalFieldLabel';
 import ModalFieldWrapper from '../ui/modals/ModalFieldWrapper';
 import ModalFooter from '../ui/modals/ModalFooter';
 import ModalHeader from '../ui/modals/ModalHeader';
-import { STATUS_CONFIG } from '@/lib/constants/transactions';
 
 interface EditItemStatusFormProps {
   onClose: () => void;
@@ -30,7 +29,7 @@ export default function EditItemStatusForm({
   selectedItems,
 }: EditItemStatusFormProps) {
   const { selectedValue, handleSelect } = useSelectValue();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
   const { mutateAsync: changeStatus, isPending } = useChangeTransactionStatus();
 
   const initialValue = [...new Set(selectedItems.map((el) => el.status))];
@@ -38,10 +37,17 @@ export default function EditItemStatusForm({
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    await changeStatus({
-      ids: selectedItems.map((el) => el.id),
-      status: selectedValue as Status,
-    });
+    // mutateAsync rejects on failure. Catching keeps the dialog open with an
+    // error toast instead of leaking an unhandled rejection.
+    try {
+      await changeStatus({
+        ids: selectedItems.map((el) => el.id),
+        status: selectedValue as Status,
+      });
+    } catch {
+      toastError(OperationType.EDIT, 'Transaction');
+      return;
+    }
 
     onSuccess?.();
     onClose();

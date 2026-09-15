@@ -3,14 +3,18 @@ import { clsx } from 'clsx';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import type { TransactionItem } from '@/types/types';
+import type { CreateTransactionData, TransactionItem } from '@/types/types';
 
 import { OperationType } from '@/lib/constants/enums';
 import {
   CREATE_TRANSACTION_FIELDS,
   CURRENCY_CONFIG,
 } from '@/lib/constants/transactions';
-import { CopyTransactionSchema } from '@/lib/schemas/transaction.schema';
+import {
+  CopyTransactionSchema,
+  DESCRIPTION_MAX_LENGTH,
+} from '@/lib/schemas/transaction.schema';
+import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useToast } from '@/hooks/useToast';
 import { useCreateTransaction } from '@/hooks/useTransactionMutations';
 
@@ -47,7 +51,8 @@ export default function CopyTransactionForm({
     register,
     handleSubmit,
     control,
-    formState: { isValid },
+    setError,
+    formState: { errors, isValid },
   } = useForm({
     resolver: zodResolver(CopyTransactionSchema),
     defaultValues: {
@@ -67,13 +72,17 @@ export default function CopyTransactionForm({
         transactionCategory: sourceTransaction.transactionCategory,
         paymentMethod: sourceTransaction.paymentMethod,
         status: sourceTransaction.status,
-      } as TransactionItem,
+      } as CreateTransactionData,
       {
         onSuccess: () => {
           onClose();
           toastSuccess(OperationType.CREATE, 'Transaction');
         },
-        onError: () => toastError(OperationType.CREATE, 'Transaction'),
+        onError: (error) => {
+          if (!applyServerFieldErrors(error, setError, ['amount'])) {
+            toastError(OperationType.CREATE, 'Transaction');
+          }
+        },
       },
     );
   }
@@ -154,7 +163,6 @@ export default function CopyTransactionForm({
                   label={CREATE_TRANSACTION_FIELDS.DATE.label}
                   selectedValue={field.value}
                   onSelect={field.onChange}
-                  showSelectedOption
                   contentWidthExpandedTo="w-76"
                   padding="md"
                 />
@@ -170,6 +178,7 @@ export default function CopyTransactionForm({
               <div className="flex-2">
                 <Input
                   {...register(CREATE_TRANSACTION_FIELDS.AMOUNT.name)}
+                  error={errors.amount?.message}
                   padding="md"
                   type="number"
                   step="any"
@@ -212,6 +221,7 @@ export default function CopyTransactionForm({
           />
           <TextArea
             {...register(CREATE_TRANSACTION_FIELDS.DESCRIPTION.name)}
+            maxLength={DESCRIPTION_MAX_LENGTH}
             placeholder={CREATE_TRANSACTION_FIELDS.DESCRIPTION.placeholder}
           />
         </ModalFieldWrapper>

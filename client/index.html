@@ -8,6 +8,18 @@
     <meta name="description" content="Smart Money, Bright Tomorrow" />
     <link rel="manifest" href="/manifest.json" />
     <title>Welcome | SmartBudget</title>
+    <!-- Apply the saved (or OS) theme before first paint to avoid a light flash;
+         ThemeProvider takes over once React mounts. Same rule as getInitialTheme. -->
+    <script>
+      (function () {
+        var stored = localStorage.getItem('theme');
+        var dark =
+          stored === 'dark' ||
+          (stored !== 'light' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.classList.toggle('dark', dark);
+      })();
+    </script>
   </head>
   <body
     class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-300"

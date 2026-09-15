@@ -20,10 +20,12 @@ function cookieValue(res: Response, name: string): string | undefined {
 
 async function csrf() {
   const res = await request(app).get('/api/auth/csrf-token');
-  const value = cookieValue(res, 'psifi.x-csrf-token');
+  const token = cookieValue(res, 'psifi.x-csrf-token');
+  const sid = cookieValue(res, 'csrf-sid');
   return {
     token: res.body.csrfToken as string,
-    cookie: `psifi.x-csrf-token=${value}`,
+    // The token is bound to the anonymous csrf-sid issued with it.
+    cookie: `psifi.x-csrf-token=${token}; csrf-sid=${sid}`,
   };
 }
 

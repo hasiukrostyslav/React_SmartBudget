@@ -55,6 +55,7 @@ export default function ModalHeader({
         shape="square"
         variant="ghost"
         className="ml-auto"
+        label="Close"
         onClick={onClose}
       />
     </header>

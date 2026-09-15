@@ -77,6 +77,24 @@ describe.skipIf(!hasTestDatabase)('transactions.service', () => {
     expect(new Date(bulk.updatedAt) >= new Date(bulk.createdAt)).toBe(true);
   });
 
+  it('persists a date edit without touching other fields', async () => {
+    const created = await createTransaction(USER_A, {
+      ...base,
+      transactionName: 'Dated',
+      currency: 'USD',
+      status: 'PENDING',
+    });
+    const newDate = new Date('2025-03-04T05:06:07.000Z');
+
+    const edited = (await updateTransactionById(created.transactionId, USER_A, {
+      createdAt: newDate,
+    }))!;
+
+    expect(edited.createdAt).toBe(newDate.toISOString());
+    expect(edited.currency).toBe('USD');
+    expect(edited.status).toBe('PENDING');
+  });
+
   it('filters — including the spaced-enum categories — and counts track the filter', async () => {
     await createTransaction(USER_A, {
       ...base,

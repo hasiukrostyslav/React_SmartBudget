@@ -35,7 +35,7 @@ react_smart_budget/
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 22.13+, 24, or 26+ (the server requires 22; the client's test tools, Vitest 5 and jsdom 29, support only these lines)
 - PostgreSQL 15+
 
 ### 1. Clone the repository
@@ -72,6 +72,7 @@ VITE_API_EXPRESS_URL=http://localhost:3002
 | `npm run build` | Type-check + production build |
 | `npm run preview` | Preview production build |
 | `npm run lint` | ESLint check |
+| `npm test` | Run the tests once (`npm run test:watch` to watch) |
 | `npm run format` | Prettier format |
 
 ### 4. Express server

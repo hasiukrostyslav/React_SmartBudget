@@ -52,7 +52,7 @@ export function useOverflowList({
     return () => observer.disconnect();
   }, [count, buttonWidth, gap]);
 
-  const expandList = () => setIsListExpanded(!isListExpanded);
+  const expandList = () => setIsListExpanded((expanded) => !expanded);
 
   return { containerRef, measureRef, visible, isListExpanded, expandList };
 }

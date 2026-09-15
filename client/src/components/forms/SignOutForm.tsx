@@ -15,6 +15,7 @@ export default function SignOutForm() {
       <ButtonIcon
         size={18}
         iconName="log-out"
+        label="Sign out"
         shape="square"
         variant="ghost"
         type="submit"

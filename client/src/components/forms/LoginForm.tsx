@@ -4,6 +4,7 @@ import type { z } from 'zod';
 
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { SignInSchema } from '@/lib/schemas/auth.schema';
+import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useLogin } from '@/hooks/useLogin';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 
@@ -17,20 +18,24 @@ type FormInputs = z.infer<typeof SignInSchema>;
 
 export default function LoginForm() {
   const { login, isPending, error } = useLogin();
-  const { buttonRole, toggleVisibility } = usePasswordVisibility();
+  const { buttonRole, isVisible, toggleVisibility } = usePasswordVisibility();
 
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({ resolver: zodResolver(SignInSchema) });
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => login(data);
+  const onSubmit: SubmitHandler<FormInputs> = (data) =>
+    login(data, {
+      onError: (error) =>
+        applyServerFieldErrors(error, setError, ['email', 'password']),
+    });
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      autoComplete="off"
       className="mt-6 flex w-full flex-col gap-2"
     >
       <Input
@@ -40,6 +45,7 @@ export default function LoginForm() {
         disabled={isPending}
         error={errors.email?.message}
         iconName="email"
+        autoComplete="email"
       />
       <Input
         label="Password"
@@ -48,6 +54,8 @@ export default function LoginForm() {
         disabled={isPending}
         error={errors.password?.message}
         iconName="password"
+        autoComplete="current-password"
+        type={isVisible ? 'text' : 'password'}
         trailingButton={{
           role: buttonRole,
           onClick: toggleVisibility,

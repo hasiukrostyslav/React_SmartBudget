@@ -89,6 +89,14 @@ describe('SearchParamsSchema', () => {
     );
   });
 
+  it('caps a long search term instead of rejecting it (S-P3-1)', () => {
+    const parsed = SearchParamsSchema.parse({
+      search: `  ${'a'.repeat(150)}  `,
+    });
+
+    expect(parsed.search).toBe('a'.repeat(100));
+  });
+
   it('rejects an unknown sort key and order', () => {
     expect(SearchParamsSchema.safeParse({ sort: 'id' }).success).toBe(false);
     expect(SearchParamsSchema.safeParse({ order: 'up' }).success).toBe(false);

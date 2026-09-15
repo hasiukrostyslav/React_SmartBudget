@@ -42,6 +42,14 @@ app.use(
   cors({
     origin: allowedOrigins,
     credentials: true, // allow cookies on cross-origin requests from the SPA
+    // Lets the SPA read these on cross-origin responses: the rate-limit reset
+    // for a useful 429 message, and the request id for bug reports.
+    exposedHeaders: [
+      'RateLimit-Limit',
+      'RateLimit-Remaining',
+      'RateLimit-Reset',
+      'X-Request-Id',
+    ],
   }),
 );
 

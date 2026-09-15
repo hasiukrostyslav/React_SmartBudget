@@ -25,10 +25,10 @@ export default function PaginationFilter({
     label: String(value),
   }));
 
-  const { selectedValue, handleSelect } = useSelectValue({
-    defaultValue: limit ? Number(limit) : pageSizeOptions[0],
-    param: 'limit',
-  });
+  // The URL is the source of truth for the page size, so the select shows the
+  // limit prop directly. Mirroring it into local state went stale on
+  // Back/Forward; the hook is only used to write a new value to the URL.
+  const { handleSelect } = useSelectValue({ param: 'limit' });
 
   return (
     <div className="flex items-center text-sm text-slate-500">
@@ -44,7 +44,7 @@ export default function PaginationFilter({
         <Select
           label="limit"
           options={options}
-          selectedValue={selectedValue}
+          selectedValue={limit}
           onSelect={handleSelect}
           padding="xs"
           variant="secondary"

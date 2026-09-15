@@ -18,12 +18,10 @@ interface DatePickerProps {
   placeholder?: string;
   padding?: keyof typeof SELECT_CONFIG.padding;
   variant?: keyof typeof SELECT_CONFIG.variant;
-  showSelectedOption: boolean;
   groupPosition?: 'start' | 'end';
   contentPosition?: 'top' | 'bottom';
   contentExpandedAlign?: 'left' | 'right';
   contentWidthExpandedTo?: string;
-  withSearch?: boolean;
   disabled?: boolean;
   onSelect: (value: Date) => void;
 }
@@ -82,7 +80,10 @@ export default function DatePicker({
         groupPosition={groupPosition}
         onClick={() => {
           handleToggleExpanded();
+          // Every opening starts from the saved date, on its month, instead of
+          // wherever the previous visit left the draft and the calendar.
           setDraft(selectedValue);
+          goToMonth(selectedValue);
         }}
         ariaHasPopup="dialog"
         iconName="calendar"
@@ -113,7 +114,8 @@ export default function DatePicker({
             color="blue"
             size="sm"
             onClick={handleDone}
-            disabled={draft === selectedValue}
+            // By time, not reference: an equal date can be a new Date object.
+            disabled={draft.getTime() === selectedValue.getTime()}
           >
             Done
           </Button>

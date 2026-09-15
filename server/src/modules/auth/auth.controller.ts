@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 
 import {
@@ -10,6 +11,8 @@ import { requireUser } from '../../lib/requireUser';
 import {
   CSRF_COOKIE_NAME,
   CSRF_COOKIE_OPTIONS,
+  CSRF_SESSION_COOKIE_NAME,
+  CSRF_SESSION_COOKIE_OPTIONS,
   generateCsrfToken,
 } from '../../middleware/csrf.middleware';
 import { findUserById } from '../users/users.service';
@@ -90,8 +93,16 @@ export async function sessionController(req: Request, res: Response) {
   });
 }
 
-// GET /api/auth/csrf-token — returns a fresh CSRF token (no protection required on this GET)
+// GET /api/auth/csrf-token — returns a CSRF token bound to this browser's
+// anonymous id, issuing the id first if the browser has none.
 export function csrfTokenController(req: Request, res: Response) {
+  if (!req.cookies[CSRF_SESSION_COOKIE_NAME]) {
+    const sid = randomUUID();
+    res.cookie(CSRF_SESSION_COOKIE_NAME, sid, CSRF_SESSION_COOKIE_OPTIONS);
+    // Visible to generateCsrfToken in this same request.
+    req.cookies[CSRF_SESSION_COOKIE_NAME] = sid;
+  }
+
   const csrfToken = generateCsrfToken(req, res);
   res.json({ success: true, csrfToken });
 }

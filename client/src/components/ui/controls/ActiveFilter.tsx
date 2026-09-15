@@ -32,6 +32,7 @@ export default function ActiveFilter(props: ActiveFilterProps) {
           <div>
             <ButtonIcon
               iconName={isExpanded ? 'chevron-up' : 'chevron-down'}
+              label={isExpanded ? 'Show fewer filters' : 'Show all filters'}
               shape="round"
               size={10}
               variant="ghost"
@@ -63,6 +64,7 @@ export default function ActiveFilter(props: ActiveFilterProps) {
             shape="round"
             size={10}
             variant="primary"
+            label={`Remove filter ${filter.key}: ${filter.value}`}
             onClick={() => onClick(filter)}
           />
         </div>

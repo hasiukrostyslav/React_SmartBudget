@@ -41,25 +41,35 @@ export default function EditTransactionCategoryForm({
   const { searchQuery, role, handleChange, handleClear } = useSearchInput({});
   const { mutateAsync: changeCategory, isPending } =
     useChangeTransactionCategory();
-  const { toastSuccess } = useToast();
+  const { toastSuccess, toastError } = useToast();
 
   const initialValue = [...new Set(selectedItems.map((el) => el.category))];
-  const filteredCategories = TRANSACTION_CATEGORIES.filter((el) =>
-    searchQuery.length === 0
-      ? el
-      : el.replaceAll('_', ' ').includes(searchQuery.trimStart()) ||
-        TRANSACTION_CATEGORIES_CONFIG[el].text.description
-          .toLowerCase()
-          .includes(searchQuery.trimStart()),
+  // Category keys and the lowercased descriptions are compared against a
+  // lowercased query, so "Pet" and "CAFE" match like "pet" and "cafe" do.
+  const query = searchQuery.trim().toLowerCase();
+  const filteredCategories = TRANSACTION_CATEGORIES.filter(
+    (el) =>
+      query.length === 0 ||
+      el.replaceAll('_', ' ').includes(query) ||
+      TRANSACTION_CATEGORIES_CONFIG[el].text.description
+        .toLowerCase()
+        .includes(query),
   ).toSorted();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await changeCategory({
-      ids: selectedItems.map((el) => el.id),
-      category: selectedValue as TransactionCategories,
-    });
+    // mutateAsync rejects on failure. Catching keeps the dialog open with an
+    // error toast instead of leaking an unhandled rejection.
+    try {
+      await changeCategory({
+        ids: selectedItems.map((el) => el.id),
+        category: selectedValue as TransactionCategories,
+      });
+    } catch {
+      toastError(OperationType.EDIT, 'Transaction');
+      return;
+    }
 
     onSuccess?.();
     onClose();

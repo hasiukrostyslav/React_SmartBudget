@@ -22,7 +22,7 @@ export default function Sidebar() {
       <Navbar isCollapsed={isCollapsed} />
 
       <ButtonIcon
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => setIsCollapsed((collapsed) => !collapsed)}
         iconName="chevrons-left"
         size={24}
         shape="square"
