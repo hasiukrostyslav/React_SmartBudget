@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useSearchInput } from './useSearchInput';
 
 function SearchBox() {
-  const { searchQuery, handleChange } = useSearchInput({
+  const { searchQuery, handleChange, handleClear } = useSearchInput({
     isUpdateSearchParam: true,
   });
   const location = useLocation();
@@ -15,6 +15,9 @@ function SearchBox() {
     <>
       <input aria-label="Search" value={searchQuery} onChange={handleChange} />
       <output aria-label="URL">{location.search}</output>
+      <button type="button" onClick={handleClear}>
+        Clear
+      </button>
       <button
         type="button"
         onClick={() => navigate('/transactions?search=zzz')}
@@ -31,10 +34,13 @@ function SearchBox() {
   );
 }
 
-function renderSearchBox() {
+function renderSearchBox(
+  entries = ['/transactions?page=2'],
+  index = entries.length - 1,
+) {
   vi.useFakeTimers();
   render(
-    <MemoryRouter initialEntries={['/transactions?page=2']}>
+    <MemoryRouter initialEntries={entries} initialIndex={index}>
       <SearchBox />
     </MemoryRouter>,
   );
@@ -94,5 +100,42 @@ describe('useSearchInput', () => {
 
     act(() => fireEvent.click(screen.getByText('Forward')));
     expect(input.value).toBe('zzz');
+  });
+
+  it('syncs a later Back to the written query when another navigation superseded the write', () => {
+    const { input, type } = renderSearchBox();
+
+    act(() => type('abc'));
+    act(() => {
+      vi.advanceTimersByTime(300); // writes abc (a transition)
+      fireEvent.click(screen.getByText('Other search')); // before it commits
+    });
+    expect(input.value).toBe('zzz');
+
+    act(() => fireEvent.click(screen.getByText('Back')));
+
+    expect(screen.getByLabelText('URL').textContent).toContain('search=abc');
+    expect(input.value).toBe('abc');
+  });
+
+  it('syncs a later Back to the written query when Clear superseded the write', () => {
+    const { input, type } = renderSearchBox([
+      '/transactions?page=1&search=abc',
+      '/transactions?page=3',
+    ]);
+
+    act(() => type('abc'));
+    act(() => {
+      vi.advanceTimersByTime(300); // writes abc (a transition)
+      fireEvent.click(screen.getByText('Clear')); // before it commits
+    });
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    act(() => fireEvent.click(screen.getByText('Back')));
+
+    expect(screen.getByLabelText('URL').textContent).toContain('search=abc');
+    expect(input.value).toBe('abc');
   });
 });

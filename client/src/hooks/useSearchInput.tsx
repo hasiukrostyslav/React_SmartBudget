@@ -36,16 +36,13 @@ export function useSearchInput({
     if (isContentExpanded) setLocalSearchQuery('');
   }
 
-  // The URL changed without typing (Back/Forward, "Clear filters"): show it.
+  // The URL changed without typing (Back/Forward, "Clear filters"): show it,
+  // unless it's the value this hook just wrote. Any committed change retires
+  // the marker, matched or not, so it can only ever skip its own write's sync.
   if (isUpdateSearchParam && urlQuery !== prevUrlQuery) {
     setPrevUrlQuery(urlQuery);
-    if (urlQuery === writtenQuery) {
-      // Our own write landing. Forget it, so a later Back or Forward to the
-      // same value still syncs.
-      setWrittenQuery(null);
-    } else {
-      setLocalSearchQuery(urlQuery);
-    }
+    setWrittenQuery(null);
+    if (urlQuery !== writtenQuery) setLocalSearchQuery(urlQuery);
   }
 
   // The input updates on every keystroke, but the URL, and the request it
@@ -76,14 +73,13 @@ export function useSearchInput({
     setLocalSearchQuery('');
 
     if (isUpdateSearchParam) {
-      // Only when the URL will actually change, or the marker never clears.
-      if (urlQuery !== '') setWrittenQuery('');
+      setWrittenQuery('');
       const newSearchString = createQueryString(searchParams, [
         { param: 'search', value: '' },
       ]);
       navigate(`${location.pathname}?${newSearchString}`, { replace: true });
     }
-  }, [isUpdateSearchParam, urlQuery, searchParams, location, navigate]);
+  }, [isUpdateSearchParam, searchParams, location, navigate]);
 
   const role: keyof typeof INPUT_CONFIG.button.roleIcon = 'clear';
 
