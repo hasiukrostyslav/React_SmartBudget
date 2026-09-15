@@ -11,7 +11,7 @@ export default function ErrorPage() {
       <Link to="/dashboard">
         <Logo type="lg" className="absolute top-2.5 left-6.5 h-10" />
       </Link>
-      <ErrorState type="server" page="outer" />
+      <ErrorState type="server" page="outer" withReload />
       <ThemeButton className="absolute right-10 bottom-5" />
     </section>
   );

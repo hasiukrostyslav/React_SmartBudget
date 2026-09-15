@@ -1,5 +1,3 @@
-import { lazy } from 'react';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Route, Routes } from 'react-router';
@@ -10,6 +8,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import RedirectRoute from './components/routes/RedirectRoute';
 import RouteErrorBoundary from './components/routes/RouteErrorBoundary';
 import { ThemeProvider } from './context';
+import { lazyPage } from './lib/utils/lazyPage';
 import { shouldRetryQuery } from './lib/utils/queryRetry';
 import AuthLayout from './pages/auth/AuthLayout';
 import DashboardLayout from './pages/dashboard/DashboardLayout';
@@ -17,21 +16,22 @@ import ErrorPage from './pages/ErrorPage';
 import NotFound from './pages/NotFound';
 
 // Pages load on demand: the login screen doesn't ship the dashboard, and
-// each dashboard page downloads only when it is first visited.
-const ForgotPasswordPage = lazy(
+// each dashboard page downloads only when it is first visited. lazyPage
+// reloads once if a chunk fails to load, e.g. after a deploy.
+const ForgotPasswordPage = lazyPage(
   () => import('./pages/auth/ForgotPasswordPage'),
 );
-const LoginPage = lazy(() => import('./pages/auth/LoginPage'));
-const SignUpPage = lazy(() => import('./pages/auth/SignUpPage'));
-const CardsPage = lazy(() => import('./pages/dashboard/CardsPage'));
-const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
-const DepositsPage = lazy(() => import('./pages/dashboard/DepositsPage'));
-const LoansPage = lazy(() => import('./pages/dashboard/LoansPage'));
-const PaymentsPage = lazy(() => import('./pages/dashboard/PaymentsPage'));
-const ProfilePage = lazy(() => import('./pages/dashboard/ProfilePage'));
-const SavingsPage = lazy(() => import('./pages/dashboard/SavingsPage'));
-const SettingsPage = lazy(() => import('./pages/dashboard/SettingsPage'));
-const TransactionsPage = lazy(
+const LoginPage = lazyPage(() => import('./pages/auth/LoginPage'));
+const SignUpPage = lazyPage(() => import('./pages/auth/SignUpPage'));
+const CardsPage = lazyPage(() => import('./pages/dashboard/CardsPage'));
+const DashboardPage = lazyPage(() => import('./pages/dashboard/DashboardPage'));
+const DepositsPage = lazyPage(() => import('./pages/dashboard/DepositsPage'));
+const LoansPage = lazyPage(() => import('./pages/dashboard/LoansPage'));
+const PaymentsPage = lazyPage(() => import('./pages/dashboard/PaymentsPage'));
+const ProfilePage = lazyPage(() => import('./pages/dashboard/ProfilePage'));
+const SavingsPage = lazyPage(() => import('./pages/dashboard/SavingsPage'));
+const SettingsPage = lazyPage(() => import('./pages/dashboard/SettingsPage'));
+const TransactionsPage = lazyPage(
   () => import('./pages/dashboard/TransactionPage'),
 );
 

@@ -18,7 +18,9 @@ export default function DashboardLayout() {
         <Header />
         <section className="relative min-h-0 overflow-y-auto bg-slate-50 px-6 py-4 dark:bg-slate-900">
           {/* A crashing page keeps the sidebar and header usable */}
-          <RouteErrorBoundary fallback={<ErrorState type="server" />}>
+          <RouteErrorBoundary
+            fallback={<ErrorState type="server" withReload />}
+          >
             <Suspense fallback={<Spinner />}>
               <Outlet />
             </Suspense>

@@ -10,9 +10,16 @@ import Icon from '../icons/Icon';
 interface ErrorProps {
   type: keyof typeof ERROR_MESSAGES_CONFIG;
   page?: 'inner' | 'outer';
+  // Offers a full page reload, for failures a re-render can't fix, such as a
+  // page chunk that failed to download.
+  withReload?: boolean;
 }
 
-export default function ErrorState({ type, page = 'inner' }: ErrorProps) {
+export default function ErrorState({
+  type,
+  page = 'inner',
+  withReload = false,
+}: ErrorProps) {
   const navigate = useNavigate();
 
   return (
@@ -38,15 +45,28 @@ export default function ErrorState({ type, page = 'inner' }: ErrorProps) {
           {ERROR_MESSAGES_CONFIG[type].message}
         </p>
       </figcaption>
-      {page === 'outer' && (
+      {(page === 'outer' || withReload) && (
         <div className="flex gap-4">
-          <ButtonLink iconName="utility" color="blue" href="/dashboard">
-            Back to Home
-          </ButtonLink>
-          <Button size="lg" color="outline" onClick={() => navigate(-1)}>
-            <Icon name="arrow-left" size={18} />
-            Go Back
-          </Button>
+          {withReload && (
+            <Button
+              size="lg"
+              color={page === 'outer' ? 'outline' : 'blue'}
+              onClick={() => window.location.reload()}
+            >
+              Reload page
+            </Button>
+          )}
+          {page === 'outer' && (
+            <>
+              <ButtonLink iconName="utility" color="blue" href="/dashboard">
+                Back to Home
+              </ButtonLink>
+              <Button size="lg" color="outline" onClick={() => navigate(-1)}>
+                <Icon name="arrow-left" size={18} />
+                Go Back
+              </Button>
+            </>
+          )}
         </div>
       )}
     </figure>
