@@ -9,6 +9,8 @@ const RELOAD_ATTEMPTED_KEY = 'page-chunk-reload-attempted';
  * reload can't fix it: the error is rethrown for the error boundary instead of
  * reloading again. The limit is one reload per failure, not a time window, so a
  * slow page load can't turn it into a loop. A successful import re-arms it.
+ * Offline it doesn't reload at all: that would replace the app with the
+ * browser's offline page.
  */
 export function importWithReload<T>(
   load: () => Promise<T>,
@@ -20,12 +22,16 @@ export function importWithReload<T>(
       return module;
     },
     (error: unknown) => {
-      if (!claimReload()) throw error;
+      if (isOffline() || !claimReload()) throw error;
       reload();
       // The page is being replaced; never settle, so nothing renders meanwhile.
       return new Promise<T>(() => {});
     },
   );
+}
+
+function isOffline() {
+  return typeof navigator !== 'undefined' && navigator.onLine === false;
 }
 
 /** True if this failure may reload; false if the last reload didn't help. */

@@ -63,6 +63,21 @@ describe('importWithReload', () => {
     expect(reload).toHaveBeenCalledTimes(2);
   });
 
+  it('rethrows without reloading while offline, keeping the reload for later', async () => {
+    const onLine = vi
+      .spyOn(Navigator.prototype, 'onLine', 'get')
+      .mockReturnValue(false);
+    const reload = vi.fn();
+
+    const offline = await settled(importWithReload(failing, reload));
+    expect(offline).toEqual({ error: chunkError });
+    expect(reload).not.toHaveBeenCalled();
+
+    onLine.mockReturnValue(true);
+    await settled(importWithReload(failing, reload));
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
   it('rethrows without reloading when session storage is unavailable', async () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('blocked');
