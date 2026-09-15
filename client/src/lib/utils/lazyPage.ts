@@ -1,36 +1,53 @@
 import { lazy, type ComponentType } from 'react';
 
-const RELOADED_AT_KEY = 'page-chunk-reloaded-at';
-// A second failure this soon after reloading is a real error, not a stale tab.
-const RELOAD_WINDOW_MS = 10_000;
+const RELOAD_ATTEMPTED_KEY = 'page-chunk-reload-attempted';
 
 /**
  * Runs a page import. If it fails, the usual cause is a tab left open across a
  * deploy asking for chunk files that no longer exist, so the page reloads once
- * to pick up the new build. A failure again within the window is rethrown for
- * the error boundary, so a real outage can't cause a reload loop.
+ * to pick up the new build. If the import fails again after that reload, a
+ * reload can't fix it: the error is rethrown for the error boundary instead of
+ * reloading again. The limit is one reload per failure, not a time window, so a
+ * slow page load can't turn it into a loop. A successful import re-arms it.
  */
 export function importWithReload<T>(
   load: () => Promise<T>,
   reload: () => void = () => window.location.reload(),
 ): Promise<T> {
-  return load().catch((error: unknown) => {
-    if (!claimReload()) throw error;
-    reload();
-    // The page is being replaced; never settle, so nothing renders meanwhile.
-    return new Promise<T>(() => {});
-  });
+  return load().then(
+    (module) => {
+      forgetReload();
+      return module;
+    },
+    (error: unknown) => {
+      if (!claimReload()) throw error;
+      reload();
+      // The page is being replaced; never settle, so nothing renders meanwhile.
+      return new Promise<T>(() => {});
+    },
+  );
 }
 
+/** True if this failure may reload; false if the last reload didn't help. */
 function claimReload(): boolean {
   try {
-    const last = Number(sessionStorage.getItem(RELOADED_AT_KEY));
-    if (last && Date.now() - last < RELOAD_WINDOW_MS) return false;
-    sessionStorage.setItem(RELOADED_AT_KEY, String(Date.now()));
+    if (sessionStorage.getItem(RELOAD_ATTEMPTED_KEY)) {
+      sessionStorage.removeItem(RELOAD_ATTEMPTED_KEY);
+      return false;
+    }
+    sessionStorage.setItem(RELOAD_ATTEMPTED_KEY, '1');
     return true;
   } catch {
     // Without storage a reload can't be limited to once, so don't reload.
     return false;
+  }
+}
+
+function forgetReload() {
+  try {
+    sessionStorage.removeItem(RELOAD_ATTEMPTED_KEY);
+  } catch {
+    // No storage, so no attempt was recorded.
   }
 }
 
