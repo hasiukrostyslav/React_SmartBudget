@@ -23,6 +23,10 @@ export function useSearchInput({
     isUpdateSearchParam ? urlQuery : '',
   );
   const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
+  // The query this hook itself last wrote to the URL. Navigation renders as a
+  // transition, so newer typing can commit before the write does. When the URL
+  // then changes to this value, it must not overwrite the input.
+  const [writtenQuery, setWrittenQuery] = useState<string | null>(null);
   const [prevExpanded, setPrevExpanded] = useState(isContentExpanded);
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,7 +39,13 @@ export function useSearchInput({
   // The URL changed without typing (Back/Forward, "Clear filters"): show it.
   if (isUpdateSearchParam && urlQuery !== prevUrlQuery) {
     setPrevUrlQuery(urlQuery);
-    setLocalSearchQuery(urlQuery);
+    if (urlQuery === writtenQuery) {
+      // Our own write landing. Forget it, so a later Back or Forward to the
+      // same value still syncs.
+      setWrittenQuery(null);
+    } else {
+      setLocalSearchQuery(urlQuery);
+    }
   }
 
   // The input updates on every keystroke, but the URL, and the request it
@@ -45,6 +55,7 @@ export function useSearchInput({
     if (!isUpdateSearchParam || localSearchQuery === urlQuery) return;
 
     const timer = setTimeout(() => {
+      setWrittenQuery(localSearchQuery);
       const newSearchString = createQueryString(searchParams, [
         { param: 'search', value: localSearchQuery },
       ]);
@@ -65,12 +76,14 @@ export function useSearchInput({
     setLocalSearchQuery('');
 
     if (isUpdateSearchParam) {
+      // Only when the URL will actually change, or the marker never clears.
+      if (urlQuery !== '') setWrittenQuery('');
       const newSearchString = createQueryString(searchParams, [
         { param: 'search', value: '' },
       ]);
       navigate(`${location.pathname}?${newSearchString}`, { replace: true });
     }
-  }, [isUpdateSearchParam, searchParams, location, navigate]);
+  }, [isUpdateSearchParam, urlQuery, searchParams, location, navigate]);
 
   const role: keyof typeof INPUT_CONFIG.button.roleIcon = 'clear';
 
