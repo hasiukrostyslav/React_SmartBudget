@@ -138,4 +138,23 @@ describe('useSearchInput', () => {
     expect(screen.getByLabelText('URL').textContent).toContain('search=abc');
     expect(input.value).toBe('abc');
   });
+
+  it('Back while a search write is pending leaves the previous entry as it was', () => {
+    const { input, type } = renderSearchBox([
+      '/transactions?page=1',
+      '/transactions?page=2',
+    ]);
+
+    act(() => type('abc'));
+    act(() => {
+      vi.advanceTimersByTime(100); // still within the debounce
+    });
+    act(() => fireEvent.click(screen.getByText('Back')));
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    expect(screen.getByLabelText('URL').textContent).toBe('?page=1');
+    expect(input.value).toBe('');
+  });
 });

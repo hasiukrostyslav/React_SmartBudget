@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import {
+  useLocation,
+  useNavigate,
+  useNavigationType,
+  useSearchParams,
+} from 'react-router';
 
 import { INPUT_CONFIG } from '@/lib/constants/components';
 import { createQueryString } from '@/lib/utils/utils';
@@ -30,6 +35,8 @@ export function useSearchInput({
   const [prevExpanded, setPrevExpanded] = useState(isContentExpanded);
   const location = useLocation();
   const navigate = useNavigate();
+  const navigationType = useNavigationType();
+  const [prevLocationKey, setPrevLocationKey] = useState(location.key);
 
   if (isContentExpanded !== prevExpanded) {
     setPrevExpanded(isContentExpanded);
@@ -43,6 +50,17 @@ export function useSearchInput({
     setPrevUrlQuery(urlQuery);
     setWrittenQuery(null);
     if (urlQuery !== writtenQuery) setLocalSearchQuery(urlQuery);
+  }
+
+  // Back/Forward always shows that entry's query, even if it's unchanged, and
+  // drops typing that wasn't written yet. Otherwise the pending write would
+  // land on the entry the user just went back to.
+  if (isUpdateSearchParam && location.key !== prevLocationKey) {
+    setPrevLocationKey(location.key);
+    if (navigationType === 'POP') {
+      setWrittenQuery(null);
+      setLocalSearchQuery(urlQuery);
+    }
   }
 
   // The input updates on every keystroke, but the URL, and the request it
