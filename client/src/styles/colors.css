@@ -1,124 +1,219 @@
-/*
- * SmartBudget colour tokens — Tailwind CSS v4
- * Source of truth for the design palette (see the "Color palette" board).
- *
- * 1. Custom shades that are not in Tailwind's default palette
- *    → bg-navy, bg-app-bg, border-app-divider, bg-dark-panel, text-dark-muted …
- * 2. Semantic aliases that point at Tailwind's own colours
- *    → bg-primary, hover:bg-primary-hover, text-success, bg-danger-bg,
- *      text-cat-water + bg-cat-water-bg, bg-acc-card …
- */
-
-/* ---------- 1. Custom shades ---------- */
+/* Colours with their own value */
 @theme {
   /* Brand */
-  --color-navy: #0f1b3d; /* balance hero, login brand panel, toasts */
+  --color-navy: #0f1b3d; /* #0F1B3D · Balance card, login panel, toasts */
 
-  /* Light surfaces */
-  --color-app-bg: #f4f6fa; /* page background */
-  --color-app-divider: #e5e9f0; /* card borders, sidebar, header */
-  --color-app-divider-light: #eef2f6; /* inner separators, progress tracks */
+  /* Backgrounds */
+  --color-page: #f4f6fa; /* #F4F6FA · App background behind cards */
+
+  /* Borders */
+  --color-line-card: #e5e9f0; /* #E5E9F0 · Card edges, sidebar, header */
+  --color-line-soft: #eef2f6; /* #EEF2F6 · Lines inside cards, progress track */
+
+  /* On navy */
+  --color-on-navy-faded: rgb(
+    255 255 255 / 0.72
+  ); /* #FFFFFF 72% · “Budget” in the white logo */
+  --color-on-navy-hover: rgb(
+    255 255 255 / 0.18
+  ); /* #FFFFFF 18% · Hover and borders on navy */
+  --color-on-navy-surface: rgb(
+    255 255 255 / 0.1
+  ); /* #FFFFFF 10% · Tiles and buttons on navy */
+  --color-on-navy-grid: rgb(
+    255 255 255 / 0.05
+  ); /* #FFFFFF 5% · Grid lines on the login panel */
 
   /* Dark theme */
-  --color-dark-bg: #0a1020; /* page background */
-  --color-dark-panel: #0b1220; /* panels, cards */
-  --color-dark-input: #111a2e; /* inputs */
-  --color-dark-soft: #16213a; /* toggles, icon tiles */
-  --color-dark-border: #2a3852; /* borders, dividers */
-  --color-dark-text: #e6ebf5; /* body text */
-  --color-dark-muted: #93a1b8; /* secondary text */
-  --color-dark-link: #7aa7ff; /* links */
-  --color-dark-error-bg: #2a1416; /* error banner */
-  --color-dark-success-bg: #123322; /* success icon tile */
+  --color-dark-page: #0a1020; /* #0A1020 · Page background */
+  --color-dark-card: #0b1220; /* #0B1220 · Panels and cards */
+  --color-dark-input: #111a2e; /* #111A2E · Inputs */
+  --color-dark-hover: #16213a; /* #16213A · Toggles, icon tiles, hover */
+  --color-dark-line: #2a3852; /* #2A3852 · Borders and dividers */
+  --color-dark-heading: #e6ebf5; /* #E6EBF5 · Main text */
+  --color-dark-muted: #93a1b8; /* #93A1B8 · Secondary text */
+  --color-dark-link: #7aa7ff; /* #7AA7FF · Links */
+  --color-dark-danger-bg: #2a1416; /* #2A1416 · Error banner */
+  --color-dark-success-bg: #123322; /* #123322 · Success icon tile */
+
+  /* Overlays & shadows */
+  --color-overlay: rgb(
+    15 23 42 / 0.5
+  ); /* #0F172A 50% · Behind modals and dialogs */
+  --color-overlay-light: rgb(
+    15 23 42 / 0.35
+  ); /* #0F172A 35% · Behind the side drawer */
+  --color-frozen: rgb(
+    226 232 240 / 0.72
+  ); /* #E2E8F0 72% · Over a frozen card */
+
+  /* Card network */
+  --color-network-red: #eb001b; /* #EB001B · Left circle of the card logo */
+  --color-network-orange: #f79e1b; /* #F79E1B · Right circle of the card logo */
+
+  /* Shadows */
+  --shadow-toggle: 0 1px 2px rgb(15 23 42 / 0.14); /* #0F172A 14% · Selected tab, switches */
+  --shadow-hover: 0 10px 24px rgb(15 23 42 / 0.1); /* #0F172A 10% · Cards on hover */
+  --shadow-popover: 0 16px 40px rgb(15 23 42 / 0.16); /* #0F172A 16% · Menus, popovers */
+  --shadow-modal: 0 32px 80px rgb(15 23 42 / 0.35); /* #0F172A 35% · Modals */
+  --shadow-on-navy: 0 30px 60px rgb(2 6 23 / 0.45); /* #020617 45% · Cards on navy */
+  --shadow-glow: 0 10px 24px rgb(37 99 235 / 0.35); /* #2563EB 35% · Glow under primary buttons */
 }
 
-/* ---------- 2. Semantic aliases (Tailwind palette) ---------- */
+/* Colours taken from Tailwind's palette */
 @theme inline {
   /* Brand */
-  --color-primary: var(--color-blue-600); /* buttons, links, active nav */
-  --color-primary-hover: var(--color-blue-700);
-  --color-primary-deep: var(--color-blue-900);
-  --color-primary-soft: var(--color-blue-50); /* selected rows, soft buttons */
-  --color-primary-border: var(--color-blue-200);
+  --color-primary: var(
+    --color-blue-600
+  ); /* #2563EB · Buttons, links, active menu item */
+  --color-primary-hover: var(
+    --color-blue-700
+  ); /* #1D4ED8 · Hover on primary buttons and links */
+  --color-primary-pressed: var(
+    --color-blue-800
+  ); /* #1E40AF · Pressed buttons, info text on light blue */
+  --color-primary-dark: var(
+    --color-blue-900
+  ); /* #1E3A8A · Dark blue text, highlights */
+  --color-primary-light: var(
+    --color-blue-100
+  ); /* #DBEAFE · Avatar, light chart bars */
+  --color-primary-soft: var(
+    --color-blue-50
+  ); /* #EFF6FF · Selected rows, soft buttons, chips */
+  --color-primary-border: var(
+    --color-blue-200
+  ); /* #BFDBFE · Borders around light-blue areas */
 
   /* Text */
-  --color-text: var(--color-slate-900);
-  --color-text-secondary: var(--color-slate-700);
-  --color-text-muted: var(--color-slate-600);
-  --color-text-subtle: var(--color-slate-500);
-  --color-text-disabled: var(--color-slate-400);
+  --color-heading: var(
+    --color-slate-900
+  ); /* #0F172A · Titles, amounts, main text */
+  --color-body: var(--color-slate-700); /* #334155 · Labels, button text */
+  --color-secondary: var(
+    --color-slate-600
+  ); /* #475569 · Descriptions, supporting text */
+  --color-muted: var(--color-slate-500); /* #64748B · Captions, dates, hints */
+  --color-placeholder: var(
+    --color-slate-400
+  ); /* #94A3B8 · Placeholders, disabled text */
 
-  /* Borders & surfaces */
-  --color-border: var(--color-slate-200);
-  --color-border-strong: var(--color-slate-300);
-  --color-surface: var(--color-white);
-  --color-surface-alt: var(--color-slate-50);
-  --color-surface-muted: var(--color-slate-100);
+  /* Backgrounds */
+  --color-card: var(
+    --color-white
+  ); /* #FFFFFF · Cards, modals, header, sidebar */
+  --color-subtle: var(
+    --color-slate-50
+  ); /* #F8FAFC · Table headers, inputs, info boxes */
+  --color-hover: var(
+    --color-slate-100
+  ); /* #F1F5F9 · Hover on rows and menus, tab bar */
 
-  /* Success — income, completed, paid */
-  --color-success: var(--color-green-600);
-  --color-success-text: var(--color-green-700);
-  --color-success-bg: var(--color-green-100);
-  --color-success-soft: var(--color-green-50);
-  --color-success-border: var(--color-green-200);
+  /* Borders */
+  --color-line-strong: var(
+    --color-slate-300
+  ); /* #CBD5E1 · Inputs, switch track when off */
+  --color-line: var(--color-slate-200); /* #E2E8F0 · Buttons, chips, outlines */
 
-  /* Warning — pending, due soon, budget near limit */
-  --color-warning: var(--color-amber-600);
-  --color-warning-text: var(--color-amber-700);
-  --color-warning-bg: var(--color-amber-100);
-  --color-warning-soft: var(--color-amber-50);
+  /* Success */
+  --color-success: var(
+    --color-green-600
+  ); /* #16A34A · Icons, progress bars, dots */
+  --color-success-text: var(
+    --color-green-700
+  ); /* #15803D · Income amounts, “Completed” */
+  --color-success-bg: var(
+    --color-green-100
+  ); /* #DCFCE7 · Status pills, icon tiles */
+  --color-success-panel: var(
+    --color-green-50
+  ); /* #F0FDF4 · Large success boxes */
+  --color-success-border: var(
+    --color-green-200
+  ); /* #BBF7D0 · Border of success boxes */
 
-  /* Danger — expenses, errors, destructive actions */
-  --color-danger: var(--color-red-600);
-  --color-danger-text: var(--color-red-700);
-  --color-danger-strong: var(--color-red-800);
-  --color-danger-bg: var(--color-red-100);
-  --color-danger-soft: var(--color-red-50);
-  --color-danger-border: var(--color-red-200);
+  /* Warning */
+  --color-warning: var(
+    --color-amber-600
+  ); /* #D97706 · Icons, budget over 80% */
+  --color-warning-text: var(
+    --color-amber-700
+  ); /* #B45309 · “Pending”, due dates */
+  --color-warning-bg: var(
+    --color-amber-100
+  ); /* #FEF3C7 · Status pills, badges */
+  --color-warning-panel: var(
+    --color-amber-50
+  ); /* #FFFBEB · Large warning boxes */
 
-  /* Charts */
-  --color-chart-income: var(--color-blue-600);
-  --color-chart-expense: var(--color-amber-500);
+  /* Danger */
+  --color-danger: var(
+    --color-red-600
+  ); /* #DC2626 · Expense amounts, red badges */
+  --color-danger-text: var(
+    --color-red-700
+  ); /* #B91C1C · Error messages, Delete buttons */
+  --color-danger-heading: var(
+    --color-red-800
+  ); /* #991B1B · Titles in danger boxes */
+  --color-danger-bg: var(
+    --color-red-100
+  ); /* #FEE2E2 · Status pills, icon tiles */
+  --color-danger-panel: var(
+    --color-red-50
+  ); /* #FEF2F2 · Error banners, overdue rows */
+  --color-danger-border: var(
+    --color-red-200
+  ); /* #FECACA · Border of Delete buttons */
 
-  /* Categories: text-cat-* for icon/label, bg-cat-*-bg for the pill */
-  --color-cat-water: var(--color-sky-700);
-  --color-cat-water-bg: var(--color-sky-100);
-  --color-cat-gas: var(--color-red-700);
-  --color-cat-gas-bg: var(--color-red-100);
-  --color-cat-electricity: var(--color-yellow-800);
-  --color-cat-electricity-bg: var(--color-yellow-100);
-  --color-cat-utilities: var(--color-lime-800);
-  --color-cat-utilities-bg: var(--color-lime-100);
-  --color-cat-internet: var(--color-cyan-700);
-  --color-cat-internet-bg: var(--color-cyan-100);
-  --color-cat-taxes: var(--color-rose-700);
-  --color-cat-taxes-bg: var(--color-rose-100);
-  --color-cat-income: var(--color-green-700);
-  --color-cat-income-bg: var(--color-green-100);
-  --color-cat-groceries: var(--color-green-800);
-  --color-cat-groceries-bg: var(--color-green-100);
-  --color-cat-personal-care: var(--color-pink-700);
-  --color-cat-personal-care-bg: var(--color-pink-100);
-  --color-cat-healthcare: var(--color-teal-700);
-  --color-cat-healthcare-bg: var(--color-teal-100);
-  --color-cat-transport: var(--color-violet-700);
-  --color-cat-transport-bg: var(--color-violet-100);
-  --color-cat-cafe: var(--color-orange-700);
-  --color-cat-cafe-bg: var(--color-orange-100);
-  --color-cat-subscriptions: var(--color-slate-700);
-  --color-cat-subscriptions-bg: var(--color-slate-100);
-  --color-cat-fees: var(--color-slate-600);
-  --color-cat-fees-bg: var(--color-slate-100);
-  --color-cat-transfer: var(--color-blue-700);
-  --color-cat-transfer-bg: var(--color-blue-50);
-  --color-cat-exchange: var(--color-indigo-700);
-  --color-cat-exchange-bg: var(--color-indigo-100);
+  /* On navy */
+  --color-on-navy: var(--color-white); /* #FFFFFF · Main text on navy */
+  --color-on-navy-muted: var(
+    --color-indigo-200
+  ); /* #C7D2FE · Secondary text on navy */
+  --color-on-navy-accent: var(
+    --color-blue-300
+  ); /* #93C5FD · Accent text and icons on navy */
+  --color-on-navy-progress: var(
+    --color-blue-400
+  ); /* #60A5FA · Progress bars on navy */
+  --color-on-navy-success: var(
+    --color-green-300
+  ); /* #86EFAC · Positive numbers on navy, toast tick */
 
-  /* Accounts */
-  --color-acc-card: var(--color-blue-900);
-  --color-acc-cash: var(--color-green-600);
-  --color-acc-usd: var(--color-teal-700);
-  --color-acc-eur: var(--color-violet-600);
-  --color-acc-credit: var(--color-amber-700);
-  --color-acc-deposit: var(--color-emerald-500);
+  /* Charts & accounts */
+  --color-chart-income: var(--color-blue-600); /* #2563EB · Income bars */
+  --color-chart-expense: var(--color-amber-500); /* #F59E0B · Expense bars */
+  --color-account-card: var(--color-blue-900); /* #1E3A8A · Main card */
+  --color-account-cash: var(--color-green-600); /* #16A34A · Cash wallet */
+  --color-account-usd: var(--color-teal-700); /* #0F766E · Dollar account */
+  --color-account-eur: var(--color-violet-600); /* #7C3AED · Euro account */
+  --color-account-credit: var(--color-amber-700); /* #B45309 · Credit card */
+  --color-account-deposit: var(
+    --color-emerald-500
+  ); /* #10B981 · Deposits, deposit progress */
+
+  /* Card designs */
+  --color-card-black-start: var(
+    --color-slate-900
+  ); /* #0F172A · Main debit card */
+  --color-card-black-end: var(--color-blue-900); /* #1E3A8A · Main debit card */
+  --color-card-virtual-start: var(
+    --color-blue-700
+  ); /* #1D4ED8 · Virtual card */
+  --color-card-virtual-end: var(--color-cyan-600); /* #0891B2 · Virtual card */
+  --color-card-usd-start: var(--color-emerald-800); /* #065F46 · USD card */
+  --color-card-usd-end: var(--color-teal-700); /* #0F766E · USD card */
+  --color-card-new-start: var(
+    --color-indigo-700
+  ); /* #4338CA · Newly created virtual card */
+  --color-card-new-end: var(
+    --color-violet-600
+  ); /* #7C3AED · Newly created virtual card */
+
+  /* Dark theme */
+  --color-dark-selected: var(
+    --color-slate-800
+  ); /* #1E293B · Selected theme button */
+  --color-dark-danger-text: var(--color-red-300); /* #FCA5A5 · Error text */
 }

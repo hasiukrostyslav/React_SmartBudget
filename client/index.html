@@ -3,13 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="logo/smartbudget-icon.svg" />
     <meta name="theme-color" content="#0f172b" />
     <meta name="description" content="Smart Money, Bright Tomorrow" />
     <link rel="manifest" href="/manifest.json" />
     <title>Welcome | SmartBudget</title>
-    <!-- Apply the saved (or OS) theme before first paint to avoid a light flash;
-         ThemeProvider takes over once React mounts. Same rule as getInitialTheme. -->
+
     <script>
       (function () {
         var stored = localStorage.getItem('theme');
@@ -21,9 +20,7 @@
       })();
     </script>
   </head>
-  <body
-    class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-300"
-  >
+  <body class="bg-page dark:bg-dark-page dark:text-dark-heading text-heading">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
