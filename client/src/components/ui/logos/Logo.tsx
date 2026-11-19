@@ -1,24 +1,20 @@
 import { useTheme } from '@/hooks/useTheme';
 
 interface LogoProps {
-  type: 'sm' | 'lg';
+  type: 'logo' | 'icon' | 'symbol';
+  color?: 'black' | 'white';
   className?: string;
 }
+const baseURL = '/logo/smartbudget';
 
-export default function Logo({ className, type }: LogoProps) {
+export default function Logo({ className, type, color }: LogoProps) {
   const { theme } = useTheme();
 
   return (
     <img
-      src={
-        type === 'lg'
-          ? `/logo-${theme === 'light' ? 'dark' : 'light'}.svg`
-          : '/logo-sm.svg'
-      }
+      src={`${baseURL}-${type}${color ? '-' + color : ''}.svg`}
       alt="Logo"
-      width={404}
-      height={92}
-      className={`w-auto ${className}`}
+      className={`w-full ${className}`}
     />
   );
 }

@@ -1,5 +1,4 @@
 import ThemeButton from '../ui/buttons/ThemeButton';
-import Logo from '../ui/logos/Logo';
 
 interface AuthFormProps {
   children: React.ReactNode;
@@ -13,7 +12,6 @@ export default function AuthFormContainer({
   return (
     <section className="relative flex w-1/2 items-center justify-center">
       <div className="flex w-1/2 flex-col items-center justify-center gap-2">
-        <Logo className="h-17.5" type="lg" />
         <h2 className="text-lg font-medium tracking-wide">{heading}</h2>
         {children}
       </div>
