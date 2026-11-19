@@ -1,16 +1,60 @@
-/* Colours with their own value */
 @theme {
   /* Brand */
-  --color-navy: #0f1b3d; /* #0F1B3D · Balance card, login panel, toasts */
+  --color-primary: #2563eb; /* Buttons, links, active menu item */
+  --color-primary-hover: #1d4ed8; /* Hover on primary buttons and links */
+  --color-primary-pressed: #1e40af; /* Pressed buttons, info text on light blue */
+  --color-primary-dark: #1e3a8a; /* Dark blue text, highlights */
+  --color-primary-light: #dbeafe; /* Avatar, light chart bars */
+  --color-primary-soft: #eff6ff; /* Selected rows, soft buttons, chips */
+  --color-primary-border: #bfdbfe; /* Borders around light-blue areas */
+  --color-navy: #0f1b3d; /* Balance card, login panel, toasts */
+
+  /* Text */
+  --color-heading: #0f172a; /* Titles, amounts, main text */
+  --color-body: #334155; /* Labels, button text */
+  --color-secondary: #475569; /* Descriptions, supporting text */
+  --color-muted: #64748b; /* Captions, dates, hints */
+  --color-placeholder: #94a3b8; /* Placeholders, disabled text */
 
   /* Backgrounds */
-  --color-page: #f4f6fa; /* #F4F6FA · App background behind cards */
+  --color-page: #f4f6fa; /* App background behind cards */
+  --color-card: #ffffff; /* Cards, modals, header, sidebar */
+  --color-subtle: #f8fafc; /* Table headers, inputs, info boxes */
+  --color-hover: #f1f5f9; /* Hover on rows and menus, tab bar */
 
   /* Borders */
-  --color-line-card: #e5e9f0; /* #E5E9F0 · Card edges, sidebar, header */
-  --color-line-soft: #eef2f6; /* #EEF2F6 · Lines inside cards, progress track */
+  --color-line-strong: #cbd5e1; /* Inputs, switch track when off */
+  --color-line: #e2e8f0; /* Buttons, chips, outlines */
+  --color-line-card: #e5e9f0; /* Card edges, sidebar, header */
+  --color-line-soft: #eef2f6; /* Lines inside cards, progress track */
+
+  /* Success */
+  --color-success: #16a34a; /* Icons, progress bars, dots */
+  --color-success-text: #15803d; /* Income amounts, “Completed” */
+  --color-success-bg: #dcfce7; /* Status pills, icon tiles */
+  --color-success-panel: #f0fdf4; /* Large success boxes */
+  --color-success-border: #bbf7d0; /* Border of success boxes */
+
+  /* Warning */
+  --color-warning: #d97706; /* Icons, budget over 80% */
+  --color-warning-text: #b45309; /* “Pending”, due dates */
+  --color-warning-bg: #fef3c7; /* Status pills, badges */
+  --color-warning-panel: #fffbeb; /* Large warning boxes */
+
+  /* Danger */
+  --color-danger: #dc2626; /* Expense amounts, red badges */
+  --color-danger-text: #b91c1c; /* Error messages, Delete buttons */
+  --color-danger-heading: #991b1b; /* Titles in danger boxes */
+  --color-danger-bg: #fee2e2; /* Status pills, icon tiles */
+  --color-danger-panel: #fef2f2; /* Error banners, overdue rows */
+  --color-danger-border: #fecaca; /* Border of Delete buttons */
 
   /* On navy */
+  --color-on-navy: #ffffff; /* Main text on navy */
+  --color-on-navy-muted: #c7d2fe; /* Secondary text on navy */
+  --color-on-navy-accent: #93c5fd; /* Accent text and icons on navy */
+  --color-on-navy-progress: #60a5fa; /* Progress bars on navy */
+  --color-on-navy-success: #86efac; /* Positive numbers on navy, toast tick */
   --color-on-navy-faded: rgb(
     255 255 255 / 0.72
   ); /* #FFFFFF 72% · “Budget” in the white logo */
@@ -24,17 +68,39 @@
     255 255 255 / 0.05
   ); /* #FFFFFF 5% · Grid lines on the login panel */
 
+  /* Charts & accounts */
+  --color-chart-income: #2563eb; /* Income bars */
+  --color-chart-expense: #f59e0b; /* Expense bars */
+  --color-account-card: #1e3a8a; /* Main card */
+  --color-account-cash: #16a34a; /* Cash wallet */
+  --color-account-usd: #0f766e; /* Dollar account */
+  --color-account-eur: #7c3aed; /* Euro account */
+  --color-account-credit: #b45309; /* Credit card */
+  --color-account-deposit: #10b981; /* Deposits, deposit progress */
+
+  /* Card designs */
+  --color-card-black-start: #0f172a; /* Main debit card (gradient start) */
+  --color-card-black-end: #1e3a8a; /* Main debit card (gradient end) */
+  --color-card-virtual-start: #1d4ed8; /* Virtual card (gradient start) */
+  --color-card-virtual-end: #0891b2; /* Virtual card (gradient end) */
+  --color-card-usd-start: #065f46; /* USD card (gradient start) */
+  --color-card-usd-end: #0f766e; /* USD card (gradient end) */
+  --color-card-new-start: #4338ca; /* Newly created virtual card (gradient start) */
+  --color-card-new-end: #7c3aed; /* Newly created virtual card (gradient end) */
+
   /* Dark theme */
-  --color-dark-page: #0a1020; /* #0A1020 · Page background */
-  --color-dark-card: #0b1220; /* #0B1220 · Panels and cards */
-  --color-dark-input: #111a2e; /* #111A2E · Inputs */
-  --color-dark-hover: #16213a; /* #16213A · Toggles, icon tiles, hover */
-  --color-dark-line: #2a3852; /* #2A3852 · Borders and dividers */
-  --color-dark-heading: #e6ebf5; /* #E6EBF5 · Main text */
-  --color-dark-muted: #93a1b8; /* #93A1B8 · Secondary text */
-  --color-dark-link: #7aa7ff; /* #7AA7FF · Links */
-  --color-dark-danger-bg: #2a1416; /* #2A1416 · Error banner */
-  --color-dark-success-bg: #123322; /* #123322 · Success icon tile */
+  --color-dark-page: #0a1020; /* Page background */
+  --color-dark-card: #0b1220; /* Panels and cards */
+  --color-dark-input: #111a2e; /* Inputs */
+  --color-dark-hover: #16213a; /* Toggles, icon tiles, hover */
+  --color-dark-selected: #1e293b; /* Selected theme button */
+  --color-dark-line: #2a3852; /* Borders and dividers */
+  --color-dark-heading: #e6ebf5; /* Main text */
+  --color-dark-muted: #93a1b8; /* Secondary text */
+  --color-dark-link: #7aa7ff; /* Links */
+  --color-dark-danger-text: #fca5a5; /* Error text */
+  --color-dark-danger-bg: #2a1416; /* Error banner */
+  --color-dark-success-bg: #123322; /* Success icon tile */
 
   /* Overlays & shadows */
   --color-overlay: rgb(
@@ -48,172 +114,14 @@
   ); /* #E2E8F0 72% · Over a frozen card */
 
   /* Card network */
-  --color-network-red: #eb001b; /* #EB001B · Left circle of the card logo */
-  --color-network-orange: #f79e1b; /* #F79E1B · Right circle of the card logo */
+  --color-network-red: #eb001b; /* Left circle of the card logo */
+  --color-network-orange: #f79e1b; /* Right circle of the card logo */
 
   /* Shadows */
-  --shadow-toggle: 0 1px 2px rgb(15 23 42 / 0.14); /* #0F172A 14% · Selected tab, switches */
-  --shadow-hover: 0 10px 24px rgb(15 23 42 / 0.1); /* #0F172A 10% · Cards on hover */
-  --shadow-popover: 0 16px 40px rgb(15 23 42 / 0.16); /* #0F172A 16% · Menus, popovers */
-  --shadow-modal: 0 32px 80px rgb(15 23 42 / 0.35); /* #0F172A 35% · Modals */
-  --shadow-on-navy: 0 30px 60px rgb(2 6 23 / 0.45); /* #020617 45% · Cards on navy */
-  --shadow-glow: 0 10px 24px rgb(37 99 235 / 0.35); /* #2563EB 35% · Glow under primary buttons */
-}
-
-/* Colours taken from Tailwind's palette */
-@theme inline {
-  /* Brand */
-  --color-primary: var(
-    --color-blue-600
-  ); /* #2563EB · Buttons, links, active menu item */
-  --color-primary-hover: var(
-    --color-blue-700
-  ); /* #1D4ED8 · Hover on primary buttons and links */
-  --color-primary-pressed: var(
-    --color-blue-800
-  ); /* #1E40AF · Pressed buttons, info text on light blue */
-  --color-primary-dark: var(
-    --color-blue-900
-  ); /* #1E3A8A · Dark blue text, highlights */
-  --color-primary-light: var(
-    --color-blue-100
-  ); /* #DBEAFE · Avatar, light chart bars */
-  --color-primary-soft: var(
-    --color-blue-50
-  ); /* #EFF6FF · Selected rows, soft buttons, chips */
-  --color-primary-border: var(
-    --color-blue-200
-  ); /* #BFDBFE · Borders around light-blue areas */
-
-  /* Text */
-  --color-heading: var(
-    --color-slate-900
-  ); /* #0F172A · Titles, amounts, main text */
-  --color-body: var(--color-slate-700); /* #334155 · Labels, button text */
-  --color-secondary: var(
-    --color-slate-600
-  ); /* #475569 · Descriptions, supporting text */
-  --color-muted: var(--color-slate-500); /* #64748B · Captions, dates, hints */
-  --color-placeholder: var(
-    --color-slate-400
-  ); /* #94A3B8 · Placeholders, disabled text */
-
-  /* Backgrounds */
-  --color-card: var(
-    --color-white
-  ); /* #FFFFFF · Cards, modals, header, sidebar */
-  --color-subtle: var(
-    --color-slate-50
-  ); /* #F8FAFC · Table headers, inputs, info boxes */
-  --color-hover: var(
-    --color-slate-100
-  ); /* #F1F5F9 · Hover on rows and menus, tab bar */
-
-  /* Borders */
-  --color-line-strong: var(
-    --color-slate-300
-  ); /* #CBD5E1 · Inputs, switch track when off */
-  --color-line: var(--color-slate-200); /* #E2E8F0 · Buttons, chips, outlines */
-
-  /* Success */
-  --color-success: var(
-    --color-green-600
-  ); /* #16A34A · Icons, progress bars, dots */
-  --color-success-text: var(
-    --color-green-700
-  ); /* #15803D · Income amounts, “Completed” */
-  --color-success-bg: var(
-    --color-green-100
-  ); /* #DCFCE7 · Status pills, icon tiles */
-  --color-success-panel: var(
-    --color-green-50
-  ); /* #F0FDF4 · Large success boxes */
-  --color-success-border: var(
-    --color-green-200
-  ); /* #BBF7D0 · Border of success boxes */
-
-  /* Warning */
-  --color-warning: var(
-    --color-amber-600
-  ); /* #D97706 · Icons, budget over 80% */
-  --color-warning-text: var(
-    --color-amber-700
-  ); /* #B45309 · “Pending”, due dates */
-  --color-warning-bg: var(
-    --color-amber-100
-  ); /* #FEF3C7 · Status pills, badges */
-  --color-warning-panel: var(
-    --color-amber-50
-  ); /* #FFFBEB · Large warning boxes */
-
-  /* Danger */
-  --color-danger: var(
-    --color-red-600
-  ); /* #DC2626 · Expense amounts, red badges */
-  --color-danger-text: var(
-    --color-red-700
-  ); /* #B91C1C · Error messages, Delete buttons */
-  --color-danger-heading: var(
-    --color-red-800
-  ); /* #991B1B · Titles in danger boxes */
-  --color-danger-bg: var(
-    --color-red-100
-  ); /* #FEE2E2 · Status pills, icon tiles */
-  --color-danger-panel: var(
-    --color-red-50
-  ); /* #FEF2F2 · Error banners, overdue rows */
-  --color-danger-border: var(
-    --color-red-200
-  ); /* #FECACA · Border of Delete buttons */
-
-  /* On navy */
-  --color-on-navy: var(--color-white); /* #FFFFFF · Main text on navy */
-  --color-on-navy-muted: var(
-    --color-indigo-200
-  ); /* #C7D2FE · Secondary text on navy */
-  --color-on-navy-accent: var(
-    --color-blue-300
-  ); /* #93C5FD · Accent text and icons on navy */
-  --color-on-navy-progress: var(
-    --color-blue-400
-  ); /* #60A5FA · Progress bars on navy */
-  --color-on-navy-success: var(
-    --color-green-300
-  ); /* #86EFAC · Positive numbers on navy, toast tick */
-
-  /* Charts & accounts */
-  --color-chart-income: var(--color-blue-600); /* #2563EB · Income bars */
-  --color-chart-expense: var(--color-amber-500); /* #F59E0B · Expense bars */
-  --color-account-card: var(--color-blue-900); /* #1E3A8A · Main card */
-  --color-account-cash: var(--color-green-600); /* #16A34A · Cash wallet */
-  --color-account-usd: var(--color-teal-700); /* #0F766E · Dollar account */
-  --color-account-eur: var(--color-violet-600); /* #7C3AED · Euro account */
-  --color-account-credit: var(--color-amber-700); /* #B45309 · Credit card */
-  --color-account-deposit: var(
-    --color-emerald-500
-  ); /* #10B981 · Deposits, deposit progress */
-
-  /* Card designs */
-  --color-card-black-start: var(
-    --color-slate-900
-  ); /* #0F172A · Main debit card */
-  --color-card-black-end: var(--color-blue-900); /* #1E3A8A · Main debit card */
-  --color-card-virtual-start: var(
-    --color-blue-700
-  ); /* #1D4ED8 · Virtual card */
-  --color-card-virtual-end: var(--color-cyan-600); /* #0891B2 · Virtual card */
-  --color-card-usd-start: var(--color-emerald-800); /* #065F46 · USD card */
-  --color-card-usd-end: var(--color-teal-700); /* #0F766E · USD card */
-  --color-card-new-start: var(
-    --color-indigo-700
-  ); /* #4338CA · Newly created virtual card */
-  --color-card-new-end: var(
-    --color-violet-600
-  ); /* #7C3AED · Newly created virtual card */
-
-  /* Dark theme */
-  --color-dark-selected: var(
-    --color-slate-800
-  ); /* #1E293B · Selected theme button */
-  --color-dark-danger-text: var(--color-red-300); /* #FCA5A5 · Error text */
+  --shadow-toggle: 0 1px 2px rgb(15 23 42 / 0.14); /* Selected tab, switches */
+  --shadow-hover: 0 10px 24px rgb(15 23 42 / 0.1); /* Cards on hover */
+  --shadow-popover: 0 16px 40px rgb(15 23 42 / 0.16); /* Menus, popovers */
+  --shadow-modal: 0 32px 80px rgb(15 23 42 / 0.35); /* Modals */
+  --shadow-on-navy: 0 30px 60px rgb(2 6 23 / 0.45); /* Cards on navy */
+  --shadow-glow: 0 10px 24px rgb(37 99 235 / 0.35); /* Glow under primary buttons */
 }

@@ -1,38 +1,42 @@
-import { useState } from 'react';
+import clsx from 'clsx';
 
 import { useTheme } from '@/hooks/useTheme';
 
 import Icon from '../icons/Icon';
 
 export default function ThemeButton({ className }: { className?: string }) {
-  const [isInitial, setIsInitial] = useState(true);
   const { theme, setLightTheme, setDarkTheme } = useTheme();
 
   return (
     <div
-      className={`flex gap-4 rounded-2xl border-2 border-blue-400 px-1 py-0.5 ${className}`}
+      className={clsx(
+        'bg-line dark:bg-dark-hover flex gap-0.5 rounded-full p-0.75',
+        className,
+      )}
     >
       <button
-        className={`outline-round-full p-1 ${
-          theme === 'light' ? 'bg-blue-300 text-blue-600' : 'text-blue-200'
-        } ${!isInitial && theme === 'light' ? 'animate-wiggle' : ''}`}
-        onClick={() => {
-          setIsInitial(true);
-          setLightTheme();
-          setIsInitial(false);
-        }}
+        aria-label="Light theme"
+        aria-pressed={theme === 'light'}
+        className={clsx(
+          'outline-round-full grid h-7.5 w-8.5 place-items-center rounded-full',
+          theme === 'light'
+            ? 'bg-card text-warning shadow-toggle'
+            : 'text-muted dark:text-dark-muted bg-transparent',
+        )}
+        onClick={() => setLightTheme()}
       >
         <Icon name="light" size={16} />
       </button>
       <button
-        className={`outline-round-full p-1 ${
-          theme === 'dark' ? 'bg-blue-500 text-blue-200' : 'text-blue-600'
-        } ${!isInitial && theme === 'dark' ? 'animate-wiggle' : ''}`}
-        onClick={() => {
-          setIsInitial(true);
-          setDarkTheme();
-          setIsInitial(false);
-        }}
+        aria-label="Dark theme"
+        aria-pressed={theme === 'dark'}
+        className={clsx(
+          'outline-round-full grid h-7.5 w-8.5 place-items-center rounded-full',
+          theme === 'dark'
+            ? 'bg-dark-selected text-dark-heading'
+            : 'text-muted dark:text-dark-muted bg-transparent',
+        )}
+        onClick={() => setDarkTheme()}
       >
         <Icon name="dark" size={16} />
       </button>

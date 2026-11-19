@@ -57,6 +57,7 @@ export default function AuthLayout() {
           ))}
         </div>
       </section>
+
       <Suspense fallback={null}>
         <Outlet />
       </Suspense>
