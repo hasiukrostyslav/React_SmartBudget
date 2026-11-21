@@ -53,7 +53,7 @@ export default function AuthLayout() {
           />
           <img
             className="absolute right-3/10 bottom-0 w-3/8"
-            src="/auth/transaction-card.png"
+            src="/auth/transactions-card.png"
             alt="Transaction card"
           />
         </div>
