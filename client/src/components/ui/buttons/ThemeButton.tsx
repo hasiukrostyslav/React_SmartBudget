@@ -10,7 +10,7 @@ export default function ThemeButton({ className }: { className?: string }) {
   return (
     <div
       className={clsx(
-        'bg-line dark:bg-dark-hover flex gap-0.5 rounded-full p-0.75',
+        'bg-hover dark:bg-dark-hover flex gap-0.5 rounded-full p-0.75',
         className,
       )}
     >
@@ -18,7 +18,7 @@ export default function ThemeButton({ className }: { className?: string }) {
         aria-label="Light theme"
         aria-pressed={theme === 'light'}
         className={clsx(
-          'outline-round-full grid h-7.5 w-8.5 place-items-center rounded-full',
+          'outline-round-full grid h-6.5 w-7.5 place-items-center rounded-full xl:h-7.5 xl:w-8.5',
           theme === 'light'
             ? 'bg-card text-warning shadow-toggle'
             : 'text-muted dark:text-dark-muted bg-transparent',
@@ -31,7 +31,7 @@ export default function ThemeButton({ className }: { className?: string }) {
         aria-label="Dark theme"
         aria-pressed={theme === 'dark'}
         className={clsx(
-          'outline-round-full grid h-7.5 w-8.5 place-items-center rounded-full',
+          'outline-round-full grid h-6.5 w-7.5 place-items-center rounded-full xl:h-7.5 xl:w-8.5',
           theme === 'dark'
             ? 'bg-dark-selected text-dark-heading'
             : 'text-muted dark:text-dark-muted bg-transparent',

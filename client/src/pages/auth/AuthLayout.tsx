@@ -25,7 +25,7 @@ export default function AuthLayout() {
       <section
         className={clsx(
           'bg-navy bg-grid w-1/2 px-10 py-7 xl:px-12 xl:py-9',
-          'hidden flex-col justify-between md:flex',
+          'hidden flex-col justify-between sm:flex',
         )}
       >
         <div className="max-w-30 lg:max-w-36 xl:max-w-42">

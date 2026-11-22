@@ -1,5 +1,7 @@
 export default function Copyright() {
   const year = new Date().getFullYear();
 
-  return <p>Copyright &copy; {year} SmartBudget</p>;
+  return (
+    <p className="text-muted text-xs xl:text-sm">&copy; {year} SmartBudget</p>
+  );
 }
