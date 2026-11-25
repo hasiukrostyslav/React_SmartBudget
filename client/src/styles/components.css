@@ -17,7 +17,7 @@
 
     @apply focus-visible:outline-2;
     @apply focus-visible:outline-offset-2;
-    @apply focus-visible:outline-blue-500;
+    @apply focus-visible:outline-primary-hover;
   }
 
   .outline-round-md {
@@ -28,7 +28,7 @@
 
     @apply focus-visible:outline-4;
     @apply focus-visible:outline-offset-3;
-    @apply focus-visible:outline-blue-500;
+    @apply focus-visible:outline-primary-hover;
   }
 
   .outline-round-full {
@@ -39,7 +39,7 @@
 
     @apply focus-visible:outline-2;
     @apply focus-visible:outline-offset-2;
-    @apply focus-visible:outline-blue-500;
+    @apply focus-visible:outline-primary-hover;
   }
 
   .outline-input {
@@ -50,7 +50,7 @@
 
     @apply focus-visible:outline-2;
     @apply focus-visible:-outline-offset-2;
-    @apply focus-visible:outline-blue-500;
+    @apply focus-visible:outline-primary-hover;
   }
 
   .scrollbar {

@@ -32,9 +32,9 @@ export const ERROR_MESSAGES = {
 } as const;
 
 export const INPUT_PLACEHOLDER = {
-  email: 'Please enter your email',
-  password: 'Please enter your password',
-  name: 'Please enter your full name',
+  email: 'you@example.com',
+  password: 'Your password',
+  name: 'Alex Smith',
   search: 'Search',
 } as const;
 
@@ -130,6 +130,37 @@ export const EMPTY_STATE_TEXT = {
       header: 'No dashboard match your filters',
       description:
         'Nothing on your dashboard matches your filters. Try clearing filters to see everything.',
+    },
+  },
+} as const;
+
+export const AUTH_TEXT = {
+  login: {
+    header: 'Welcome back',
+    description: 'Sign in to your SmartBudget account.',
+    cta: {
+      prompt: "Don't have an account?",
+      label: 'Create account',
+      href: '/auth/signup',
+    },
+  },
+  register: {
+    header: 'Create an account',
+    description: 'Start tracking your money in minutes.',
+    cta: {
+      prompt: 'Already have an account?',
+      label: 'Sign In',
+      href: '/auth/login',
+    },
+  },
+  reset: {
+    header: 'Reset your password',
+    description:
+      'Enter the email you signed up with and we’ll send you a link to set a new password.',
+    cta: {
+      prompt: 'Remembered it?',
+      label: 'Sign In',
+      href: '/auth/login',
     },
   },
 } as const;

@@ -8,9 +8,8 @@ import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 import { useSignUp } from '@/hooks/useSignUp';
 
-import Button from '../ui/buttons/Button';
+import Button from '../ui/buttons/ButtonNew';
 import FormError from '../ui/feedback/FormError';
-import Icon from '../ui/icons/Icon';
 import Input from '../ui/inputs/Input';
 
 type FormInputs = z.infer<typeof SignUpSchema>;
@@ -35,7 +34,7 @@ export default function SignUpForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-6 flex w-full flex-col gap-2"
+      className="flex w-full flex-col gap-6"
     >
       <Input
         label="Full name"
@@ -47,7 +46,7 @@ export default function SignUpForm() {
         autoComplete="name"
       />
       <Input
-        label="Email address"
+        label="Email"
         {...register('email')}
         placeholder={INPUT_PLACEHOLDER.email}
         error={errors.email?.message}
@@ -72,21 +71,8 @@ export default function SignUpForm() {
 
       {error && <FormError message={error.message} />}
 
-      <Button
-        size="lg"
-        color="black"
-        type="submit"
-        className="mt-3"
-        disabled={isPending}
-      >
-        {!isPending ? (
-          'Sign Up'
-        ) : (
-          <span className="flex items-center justify-center gap-2">
-            <Icon size={24} name="loader-circle" className="animate-spin" />
-            Submit
-          </span>
-        )}
+      <Button type="submit" variant="primary" size="form" isLoading={isPending}>
+        Create account
       </Button>
     </form>
   );

@@ -97,6 +97,7 @@
   --color-dark-line: #2a3852; /* Borders and dividers */
   --color-dark-heading: #e6ebf5; /* Main text */
   --color-dark-muted: #93a1b8; /* Secondary text */
+  --color-dark-placeholder: #64748b; /* Placeholders, disabled text */
   --color-dark-link: #7aa7ff; /* Links */
   --color-dark-danger-text: #fca5a5; /* Error text */
   --color-dark-danger-bg: #2a1416; /* Error banner */

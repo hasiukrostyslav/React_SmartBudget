@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 import { ERROR_MESSAGES_CONFIG } from '@/lib/constants/components';
 
 import Button from '../buttons/Button';
-import ButtonLink from '../buttons/ButtonLink';
 import Icon from '../icons/Icon';
 
 interface ErrorProps {
@@ -58,9 +57,9 @@ export default function ErrorState({
           )}
           {page === 'outer' && (
             <>
-              <ButtonLink iconName="utility" color="blue" href="/dashboard">
+              <Button size="lg" color="blue" href="/dashboard">
                 Back to Home
-              </ButtonLink>
+              </Button>
               <Button size="lg" color="outline" onClick={() => navigate(-1)}>
                 <Icon name="arrow-left" size={18} />
                 Go Back

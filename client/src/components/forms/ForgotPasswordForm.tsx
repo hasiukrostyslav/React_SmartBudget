@@ -5,7 +5,7 @@ import type z from 'zod';
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { ForgotPasswordSchema } from '@/lib/schemas/auth.schema';
 
-import Button from '../ui/buttons/Button';
+import Button from '../ui/buttons/ButtonNew';
 import Input from '../ui/inputs/Input';
 
 type FormInput = z.infer<typeof ForgotPasswordSchema>;
@@ -24,7 +24,7 @@ export default function ForgotPasswordForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full flex-col gap-3"
+      className="flex w-full flex-col gap-6"
     >
       <Input
         {...register('email')}
@@ -34,9 +34,8 @@ export default function ForgotPasswordForm() {
         iconName="email"
         autoComplete="email"
       />
-
-      <Button size="lg" color="black" type="submit">
-        Reset Password
+      <Button type="submit" variant="primary" size="form">
+        Send reset link
       </Button>
     </form>
   );

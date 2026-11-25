@@ -8,9 +8,8 @@ import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useLogin } from '@/hooks/useLogin';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 
-import Button from '../ui/buttons/Button';
+import Button from '../ui/buttons/ButtonNew';
 import FormError from '../ui/feedback/FormError';
-import Icon from '../ui/icons/Icon';
 import Input from '../ui/inputs/Input';
 import AuthLink from '../ui/links/AuthLink';
 
@@ -36,10 +35,10 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mt-6 flex w-full flex-col gap-2"
+      className="flex w-full flex-col gap-4"
     >
       <Input
-        label="Email address"
+        label="Email"
         {...register('email')}
         placeholder={INPUT_PLACEHOLDER.email}
         disabled={isPending}
@@ -62,20 +61,13 @@ export default function LoginForm() {
         }}
       />
       <AuthLink href="/auth/forgot-password" className="mb-3 self-end">
-        Forgot password
+        Forgot password?
       </AuthLink>
 
       {error && <FormError message={error.message} />}
 
-      <Button size="lg" color="black" type="submit" disabled={isPending}>
-        {!isPending ? (
-          'Sign In'
-        ) : (
-          <span className="flex items-center justify-center gap-2">
-            <Icon size={24} name="loader-circle" className="animate-spin" />
-            Submit
-          </span>
-        )}
+      <Button type="submit" variant="primary" size="form" isLoading={isPending}>
+        Sign In
       </Button>
     </form>
   );
