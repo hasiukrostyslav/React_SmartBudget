@@ -5,7 +5,7 @@ import type z from 'zod';
 import { INPUT_PLACEHOLDER } from '@/lib/constants/messages';
 import { ForgotPasswordSchema } from '@/lib/schemas/auth.schema';
 
-import Button from '../ui/buttons/ButtonNew';
+import Button from '../ui/buttons/Button';
 import Input from '../ui/inputs/Input';
 
 type FormInput = z.infer<typeof ForgotPasswordSchema>;

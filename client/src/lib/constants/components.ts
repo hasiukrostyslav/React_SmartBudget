@@ -20,31 +20,6 @@ export const ERROR_MESSAGES_CONFIG = {
   },
 } as const;
 
-export const BUTTON_CONFIG = {
-  color: {
-    black: `border-slate-900 bg-slate-900 hover:border-slate-800
-    hover:bg-slate-800 dark:border-blue-600 dark:bg-blue-600
-    dark:hover:border-blue-500 dark:hover:bg-blue-500`,
-    blue: `border-blue-600 text-slate-100 bg-blue-600
-    hover:border-blue-700 hover:bg-blue-700
-    dark:bg-blue-800 dark:border-blue-800 dark:hover:bg-blue-900 dark:hover:border-blue-900`,
-    red: `border-red-600 bg-red-600 text-slate-100
-    hover:bg-red-700 hover:border-red-700
-    dark:bg-red-700 dark:border-red-700 dark:hover:bg-red-800 dark:hover:border-red-800`,
-    transparent: `text-slate-600 border-transparent dark:text-slate-400 
-    hover:text-slate-400 dark:hover:text-slate-500`,
-    outline: `border-slate-600 text-slate-600 dark:border-slate-400
-    hover:bg-slate-100 dark:text-slate-400
-    focus-visible:border-transparent dark:hover:bg-slate-800`,
-  },
-  size: {
-    xs: 'outline-round-sm px-3 py-1 text-sm',
-    sm: 'outline-round-sm px-3 py-1.5',
-    md: 'outline-round-sm px-3 py-2',
-    lg: 'outline-round-md px-3.5 py-2.5',
-  },
-} as const;
-
 export const MODAL_CONFIG = {
   header: {
     create: {

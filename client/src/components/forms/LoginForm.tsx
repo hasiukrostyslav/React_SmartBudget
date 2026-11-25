@@ -8,7 +8,7 @@ import { applyServerFieldErrors } from '@/lib/utils/formErrors';
 import { useLogin } from '@/hooks/useLogin';
 import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 
-import Button from '../ui/buttons/ButtonNew';
+import Button from '../ui/buttons/Button';
 import FormError from '../ui/feedback/FormError';
 import Input from '../ui/inputs/Input';
 import AuthLink from '../ui/links/AuthLink';

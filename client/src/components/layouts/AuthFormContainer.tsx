@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { AUTH_TEXT } from '@/lib/constants/messages';
 
 import Copyright from '../ui/atomic/Copyright';
-import Button from '../ui/buttons/ButtonNew';
+import Button from '../ui/buttons/Button';
 import ThemeButton from '../ui/buttons/ThemeButton';
 import Icon from '../ui/icons/Icon';
 
