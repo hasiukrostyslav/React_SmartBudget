@@ -27,7 +27,7 @@ export default function AuthFormContainer({ children, type }: AuthFormProps) {
         <span className="text-placeholder dark:text-dark-placeholder text-sm">
           {cta.prompt}
         </span>
-        <Button disabled variant="secondary" size="md" href={cta.href}>
+        <Button variant="secondary" size="md" href={cta.href}>
           {cta.label}
         </Button>
       </div>

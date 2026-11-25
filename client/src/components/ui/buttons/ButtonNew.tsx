@@ -32,9 +32,9 @@ const SIZES = {
 } as const;
 
 const ICON_SIZES = {
-  sm: 20,
-  md: 20,
-  lg: 24,
+  sm: 16,
+  md: 18,
+  lg: 20,
   form: 24,
 };
 
@@ -92,7 +92,10 @@ export default function Button({
         )}
         to={href}
       >
-        {children}
+        <span className="flex items-center justify-center gap-2">
+          {icon && <Icon size={ICON_SIZES[size]} name={icon} />}
+          {children}
+        </span>
       </Link>
     );
 
@@ -120,7 +123,6 @@ export default function Button({
         )}
 
         {icon && !isLoading && <Icon size={ICON_SIZES[size]} name={icon} />}
-
         {!isLoading ? children : 'Savings...'}
       </span>
     </button>
