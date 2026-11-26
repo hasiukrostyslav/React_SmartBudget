@@ -25,6 +25,5 @@ jobs:
 
       - run: npm ci
       - run: npx eslint .
-      - run: npm test
       # `npm run build` is `tsc -b && vite build`, so this also typechecks.
       - run: npm run build

@@ -1,6 +1,5 @@
 {
   "include": ["src/**/*"],
-  "exclude": ["src/**/*.test.ts"],
   // Load `include` into ts-node so the ambient src/types/express.d.ts (which
   // nothing imports) is part of the program; otherwise `req.user` doesn't exist
   // under ts-node even though tsc is fine. ts-node-dev ignores this setting —
