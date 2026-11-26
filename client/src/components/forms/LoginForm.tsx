@@ -11,7 +11,7 @@ import { usePasswordVisibility } from '@/hooks/usePasswordVisibility';
 import Button from '../ui/buttons/Button';
 import FormError from '../ui/feedback/FormError';
 import Input from '../ui/inputs/Input';
-import AuthLink from '../ui/links/AuthLink';
+import InlineLink from '../ui/links/InlineLink';
 
 type FormInputs = z.infer<typeof SignInSchema>;
 
@@ -60,9 +60,9 @@ export default function LoginForm() {
           onClick: toggleVisibility,
         }}
       />
-      <AuthLink href="/auth/forgot-password" className="mb-3 self-end">
+      <InlineLink href="/auth/forgot-password" className="mb-3 self-end">
         Forgot password?
-      </AuthLink>
+      </InlineLink>
 
       {error && <FormError message={error.message} />}
 
