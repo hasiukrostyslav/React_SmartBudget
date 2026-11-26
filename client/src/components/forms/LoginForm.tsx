@@ -46,29 +46,43 @@ export default function LoginForm() {
         iconName="email"
         autoComplete="email"
       />
-      <Input
-        label="Password"
-        {...register('password')}
-        placeholder={INPUT_PLACEHOLDER.password}
-        disabled={isPending}
-        error={errors.password?.message}
-        iconName="password"
-        autoComplete="current-password"
-        type={isVisible ? 'text' : 'password'}
-        trailingButton={{
-          role: buttonRole,
-          onClick: toggleVisibility,
-        }}
-      />
-      <InlineLink href="/auth/forgot-password" className="mb-3 self-end">
-        Forgot password?
-      </InlineLink>
+
+      <div className="relative">
+        <Input
+          label="Password"
+          {...register('password')}
+          placeholder={INPUT_PLACEHOLDER.password}
+          disabled={isPending}
+          error={errors.password?.message}
+          iconName="password"
+          autoComplete="current-password"
+          type={isVisible ? 'text' : 'password'}
+          trailingButton={{
+            role: buttonRole,
+            onClick: toggleVisibility,
+          }}
+        />
+
+        <InlineLink
+          href="/auth/forgot-password"
+          className="absolute top-0.5 right-0 self-end"
+        >
+          Forgot password?
+        </InlineLink>
+      </div>
 
       {error && <FormError message={error.message} />}
 
-      <Button type="submit" variant="primary" size="form" isLoading={isPending}>
-        Sign In
-      </Button>
+      <div className="mt-2">
+        <Button
+          type="submit"
+          variant="primary"
+          size="form"
+          isLoading={isPending}
+        >
+          Sign In
+        </Button>
+      </div>
     </form>
   );
 }

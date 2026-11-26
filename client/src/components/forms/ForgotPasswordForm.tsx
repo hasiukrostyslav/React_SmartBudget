@@ -28,7 +28,7 @@ export default function ForgotPasswordForm() {
     >
       <Input
         {...register('email')}
-        label="Email address"
+        label="Email"
         placeholder={INPUT_PLACEHOLDER.email}
         error={errors.email?.message}
         iconName="email"

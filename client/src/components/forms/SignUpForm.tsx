@@ -34,7 +34,7 @@ export default function SignUpForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full flex-col gap-6"
+      className="flex w-full flex-col gap-4"
     >
       <Input
         label="Full name"
@@ -71,9 +71,16 @@ export default function SignUpForm() {
 
       {error && <FormError message={error.message} />}
 
-      <Button type="submit" variant="primary" size="form" isLoading={isPending}>
-        Create account
-      </Button>
+      <div className="mt-2">
+        <Button
+          type="submit"
+          variant="primary"
+          size="form"
+          isLoading={isPending}
+        >
+          Create account
+        </Button>
+      </div>
     </form>
   );
 }
