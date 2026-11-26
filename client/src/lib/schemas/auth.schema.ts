@@ -7,7 +7,7 @@ export const SignUpSchema = z.object({
     .max(100, { message: 'Name must be at most 100 characters long.' })
     .trim(),
   email: z
-    .email({ message: 'Please enter a valid email.' })
+    .email({ message: 'Enter a valid email.' })
     .max(254, { message: 'Email must be at most 254 characters long.' })
     .trim(),
   password: z
@@ -23,20 +23,17 @@ export const SignUpSchema = z.object({
     .trim(),
 });
 
-// Sign-in checks presence only, matching the server. The complexity rules
-// belong to sign-up; applying them here locks out accounts whose passwords
-// predate the policy.
 export const SignInSchema = z.object({
   email: z
-    .email({ message: 'Please enter a valid email.' })
+    .email({ message: 'Enter a valid email.' })
     .max(254, { message: 'Email must be at most 254 characters long.' })
     .trim(),
-  password: z.string().min(1, { message: 'Password is required.' }),
+  password: z.string().min(1, { message: 'Enter your password.' }),
 });
 
 export const ForgotPasswordSchema = z.object({
   email: z
-    .email({ message: 'Please enter a valid email.' })
+    .email({ message: 'Enter a valid email.' })
     .max(254, { message: 'Email must be at most 254 characters long.' })
     .trim(),
 });
